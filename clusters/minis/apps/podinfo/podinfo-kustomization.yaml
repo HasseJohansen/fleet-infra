@@ -33,6 +33,15 @@ spec:
           name: podinfo
         spec:
           type: LoadBalancer
+          ports:
+            - name: http
+              port: http
+              protocol: TCP
+              targetPort: http
+            - name: hrpc
+              port: grpc
+              protocol: TCP
+              targetPort: grpc
       target:
         name: podinfo
         kind: Service
