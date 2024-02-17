@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m
-  targetNamespace: metallb
+  targetNamespace: metallb-system
   sourceRef:
     kind: GitRepository
     name: metallb
