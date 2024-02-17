@@ -25,4 +25,4 @@ spec:
           minReplicas: 3
       target:
         name: podinfo
-        kind: HorixontalPodAutoscaler
+        kind: HorizontalPodAutoscaler
