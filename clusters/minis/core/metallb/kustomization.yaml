@@ -1,0 +1,8 @@
+# kustomization.yaml
+namespace: metallb-system
+
+resources:
+  - https://raw.githubusercontent.com/metallb/metallb/main/manifests/namespace.yaml?ref=v0.14.3
+  - https://raw.githubusercontent.com/metallb/metallb/main/manifests/metallb.yaml?ref=v0.14.3
+  - configmap.yaml 
+  - secret.yaml
