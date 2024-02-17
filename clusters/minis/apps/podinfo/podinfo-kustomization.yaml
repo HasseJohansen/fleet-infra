@@ -34,10 +34,12 @@ spec:
         spec:
           type: LoadBalancer
           ports:
-            - port: 80
+            - name: http-lb
+              port: 80
               protocol: TCP
               targetPort: 9898
-            - port: 9090
+            - name: grpc-lb
+              port: 9090
               protocol: TCP
               targetPort: 9999
       target:
