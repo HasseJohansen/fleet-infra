@@ -35,11 +35,11 @@ spec:
           type: LoadBalancer
           ports:
             - name: http
-              port: http
+              port: 80
               protocol: TCP
               targetPort: http
-            - name: hrpc
-              port: grpc
+            - name: grpc
+              port: 9090
               protocol: TCP
               targetPort: grpc
       target:
