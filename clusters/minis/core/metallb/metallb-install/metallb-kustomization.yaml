@@ -12,3 +12,4 @@ spec:
   path: "./config/native"
   prune: true
   timeout: 1m
+  wait: true
