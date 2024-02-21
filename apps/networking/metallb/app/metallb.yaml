@@ -27,7 +27,6 @@ spec:
   wait: true
   patches:
     - patch: |-
-        apiVersion: apps/v1
         kind: CustomResourceDefinition
         spec:
           template:
