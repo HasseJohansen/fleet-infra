@@ -4,7 +4,7 @@ resources:
   - metallb.yaml
 spec:
   patches:
-    - patch: |-
+    - patch: |
         driftDetection:
           ignore:
           - paths:
