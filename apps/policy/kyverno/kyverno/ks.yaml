@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 30m
-  path: "./apps/policies/kyverno/kyverno/app"
+  path: "./apps/policy/kyverno/kyverno/app"
   prune: true
   sourceRef:
     kind: GitRepository
@@ -20,7 +20,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 30m
-  path: "./apps/policies/kyverno/kyverno/policies"
+  path: "./apps/policy/kyverno/kyverno/policies"
   prune: true
   sourceRef:
     kind: GitRepository
