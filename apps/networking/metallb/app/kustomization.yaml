@@ -6,8 +6,8 @@ spec:
   patches:
     - patch: |-
         driftDetection:
-    ignore:
-    - paths:
-      - /spec/conversion/webhook/clientConfig/caBundle
-      target:
-        kind: CustomResourceDefinition
+          ignore:
+          - paths:
+            - /spec/conversion/webhook/clientConfig/caBundle
+          target:
+            kind: CustomResourceDefinition
