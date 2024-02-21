@@ -25,3 +25,15 @@ spec:
   prune: true
   timeout: 1m
   wait: true
+  patches:
+    patch: |-
+      apiVersion: apps/v1
+      kind: CustomResourceDefinition
+      spec:
+        template:
+          metadata:
+            annotations:
+              kustomize.toolkit.fluxcd.io/ssa: "Ignore"
+    target:
+      kind: CustomResourceDefinition
+      name: bgppeers.metallb.io
