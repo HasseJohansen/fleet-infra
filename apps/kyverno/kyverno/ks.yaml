@@ -5,12 +5,12 @@ metadata:
   name: cluster-apps-kyverno
   namespace: flux-system
 spec:
-  interval: 10m
-  path: "./kubernetes/cluster-0/apps/kyverno/kyverno/app"
+  interval: 30m
+  path: "./apps/kyverno/kyverno/app"
   prune: true
   sourceRef:
     kind: GitRepository
-    name: k8s-gitops-kubernetes
+    name: fleet-infra
   wait: true
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -20,11 +20,11 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m
-  path: "./kubernetes/cluster-0/apps/kyverno/kyverno/policies"
+  path: "./apps/kyverno/kyverno/policies"
   prune: true
   sourceRef:
     kind: GitRepository
-    name: k8s-gitops-kubernetes
+    name: fleet-infra
   wait: true
   dependsOn:
     - name: cluster-apps-kyverno
