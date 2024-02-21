@@ -31,11 +31,8 @@ spec:
         kind: CustomResourceDefinition
         metadata:
           name: bgppeers.metallb.io
-        spec:
-          template:
-            metadata:
-              annotations:
-                kustomize.toolkit.fluxcd.io/ssa: "Ignore"
+          annotations:
+            kustomize.toolkit.fluxcd.io/ssa: "Ignore"
       target:
         kind: CustomResourceDefinition
         name: bgppeers.metallb.io
