@@ -6,10 +6,16 @@ spec:
   generateExistingOnPolicyUpdate: true
   rules:
   - name: add-longhorn-disks
+    match:
+      any:
+      - resources:
+        kinds:
+        - Pod
+        namespace: default
     mutate:
       targets:
         - apiVersion: v1
-          kind: Node
+          kind: Pod
           name: "{{ request.object.metadata.name }}"
       patchStrategicMerge:
         metadata:
