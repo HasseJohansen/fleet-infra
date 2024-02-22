@@ -37,7 +37,7 @@ spec:
         patchStrategicMerge:
           metadata:
             labels:
-              runtime: containerd
+              runtime: 'containerd'
           status:
             nodeInfo:
               <(containerRuntimeVersion): containerd*
@@ -55,7 +55,7 @@ spec:
         patchStrategicMerge:
           metadata:
             labels:
-              runtime: docker
+              runtime: 'docker'
           status:
             nodeInfo:
               <(containerRuntimeVersion): docker*
