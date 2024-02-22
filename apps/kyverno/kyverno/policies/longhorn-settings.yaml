@@ -1,0 +1,18 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-longhorn-annotation
+spec:
+  generateExistingOnPolicyUpdate: true
+  rules:
+  - name: add-longhorn-disks
+    match:
+      any:
+      - resources:
+          kinds:
+          - Node
+    mutate:
+      patchStrategicMerge:
+        metadata:
+          annotations:
+            +(node.longhorn.io/default-disks-config): '[ { "path":"/var/lib/longhorn", "allowScheduling":true }, { "name":"flash", "path":"/mnt/data", "allowScheduling":true, "tags":[ "ssd", "fast" ] }]' 
