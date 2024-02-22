@@ -3,22 +3,59 @@ kind: ClusterPolicy
 metadata:
   name: add-longhorn-annotation
 spec:
-  #generateExistingOnPolicyUpdate: true
+  #  mutateExistingOnPolicyUpdate: true
+  #  rules:
+  #  - name: add-longhorn-disks
+  #    match:
+  #      any:
+  #      - resources:
+  #          kinds:
+  #          - Node
+  #    mutate:
+  #      targets:
+  #        - apiVersion: v1
+  #          kind: Node
+  #          name: "{{ request.object.metadata.name }}"
+  #      patchStrategicMerge:
+  #        metadata:
+  #          annotations:
+  #            +(gylle): gylle
+  #              #node.longhorn.io/default-disks-config: '[ { "path":"/var/lib/longhorn", "allowScheduling":true }, { "name":"flash", "path":"/mnt/data", "allowScheduling":true, "tags":[ "ssd", "fast" ] }]' 
   mutateExistingOnPolicyUpdate: true
   rules:
-  - name: add-longhorn-disks
-    match:
-      any:
-      - resources:
-          kinds:
-          - Node
-    mutate:
-      targets:
+    - name: label-node-containerd
+      match:
+        any:
+        - resources:
+            kinds:
+            - Node
+      mutate:
+        targets:
         - apiVersion: v1
           kind: Node
           name: "{{ request.object.metadata.name }}"
-      patchStrategicMerge:
-        metadata:
-          annotations:
-            +(gylle): gylle
-              #node.longhorn.io/default-disks-config: '[ { "path":"/var/lib/longhorn", "allowScheduling":true }, { "name":"flash", "path":"/mnt/data", "allowScheduling":true, "tags":[ "ssd", "fast" ] }]' 
+        patchStrategicMerge:
+          metadata:
+            labels:
+              runtime: containerd
+          status:
+            nodeInfo:
+              <(containerRuntimeVersion): containerd*
+    - name: label-node-docker
+      match:
+        any:
+        - resources:
+            kinds:
+            - Node
+      mutate:
+        targets:
+        - apiVersion: v1
+          kind: Node
+          name: "{{ request.object.metadata.name }}"
+        patchStrategicMerge:
+          metadata:
+            labels:
+              runtime: docker
+          status:
+            nodeInfo:
+              <(containerRuntimeVersion): docker*
