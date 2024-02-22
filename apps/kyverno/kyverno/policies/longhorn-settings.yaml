@@ -10,7 +10,7 @@ spec:
       any:
       - resources:
           kinds:
-          - Pod
+          - Node
     mutate:
       patchStrategicMerge:
         metadata:
