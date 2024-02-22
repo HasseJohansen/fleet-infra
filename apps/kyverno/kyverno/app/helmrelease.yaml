@@ -17,9 +17,6 @@ spec:
       interval: 30m
   values:
     backgroundController:
-      serviceMonitor:
-        enabled: true
-
       rbac:
         clusterRole:
           extraResources:
@@ -34,7 +31,6 @@ spec:
                 - delete
                 - get
                 - list
-
     admissionController:
       rbac:
         clusterRole:
