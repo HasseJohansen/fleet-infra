@@ -25,13 +25,13 @@ spec:
         maxSurge: 1
 
     grafana:
-      enabled: false
+      enabled: true
       annotations:
         grafana_folder: Kyverno
 
     backgroundController:
       serviceMonitor:
-        enabled: false
+        enabled: true
 
       rbac:
         clusterRole:
@@ -50,11 +50,11 @@ spec:
 
     cleanupController:
       serviceMonitor:
-        enabled: false
+        enabled: true
 
     reportsController:
       serviceMonitor:
-        enabled: false
+        enabled: true
 
     admissionController:
       replicas: 3
@@ -81,4 +81,4 @@ spec:
               app.kubernetes.io/component: kyverno
 
       serviceMonitor:
-        enabled: false
+        enabled: true
