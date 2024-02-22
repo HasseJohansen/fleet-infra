@@ -15,4 +15,4 @@ spec:
       patchStrategicMerge:
         metadata:
           annotations:
-            +(node.longhorn.io/default-disks-config): '[ { "path":"/var/lib/longhorn", "allowScheduling":true }, { "name":"flash", "path":"/mnt/data", "allowScheduling":true, "tags":[ "ssd", "fast" ] }]' 
+            node.longhorn.io/default-disks-config: '[ { "path":"/var/lib/longhorn", "allowScheduling":true }, { "name":"flash", "path":"/mnt/data", "allowScheduling":true, "tags":[ "ssd", "fast" ] }]' 
