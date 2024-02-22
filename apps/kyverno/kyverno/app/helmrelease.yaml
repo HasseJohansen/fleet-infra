@@ -16,6 +16,8 @@ spec:
         namespace: kyverno
       interval: 30m
   values:
+    config:
+      excludeGroups: []
     backgroundController:
       rbac:
         clusterRole:
