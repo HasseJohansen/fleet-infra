@@ -6,6 +6,9 @@ spec:
   mutateExistingOnPolicyUpdate: true
   rules:
   - name: add-longhorn-disks
+    match:
+      resources:
+        kind: Node
     mutate:
       targets:
         - apiVersion: v1
