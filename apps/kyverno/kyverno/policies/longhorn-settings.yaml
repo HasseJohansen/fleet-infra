@@ -13,7 +13,6 @@ spec:
       targets:
         - apiVersion: v1
           kind: Node
-          name: "{{ request.object.metadata.name }}"
       patchStrategicMerge:
         metadata:
           annotations:
