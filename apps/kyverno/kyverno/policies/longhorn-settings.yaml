@@ -7,9 +7,8 @@ spec:
   rules:
   - name: add-longhorn-disks
     match:
-      all:
-      - resources:
-          kinds: 
+      resources:
+        kinds: 
           - Node
     mutate:
       targets:
