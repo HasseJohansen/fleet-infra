@@ -15,19 +15,19 @@ spec:
         name: kyverno
         namespace: kyverno
       interval: 30m
-      values:
-        backgroundController:
-          rbac:
-            clusterRole:
-              extraResources:
-                - apiGroups:
-                    - ""
-                  resources:
-                    - nodes
-                  verbs:
-                    - create
-                    - update
-                    - patch
-                    - delete
-                    - get
-                    - list
+    values:
+      backgroundController:
+        rbac:
+          clusterRole:
+            extraResources:
+              - apiGroups:
+                  - ""
+                resources:
+                  - nodes
+                verbs:
+                  - create
+                  - update
+                  - patch
+                  - delete
+                  - get
+                  - list
