@@ -15,33 +15,31 @@ spec:
         name: kyverno
         namespace: kyverno
       interval: 30m
-  values:
-    config:
-      excludeGroups: []
-    backgroundController:
-      rbac:
-        clusterRole:
-          extraResources:
-            - apiGroups:
-                - ""
-              resources:
-                - nodes
-              verbs:
-                - create
-                - update
-                - patch
-                - delete
-                - get
-                - list
-    admissionController:
-      rbac:
-        clusterRole:
-          extraResources:
-            - apiGroups:
-                - ""
-              resources:
-                - nodes
-              verbs:
-                - create
-                - update
-                - delete
+        #  values:
+        #    backgroundController:
+        #      rbac:
+        #        clusterRole:
+        #          extraResources:
+        #            - apiGroups:
+        #                - ""
+        #              resources:
+        #                - nodes
+        #              verbs:
+        #                - create
+        #                - update
+        #                - patch
+        #                - delete
+        #                - get
+        #                - list
+        #    admissionController:
+        #      rbac:
+        #        clusterRole:
+        #          extraResources:
+        #            - apiGroups:
+        #                - ""
+        #              resources:
+        #                - nodes
+        #              verbs:
+        #                - create
+        #                - update
+        #                - delete
