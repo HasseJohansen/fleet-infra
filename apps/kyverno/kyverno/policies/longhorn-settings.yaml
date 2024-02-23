@@ -8,9 +8,9 @@ spec:
   - name: add-longhorn-disks
     match:
       any:
-        - resources:
+      - resources:
           kinds: 
-            - Node
+          - Node
     mutate:
       targets:
         - apiVersion: v1
