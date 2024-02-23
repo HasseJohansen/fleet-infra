@@ -16,6 +16,6 @@ spec:
           kind: Node
       patchStrategicMerge:
         metadata:
-          annotations:
+          labels:
             +(gylle): 'gylle'
             #node.longhorn.io/default-disks-config: '[ { "path":"/var/lib/longhorn", "allowScheduling":true }, { "name":"flash", "path":"/mnt/data", "allowScheduling":true, "tags":[ "ssd", "fast" ] }]' 
