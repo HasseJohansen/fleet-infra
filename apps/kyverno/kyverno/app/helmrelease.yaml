@@ -31,15 +31,13 @@ spec:
                 - delete
                 - get
                 - list
-  postRenderers:
+    postRenderers:
     - kustomize:
         patches:
           - patch: |-
-              - op: delete
+              - op: replace
                 path: "/data/resourceFilters"
-                # path: "/resourceFilters/[Node,*,*]"
-                  #              - op: delete
-                  #                path: "/resourceFilters/[Node/*,*,*]"
+                value:[] 
             target:
               kind: ConfigMap
-              name: kyverno
+              name: "kyverno"
