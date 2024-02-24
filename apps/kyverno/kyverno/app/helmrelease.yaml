@@ -36,9 +36,10 @@ spec:
         patches:
           - patch: |-
               - op: delete
-                path: "/resourceFilters/[Node,*,*]"
-              - op: delete
-                path: "/resourceFilters/[Node/*,*,*]"
+                path: "/data/resourceFilters"
+                # path: "/resourceFilters/[Node,*,*]"
+                  #              - op: delete
+                  #                path: "/resourceFilters/[Node/*,*,*]"
             target:
               kind: ConfigMap
               name: kyverno
