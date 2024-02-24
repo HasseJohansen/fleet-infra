@@ -31,16 +31,16 @@ spec:
                 - delete
                 - get
                 - list
-                  #  postRenderers:
-                  #    - kustomize:
-                  #        patches:
-                  #          - patch: |-
-                  #              - op: delete
-                  #                path: "/data/resourceFilters/Node"
-                  #            target:
-                  #              version: v1
-                  #              kind: ConfigMap
-                  #              name: "kyverno"
+  postRenderers:
+    - kustomize:
+        patches:
+          - patch: |-
+              - op: delete
+                path: "/data/resourceFilters/Node"
+            target:
+              version: v1
+              kind: ConfigMap
+              name: "kyverno"
                  #  postRenderers:
                  #    - kustomize:
                  #        patches:
