@@ -58,5 +58,5 @@ spec:
               metadata:
                 name: not-used
                 namespace: not-used
-                labels:
-                  gylle: gylle
+                annotations:
+                  grafana_folder: gylle
