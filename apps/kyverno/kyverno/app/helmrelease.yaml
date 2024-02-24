@@ -58,5 +58,5 @@ spec:
               metadata:
                 name: not-used
                 namespace: not-used
-              data:
-                gylle: gylle
+                labels:
+                  gylle: gylle
