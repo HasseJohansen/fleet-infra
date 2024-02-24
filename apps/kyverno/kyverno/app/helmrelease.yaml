@@ -31,32 +31,28 @@ spec:
                 - delete
                 - get
                 - list
-                 #    postRenderers:
-                 #    - kustomize:
-                 #        patches:
-                 #          - patch: |-
-                 #              apiVersion: v1
-                 #              kind: ConfigMap
-                 #              meta-data:
-                 #                annotations:
-                 #                  gylle: gylle
-                 #            target:
-                 #              apiVersion: v1
-                 #              kind: ConfigMap
-                 #              name: "kyverno"
-                 #              namespace: "kyverno"
   postRenderers:
     - kustomize:
         patches:
-          - target:
+          - patch: |-
+              - op: delete
+                path: "/data/resourceFilters"
+            target:
               version: v1
               kind: ConfigMap
-              name: kyverno
-            patch: |-
-              apiVersion: v1
-              kind: ConfigMap
-              metadata:
-                name: not-used
-                namespace: not-used
-                annotations:
-                  gylle: 'gylle'
+              name: "kyverno"
+                 #  postRenderers:
+                 #    - kustomize:
+                 #        patches:
+                 #          - target:
+                 #              version: v1
+                 #              kind: ConfigMap
+                 #              name: kyverno
+                 #            patch: |-
+                 #              apiVersion: v1
+                 #              kind: ConfigMap
+                 #              metadata:
+                 #                name: not-used
+                 #                namespace: not-used
+                 #                annotations:
+                 #                  gylle: 'gylle'
