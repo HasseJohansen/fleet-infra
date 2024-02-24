@@ -16,10 +16,9 @@ spec:
         namespace: kyverno
       interval: 30m
   values:
-    resourceFiltersExclude: [
+    resourceFiltersExclude:
       - '[Node,*,*]'
       - '[Node/*,*,*]'
-    ]
     backgroundController:
       rbac:
         clusterRole:
