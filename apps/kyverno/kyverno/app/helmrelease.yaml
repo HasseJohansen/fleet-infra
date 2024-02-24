@@ -52,12 +52,11 @@ spec:
               version: v1
               kind: ConfigMap
               name: kyverno
-                #              labelSelector: grafana_dashboard in (1)
             patch: |-
               apiVersion: v1
               kind: ConfigMap
               metadata:
                 name: not-used
                 namespace: not-used
-                annotations:
-                  grafana_folder: Kubernetes
+                data:
+                  gylle: gylle
