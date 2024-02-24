@@ -35,9 +35,28 @@ spec:
     - kustomize:
         patches:
           - patch: |-
-              - op: replace
-                path: "/data/resourceFilters"
-                value: "[]" 
+              apiVersion: v1
+              kind: ConfigMap
+              meta-data:
+                annotations:
+                  gylle: gylle
             target:
+              apiVersion: v1
               kind: ConfigMap
               name: "kyverno"
+
+                #postRenderers:
+                #    - kustomize:
+                #        patches:
+                #          - target:
+                #              version: v1
+                #              kind: ConfigMap
+                #              labelSelector: grafana_dashboard in (1)
+                #            patch: |-
+                #              apiVersion: v1
+                #              kind: ConfigMap
+                #              metadata:
+                #                name: not-used
+                #                namespace: not-used
+                #                annotations:
+                #                  grafana_folder: Kubernetes
