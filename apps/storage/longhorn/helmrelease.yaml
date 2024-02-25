@@ -13,13 +13,13 @@ spec:
         kind: HelmRepository
         name: longhorn-repo
       version: 1.6.0
-  interval: 1m0s
+  interval: 10m
   values:
     service:
       ui:
         type: LoadBalancer
     defaultSettings:
-      #      backupTarget: s3://1mx.dk-longhorn-backup@eu-central-2/
-      #      backupTargetCredentialSecret: wasabi-longhorn-secret
+      backupTarget: s3://1mx.dk-longhorn-backup@eu-central-2/
+      backupTargetCredentialSecret: wasabi-longhorn-secret
       defaultReplicaCount: 2
       createDefaultDiskLabeledNodes: true
