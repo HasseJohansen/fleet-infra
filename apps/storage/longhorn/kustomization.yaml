@@ -4,4 +4,4 @@ resources:
   - helmrelease.yaml
   - helmrepo.yaml
   - ns.yaml
-    #- secret.yaml
+  - secret.yaml
