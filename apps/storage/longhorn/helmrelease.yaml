@@ -19,7 +19,7 @@ spec:
       ui:
         type: LoadBalancer
     defaultSettings:
-      #      backupTarget: s3://1mx.dk-longhorn-backup@eu-central-2/
-      #      backupTargetCredentialSecret: wasabi-longhorn-secret
+      backupTarget: s3://1mx.dk-longhorn-backup@eu-central-2/
+      backupTargetCredentialSecret: wasabi-longhorn-secret
       defaultReplicaCount: 2
       createDefaultDiskLabeledNodes: true
