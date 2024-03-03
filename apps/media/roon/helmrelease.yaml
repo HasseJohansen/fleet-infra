@@ -1,0 +1,16 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: roon-release
+  namespace: default
+spec:
+  chart:
+    spec:
+      chart: roon
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: roon-repo
+      version: 1.0.0
+  interval: 10m
