@@ -21,13 +21,16 @@ spec:
         size: 5Gi
         storageClass: "longhorn"
         retain: true
+        accessMode: "ReadWriteOnce"
       music:
         enabled: true
         size: 300Gi
         storageClass: "longhorn"
         retain: true
+        accessMode: "ReadWriteOnce"
       backups:
         enabled: true
         size: 20Gi
         storageClass: "longhorn"
         retain: true
+        accessMode: "ReadWriteOnce"
