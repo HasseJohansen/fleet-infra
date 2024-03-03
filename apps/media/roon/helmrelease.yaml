@@ -5,12 +5,11 @@ metadata:
   name: roon-release
   namespace: default
 spec:
+  releaseName: roon
   chart:
     spec:
       chart: roon
-      reconcileStrategy: ChartVersion
       sourceRef:
         kind: GitRepository
         name: roon-repo
-      version: 1.0.0
   interval: 10m
