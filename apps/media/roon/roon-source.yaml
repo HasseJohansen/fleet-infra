@@ -1,9 +1,11 @@
 ---
 apiVersion: source.toolkit.fluxcd.io/v1beta2
-kind: HelmRepository
+kind: GitRepository
 metadata:
   name: roon-repo
   namespace: default
 spec:
   interval: 10m
-  url: https://hassejohansen.github.io/HelmCharts/roon/
+  url: https://github.com/HasseJohansen/HelmCharts/roon
+  ref:
+    branch: main
