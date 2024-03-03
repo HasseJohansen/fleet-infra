@@ -15,19 +15,19 @@ spec:
   interval: 10m
   values:
     persistence:
-    config:
-      enabled: true
-      mountPath: /var/roon/
-      size: 5Gi
-      storageClass: "longhorn"
-      retain: true
-    music:
-      enabled: true
-      size: 300Gi
-      storageClass: "longhorn"
-      retain: true
-    backups:
-      enabled: true
-      size: 20Gi
-      storageClass: "longhorn"
-      retain: true
+      config:
+        enabled: true
+        mountPath: /var/roon/
+        size: 5Gi
+        storageClass: "longhorn"
+        retain: true
+      music:
+        enabled: true
+        size: 300Gi
+        storageClass: "longhorn"
+        retain: true
+      backups:
+        enabled: true
+        size: 20Gi
+        storageClass: "longhorn"
+        retain: true
