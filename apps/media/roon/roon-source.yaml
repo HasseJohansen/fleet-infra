@@ -6,6 +6,6 @@ metadata:
   namespace: default
 spec:
   interval: 10m
-  url: https://github.com/HasseJohansen/HelmCharts/roon
+  url: https://github.com/HasseJohansen/HelmCharts
   ref:
     branch: main
