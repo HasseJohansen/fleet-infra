@@ -10,7 +10,7 @@ spec:
       chart: roon
       reconcileStrategy: ChartVersion
       sourceRef:
-        kind: HelmRepository
+        kind: GitRepository
         name: roon-repo
       version: 1.0.0
   interval: 10m
