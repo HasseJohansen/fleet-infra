@@ -24,7 +24,7 @@ spec:
         accessMode: "ReadWriteOnce"
       music:
         enabled: true
-        size: 300Gi
+        size: 350Gi
         storageClass: "longhorn"
         retain: true
         accessMode: "ReadWriteOnce"
