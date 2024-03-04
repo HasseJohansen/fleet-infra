@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: roon-extension-alarm-clock
+  name: roon-extension-alarm-clock
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: roon-extension-alarm-clock
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: roon-extension-alarm-clock
+    spec:
+      #hostNetwork: true
+      containers:
+      - image: theappgineer/roon-extension-alarm-clock
+        name: roon-extension-alarm-clock
+        resources: {}
+status: {}
