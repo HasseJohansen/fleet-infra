@@ -1,6 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: default
   labels:
     app: roon-extension-alarm-clock
   name: roon-extension-alarm-clock
