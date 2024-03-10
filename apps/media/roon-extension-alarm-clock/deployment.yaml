@@ -20,5 +20,8 @@ spec:
       containers:
       - image: theappgineer/roon-extension-alarm-clock
         name: roon-extension-alarm-clock
+        env:
+        - name: TZ
+          value: Europe/Copenhagaen
         resources: {}
 status: {}
