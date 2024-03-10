@@ -16,7 +16,7 @@ spec:
       labels:
         app: roon-extension-alarm-clock
     spec:
-      #hostNetwork: true
+      hostNetwork: true
       containers:
       - image: theappgineer/roon-extension-alarm-clock
         name: roon-extension-alarm-clock
