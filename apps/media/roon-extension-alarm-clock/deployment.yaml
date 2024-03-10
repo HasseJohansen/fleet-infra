@@ -22,6 +22,6 @@ spec:
         name: roon-extension-alarm-clock
         env:
         - name: TZ
-          value: Europe/Copenhagaen
+          value: Europe/Copenhagen
         resources: {}
 status: {}
