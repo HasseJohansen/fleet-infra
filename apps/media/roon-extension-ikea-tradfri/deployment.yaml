@@ -24,17 +24,17 @@ spec:
                   volumeMounts:
                     - name: config-volume
                       mountPath: /home/node/temp
+                  lifecycle:
+                    postStart:
+                        exec:
+                            command:
+                                - /bin/sh
+                                - -c
+                                - cp /home/node/temp/config.json /home/node/config.json
             volumes:
                 - name: config-volume
                   configMap:
                     name: ikea-tradfri-config
-lifecycle:
-    postStart:
-        exec:
-            command:
-                - /bin/sh
-                - -c
-                - cp /home/node/temp/config.json /home/node/config.json
 status: {}
 sops:
     kms: []
@@ -45,14 +45,14 @@ sops:
         - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAydGhiS2dJOUhFUjU1RUpm
-            QWx3NVdyenpwWlh5MWJ2UUVyZTdZZjhib0RrCi9YZkc3VkVmWFJDZjg1MlUvTGlN
-            Si8xZnYvYnZkK29kVWNjTWhBMU1sWVEKLS0tIHI0eWNFem12QlliSXdGTVpTRmQ5
-            QTB6Vm9uM1hPUmpYN1hrYXJzc0lIM0kKTy32LNfE9Sn5J+Tva9y5/yExQXGc8BIu
-            nZDDFkdr+N+TmisTVLhbuZizMhLhQaNupi9acuLPhNhJxYCWDiCHdw==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBYdUFDM21KcXhRWmloeEQy
+            QThNRHJmWEVHTHV3RnJVajJJN2FhYzQyV0NFCnJDb1QxTFZZekEyMllpQWRIWU5Z
+            YXlKRWF3RVB6dWE1NVdQNm51d1B5cjAKLS0tIHFSZk9pWU82aXhvdUdib2tHeGNq
+            RG5CZkZsZ0NOREJlNE5iQ2E2RjI0ZXMKKWBjihi4EXmHnHr0Gc0PfmkBlEvLYs1d
+            s0EEbN2qQ8L2YuIdJ+pVN0x7Ck5uL9irSnQxSABDBklhTKIjCOL0CQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-03-17T13:23:12Z"
-    mac: ENC[AES256_GCM,data:ZxNYxD9731xEautJ7UhmDH3GvRoy6cohvebeC+WGieJn9+bBSYV1g2w9v0eKJtRA2rrq+v4mJDqTRM1T3uMxVOkZq0cupgr8eXlmAXRHCNOv5V9EYKWplKs1xulZ1NTt8e4RhG+NLl34hSJclVfOu8vJrFwJCdljxmwcjkXJhO8=,iv:6uWN6dpM8Qi7Lda/FrVgceEV1Uq5P/PgoXCZfNVN+Ao=,tag:IpzwAh/fr1LmxChAzvvpJw==,type:str]
+    lastmodified: "2024-03-17T13:30:40Z"
+    mac: ENC[AES256_GCM,data:ywuMHZmwg0g/nN/JOdvfXmZ4ioA2VRhNguLhoyba05dhIjyOYTFjTcEtkemeNPdLolDVmpdKbySG1GZJgeaHb4O+VhazqCaiAWTqonSB/MrS9hzC9+PLPBXdua6QoD57NEGR8fi7Pu0ANVwG3VzqHxLFFkt1XpqC/9oIZTAKEfc=,iv:xufTFM8CSeVMSr42uyiiq7DIOyOVhL15fFuuopQGQ7Q=,tag:Ol0QEWaaR5y17Qrbf3P3qA==,type:str]
     pgp: []
     encrypted_regex: ^(data|stringData)$
     version: 3.8.1
@@ -63,7 +63,7 @@ metadata:
     name: ikea-tradfri-config
     namespace: default
 data:
-    config.json: ENC[AES256_GCM,data:Mg+BFA157SHI4nqSMguvG7EEXUQ8sCrE4TEEIfAIO+qzXgUXN5440kuYvz8PcKMjQ5rHYfrhfjqQeaNUKFgWCwillaakMeCMul5pMrmqqTQilTa1TZ07zX7WnvXEFGmfCiTP/Xg7RiZdpt11DOM0AJY2DdSV4zdxbC9fvJtIYepcpe/rsymliBVs/2f2Xo9oS2DHkDSXoeUUSJ4B6pt6jNzhyzpqshcU+qtprCJ+MjrzJPXlx7glWy5SSWS60QENvC+mDb9BkC9+76CGtCAzC+3marKGZ1kpjDsN10KVWp1L0euNfq8yG1md3vskVyljqgmRegrqkCPxOX1g+vHGfetG2fCRC+Ewf+VDUzncJChYrLxGyiVf/d2LsqzGX3a67ah/E4Vxxfz6TFYLpR/wWrSMILa+KUs708qJCBArF4R3m0X6dPmh8FXw8qDDWy4DXXiiDfPxY5QVGPFzV3S/gAGnB2MP6/f1VokphuDbCm/y8RidfIuuN05sEcY3PNZLzRsWeWwSKsmWYrnT3f/79ouqfRCKquDQNGdqilaw+/pDxaInP76tUTcN0G3McX+/XUruODGTv5Lvx3GFtUhZj6tqMk/Le8XS8+SyoRnHLTTsnAOAO3A44QrXfvkXfJfapR5AKnOKbp1MM53CllgEsicRE25P1CUfq04Y0w25XUM5mcciAF4ICeCEghu5YQE=,iv:oATBsHQYU9WJjuEQ7+JlIXcWoeum6a0QM8Wjf0qErog=,tag:c5NHCAjVCfcb54hSjNh3xg==,type:str]
+    config.json: ENC[AES256_GCM,data:NVOXHr7hYV+3aRv0IwSn6uKMHB4JvZBp+M0X5h5sAVD990EQFaP+5r4GrHtEDZnb/4LkYN8GTZlhsJd87wo9velyaUgNdBCr0h09slFTz3x7SvBTSfRgbHkXsPMb11029FI6ujeF+q3CvuEWPl5NDJOGYcHQsBgd0DFFCuhsUMnA2StjzdEvFJc4Uw6WypMZD/gdql7hO6oVON5aDK/+57gtPALKmFuKVu4LHgLCWOzE4TQCS4YuFYvH7oNQQVYwekY8LJYgX5HTomGKs0/0jz5s8sShDCIS/shAnqpHj4zMC+jRl01F7zcZ6prSiNtLCyQ3PfKun6imMY0Wu8HH544cFoEHlp1ouA5xnXBODTqaWtqvITW2bL35VSWHhECxgS7+4+lril820F+xgyILnWyWjmKj/6bpZ7HTbWDIpHlcc+ehTWj1txEjpuDlQ3cjE3bWyJVxvL4Xemw6jFvtGYgPp9Kx7VfbQiVKKEfBOX0sVMGzrXbgcTAZ03vb8yglEWk4CM+qWW6ZimVy88uY6Z0+kaarEl6PadbSiij7wdTBSXcEp7Hc7+xYooIox+56mjQyGDjt+Nx3Eu1rgyGH/6ppcUKyMBvl/7dYlwjy7EeWB5OKLjJ91FwHADpMHXcrBuws5z6FdZLDtG6hQswt7pMzK2y3/LByYjKqKGk/2e4XQ/8ZnGHOacc+m1X29+A=,iv:x9RBoOgD1x49hIY5VlHi2DABe93Z/MXOYM+VLYkkbNs=,tag:QSngUmiGs/Id+cWBGL+7nQ==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -73,14 +73,14 @@ sops:
         - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAydGhiS2dJOUhFUjU1RUpm
-            QWx3NVdyenpwWlh5MWJ2UUVyZTdZZjhib0RrCi9YZkc3VkVmWFJDZjg1MlUvTGlN
-            Si8xZnYvYnZkK29kVWNjTWhBMU1sWVEKLS0tIHI0eWNFem12QlliSXdGTVpTRmQ5
-            QTB6Vm9uM1hPUmpYN1hrYXJzc0lIM0kKTy32LNfE9Sn5J+Tva9y5/yExQXGc8BIu
-            nZDDFkdr+N+TmisTVLhbuZizMhLhQaNupi9acuLPhNhJxYCWDiCHdw==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBYdUFDM21KcXhRWmloeEQy
+            QThNRHJmWEVHTHV3RnJVajJJN2FhYzQyV0NFCnJDb1QxTFZZekEyMllpQWRIWU5Z
+            YXlKRWF3RVB6dWE1NVdQNm51d1B5cjAKLS0tIHFSZk9pWU82aXhvdUdib2tHeGNq
+            RG5CZkZsZ0NOREJlNE5iQ2E2RjI0ZXMKKWBjihi4EXmHnHr0Gc0PfmkBlEvLYs1d
+            s0EEbN2qQ8L2YuIdJ+pVN0x7Ck5uL9irSnQxSABDBklhTKIjCOL0CQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-03-17T13:23:12Z"
-    mac: ENC[AES256_GCM,data:ZxNYxD9731xEautJ7UhmDH3GvRoy6cohvebeC+WGieJn9+bBSYV1g2w9v0eKJtRA2rrq+v4mJDqTRM1T3uMxVOkZq0cupgr8eXlmAXRHCNOv5V9EYKWplKs1xulZ1NTt8e4RhG+NLl34hSJclVfOu8vJrFwJCdljxmwcjkXJhO8=,iv:6uWN6dpM8Qi7Lda/FrVgceEV1Uq5P/PgoXCZfNVN+Ao=,tag:IpzwAh/fr1LmxChAzvvpJw==,type:str]
+    lastmodified: "2024-03-17T13:30:40Z"
+    mac: ENC[AES256_GCM,data:ywuMHZmwg0g/nN/JOdvfXmZ4ioA2VRhNguLhoyba05dhIjyOYTFjTcEtkemeNPdLolDVmpdKbySG1GZJgeaHb4O+VhazqCaiAWTqonSB/MrS9hzC9+PLPBXdua6QoD57NEGR8fi7Pu0ANVwG3VzqHxLFFkt1XpqC/9oIZTAKEfc=,iv:xufTFM8CSeVMSr42uyiiq7DIOyOVhL15fFuuopQGQ7Q=,tag:Ol0QEWaaR5y17Qrbf3P3qA==,type:str]
     pgp: []
     encrypted_regex: ^(data|stringData)$
     version: 3.8.1
