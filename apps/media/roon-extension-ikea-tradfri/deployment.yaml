@@ -21,11 +21,12 @@ spec:
                 - image: hassejohansen/roon-extension-ikea-tradfri:0.0.15
                   name: roon-extension-ikea-tradfri
                   command:
-                    - /bin/sh
+                    - sh
                     - -c
-                    - cp /home/node/temp/config.json /home/node/config.json
-                    - '&&'
-                    - node .
+                  args:
+                    - |
+                      cp /home/node/temp/config.json /home/node/config.json
+                      node .
                   resources: {}
                   volumeMounts:
                     - name: config-volume
@@ -44,14 +45,14 @@ sops:
         - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBVNy9HSFBlQmJLV0VCQ2po
-            QytyTnBmOUpvdFZENUJmMDJLaFVhREdOWFNBCmF2VnBxc210N1NBNkZBZURqQnNT
-            ck5Kd0YrMm82T3pDbnkyQ0U2SUZGRzQKLS0tIE00ZUNyc0JEUlNCenh6Yk9lcVVH
-            Wk40cTJlSXJSRStVNUFmdXpHRFBsTHMKBTFefqVugSfrKnVW48aak56AXVl0NbcU
-            zJGjjhVzeLpJHSfMA1GGz1/jGZdO8QIYdPsIi7nCQpzxjPFFg0dTew==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBpTE5ZVWJpK0pGV0J6cjV1
+            SnR1MS9HVkZkb0FieVdVNHpBTnY2Qlo3UmcwCnY1KzBqeTVMUW5SNi92R1FTWDlh
+            VUtVU0xvNFNXcXVuUEJTaXJrdXYzeUEKLS0tIHRtZGZPQUE0RHVQM2M3ZjVSdW1V
+            R0tSa3hScUhLZm5JdlBROW5nOVlhTDQK9b7gYhLXawm4w+jBHu7uYdlsISqIsL3y
+            eccLJekwZpR7pREhX+zqnISaoQp7HPI5n34Qsyv8oe4skxmpUb9NWg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-03-17T13:40:24Z"
-    mac: ENC[AES256_GCM,data:Vu0knN6dMcJDoOiZiiYJp1w6FepiIjn+vjoLt6ajwCj5itgNUzYHeyCiF+V5L9m7OSgnuKZFcYsYWQeq95tBGCT2QoFEDE44uxSZGzF5HBDpCUIt936yOF7wT3nyNC+4Q1cQzxFvL8KPviFyAYAc2PJLrP7fqyXAWRZioakomgE=,iv:TbGGcXayVjXePlrUgg7G2cF77O9lrNj/cEia5EIx6f8=,tag:+oTD1SdRz1R60YgIVO8q2g==,type:str]
+    lastmodified: "2024-03-17T13:44:45Z"
+    mac: ENC[AES256_GCM,data:ogcd2ei7NxsWZ641a2TOuLSx+ze8MTMx+XdA0zIG0CJInyVMPTtom0ErN5WFnPd1loQfj+3K+WcYm6h/xWG37FDnlR8mvVhEkI8ppDXts/JPBrmVrb4Qa9yxmagVKnCTy6NM66g29Ha5WTd7wfG9Zk+N/51DqjK3p/GPjv5B5cw=,iv:CaGE0mzC0bXAfiJXLfaM4BmfTqijLwBVIoZz/iyh9jE=,tag:Tm5jSTP3ElinEshj2TkcWQ==,type:str]
     pgp: []
     encrypted_regex: ^(data|stringData)$
     version: 3.8.1
@@ -62,7 +63,7 @@ metadata:
     name: ikea-tradfri-config
     namespace: default
 data:
-    config.json: ENC[AES256_GCM,data:E+sgGBSf53085QjcCnprmB1NVOAAFwvhyp/ohbyeWl9psuLV77pFaOYj+Hd7LcqoshQr7kgfMqexDoAZAGGDeCGBqLmhT5dTBCewnFjPDeTvxqNoVPtrl6/bTvgqSt9ZJir5sfM2UOsOu5BpbALDjWMBEIiqz4kniQxqHckeFDKy+BJ8BK8cCMAxrcZQu2RMzfeGW35TBJ4+wfrSC6X2OZqOHwto8oPX4rkDIibMB4oqIOoEVvwNjqIElLl1+HGM416XWdYInAOoAONSWc1CguXe8V+gkIF4T0mC20mNXB4qBM/r9XSApcgm79X8Yk5U05xdVTslTwa8ZMdIqyNfwT+cifyDiw8r6kEXggvda1SIAY3AqgJjjTc89mP6+fXFYc+TtpxcOCfFeJROaF82U2T5oue8d4yPgv8Kra+I8V36Fe5gEV1OK47CuZcZ60xQAjoaNkHlKTb1a8HTCqKOtM/tPu9jkksb+pNCDm/c6l/MlKMzhbI4rRYBRQjxwjdmBkgURc1ndBpOJxilS8V4LjZUN5cIatnEmbexHi+5eMsQC7aRaHBpeUvLBvI0myIz85JDBkuAMzvmS5wGUgY+zDiRzZpndyRLSzgr3hUYtMqSmc7kbUmlW1tozzsjVLovHUCYXcsQG0tPMxad9TUbMderF5bKTXo0Xn5XdUXDt447KZrTQLbhrvuxAKqGTWc=,iv:H7ci3CFDt6lCOThtPzYvFJ+z02CEknchIUMo//slDpM=,tag:frPn0VYJLcdtTwRZqyAp1w==,type:str]
+    config.json: ENC[AES256_GCM,data:poVf0tcjoJEb9uC8xUiJ4Elxil0OW370aiMt7ZDk2LKljIrkAz6LutBAlHy9/6e3Xs7U42yrT8BBIxChlqaRunfWMZShHR2jUA5q+dU4GCvx3dbyq04S6oiy4a7jUrZ4rBgol8aYiM5b1LVvcmMhsU9z8C2vQ+7G9RdfDFT21ejeDkzA9lhF3Kp8R973P1FFD4x9Ey1+AjT+4RvCR8hwMgrcBF3l1NU/SHG3LUoHXdfbyzKlgM1D/5813aTr5JZw8TixBDksBsX0aduoPUOQCaxU50Xma4/n8CGbazqI3rXn7R7bjiXP+lXudu4Dk2BYLMkuwry+YjlOj4gNtg4jBm7xIU7/BY8iOajTSH2V/1iGd7D/CkSDFecjI+9l4oPM9R+bFmrP+Y3CFWC6rGgt2I/T72x8IuXMjpays5k2cpEd3DeZwNGZk3pOksQqBrXZ5gs1p6GAFVzs8yOTfCATTXjZLRsvtzP66NHrGB4BbeCcFmDqbInkRpacty6p9/+XhKFVD7Dvx1wiMw8Mb+Y0jvKw5YBNOwB4sgNEBlcQMIy18NOhgQq2gRLOLhM72hudqeCfR8vJizPgeaxn33rURFC/Uj3nt0+dmCxPIjnLZ2tVjFinWGJYcdi9DHQ24hjobNaUVBJSTf8FOlXjg/EdDMcl3TlgyvV8PjhTOWK60OOQufQSOxK/3LSCbTeioYE=,iv:YWHZP8198fKD/Kzr9kI/z4rMkmtM/5I7mNxkHWp+GGk=,tag:rpOIw8KwT+lWQUZLUKIfQg==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -72,14 +73,14 @@ sops:
         - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBVNy9HSFBlQmJLV0VCQ2po
-            QytyTnBmOUpvdFZENUJmMDJLaFVhREdOWFNBCmF2VnBxc210N1NBNkZBZURqQnNT
-            ck5Kd0YrMm82T3pDbnkyQ0U2SUZGRzQKLS0tIE00ZUNyc0JEUlNCenh6Yk9lcVVH
-            Wk40cTJlSXJSRStVNUFmdXpHRFBsTHMKBTFefqVugSfrKnVW48aak56AXVl0NbcU
-            zJGjjhVzeLpJHSfMA1GGz1/jGZdO8QIYdPsIi7nCQpzxjPFFg0dTew==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBpTE5ZVWJpK0pGV0J6cjV1
+            SnR1MS9HVkZkb0FieVdVNHpBTnY2Qlo3UmcwCnY1KzBqeTVMUW5SNi92R1FTWDlh
+            VUtVU0xvNFNXcXVuUEJTaXJrdXYzeUEKLS0tIHRtZGZPQUE0RHVQM2M3ZjVSdW1V
+            R0tSa3hScUhLZm5JdlBROW5nOVlhTDQK9b7gYhLXawm4w+jBHu7uYdlsISqIsL3y
+            eccLJekwZpR7pREhX+zqnISaoQp7HPI5n34Qsyv8oe4skxmpUb9NWg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-03-17T13:40:24Z"
-    mac: ENC[AES256_GCM,data:Vu0knN6dMcJDoOiZiiYJp1w6FepiIjn+vjoLt6ajwCj5itgNUzYHeyCiF+V5L9m7OSgnuKZFcYsYWQeq95tBGCT2QoFEDE44uxSZGzF5HBDpCUIt936yOF7wT3nyNC+4Q1cQzxFvL8KPviFyAYAc2PJLrP7fqyXAWRZioakomgE=,iv:TbGGcXayVjXePlrUgg7G2cF77O9lrNj/cEia5EIx6f8=,tag:+oTD1SdRz1R60YgIVO8q2g==,type:str]
+    lastmodified: "2024-03-17T13:44:45Z"
+    mac: ENC[AES256_GCM,data:ogcd2ei7NxsWZ641a2TOuLSx+ze8MTMx+XdA0zIG0CJInyVMPTtom0ErN5WFnPd1loQfj+3K+WcYm6h/xWG37FDnlR8mvVhEkI8ppDXts/JPBrmVrb4Qa9yxmagVKnCTy6NM66g29Ha5WTd7wfG9Zk+N/51DqjK3p/GPjv5B5cw=,iv:CaGE0mzC0bXAfiJXLfaM4BmfTqijLwBVIoZz/iyh9jE=,tag:Tm5jSTP3ElinEshj2TkcWQ==,type:str]
     pgp: []
     encrypted_regex: ^(data|stringData)$
     version: 3.8.1
