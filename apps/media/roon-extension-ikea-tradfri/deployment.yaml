@@ -20,17 +20,16 @@ spec:
             containers:
                 - image: hassejohansen/roon-extension-ikea-tradfri:0.0.15
                   name: roon-extension-ikea-tradfri
+                  command:
+                    - /bin/sh
+                    - -c
+                    - cp /home/node/temp/config.json /home/node/config.json
+                    - '&&'
+                    - node .
                   resources: {}
                   volumeMounts:
                     - name: config-volume
                       mountPath: /home/node/temp
-                  lifecycle:
-                    postStart:
-                        exec:
-                            command:
-                                - /bin/sh
-                                - -c
-                                - cp /home/node/temp/config.json /home/node/config.json
             volumes:
                 - name: config-volume
                   configMap:
@@ -45,14 +44,14 @@ sops:
         - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBYdUFDM21KcXhRWmloeEQy
-            QThNRHJmWEVHTHV3RnJVajJJN2FhYzQyV0NFCnJDb1QxTFZZekEyMllpQWRIWU5Z
-            YXlKRWF3RVB6dWE1NVdQNm51d1B5cjAKLS0tIHFSZk9pWU82aXhvdUdib2tHeGNq
-            RG5CZkZsZ0NOREJlNE5iQ2E2RjI0ZXMKKWBjihi4EXmHnHr0Gc0PfmkBlEvLYs1d
-            s0EEbN2qQ8L2YuIdJ+pVN0x7Ck5uL9irSnQxSABDBklhTKIjCOL0CQ==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBVNy9HSFBlQmJLV0VCQ2po
+            QytyTnBmOUpvdFZENUJmMDJLaFVhREdOWFNBCmF2VnBxc210N1NBNkZBZURqQnNT
+            ck5Kd0YrMm82T3pDbnkyQ0U2SUZGRzQKLS0tIE00ZUNyc0JEUlNCenh6Yk9lcVVH
+            Wk40cTJlSXJSRStVNUFmdXpHRFBsTHMKBTFefqVugSfrKnVW48aak56AXVl0NbcU
+            zJGjjhVzeLpJHSfMA1GGz1/jGZdO8QIYdPsIi7nCQpzxjPFFg0dTew==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-03-17T13:30:40Z"
-    mac: ENC[AES256_GCM,data:ywuMHZmwg0g/nN/JOdvfXmZ4ioA2VRhNguLhoyba05dhIjyOYTFjTcEtkemeNPdLolDVmpdKbySG1GZJgeaHb4O+VhazqCaiAWTqonSB/MrS9hzC9+PLPBXdua6QoD57NEGR8fi7Pu0ANVwG3VzqHxLFFkt1XpqC/9oIZTAKEfc=,iv:xufTFM8CSeVMSr42uyiiq7DIOyOVhL15fFuuopQGQ7Q=,tag:Ol0QEWaaR5y17Qrbf3P3qA==,type:str]
+    lastmodified: "2024-03-17T13:40:24Z"
+    mac: ENC[AES256_GCM,data:Vu0knN6dMcJDoOiZiiYJp1w6FepiIjn+vjoLt6ajwCj5itgNUzYHeyCiF+V5L9m7OSgnuKZFcYsYWQeq95tBGCT2QoFEDE44uxSZGzF5HBDpCUIt936yOF7wT3nyNC+4Q1cQzxFvL8KPviFyAYAc2PJLrP7fqyXAWRZioakomgE=,iv:TbGGcXayVjXePlrUgg7G2cF77O9lrNj/cEia5EIx6f8=,tag:+oTD1SdRz1R60YgIVO8q2g==,type:str]
     pgp: []
     encrypted_regex: ^(data|stringData)$
     version: 3.8.1
@@ -63,7 +62,7 @@ metadata:
     name: ikea-tradfri-config
     namespace: default
 data:
-    config.json: ENC[AES256_GCM,data:NVOXHr7hYV+3aRv0IwSn6uKMHB4JvZBp+M0X5h5sAVD990EQFaP+5r4GrHtEDZnb/4LkYN8GTZlhsJd87wo9velyaUgNdBCr0h09slFTz3x7SvBTSfRgbHkXsPMb11029FI6ujeF+q3CvuEWPl5NDJOGYcHQsBgd0DFFCuhsUMnA2StjzdEvFJc4Uw6WypMZD/gdql7hO6oVON5aDK/+57gtPALKmFuKVu4LHgLCWOzE4TQCS4YuFYvH7oNQQVYwekY8LJYgX5HTomGKs0/0jz5s8sShDCIS/shAnqpHj4zMC+jRl01F7zcZ6prSiNtLCyQ3PfKun6imMY0Wu8HH544cFoEHlp1ouA5xnXBODTqaWtqvITW2bL35VSWHhECxgS7+4+lril820F+xgyILnWyWjmKj/6bpZ7HTbWDIpHlcc+ehTWj1txEjpuDlQ3cjE3bWyJVxvL4Xemw6jFvtGYgPp9Kx7VfbQiVKKEfBOX0sVMGzrXbgcTAZ03vb8yglEWk4CM+qWW6ZimVy88uY6Z0+kaarEl6PadbSiij7wdTBSXcEp7Hc7+xYooIox+56mjQyGDjt+Nx3Eu1rgyGH/6ppcUKyMBvl/7dYlwjy7EeWB5OKLjJ91FwHADpMHXcrBuws5z6FdZLDtG6hQswt7pMzK2y3/LByYjKqKGk/2e4XQ/8ZnGHOacc+m1X29+A=,iv:x9RBoOgD1x49hIY5VlHi2DABe93Z/MXOYM+VLYkkbNs=,tag:QSngUmiGs/Id+cWBGL+7nQ==,type:str]
+    config.json: ENC[AES256_GCM,data:E+sgGBSf53085QjcCnprmB1NVOAAFwvhyp/ohbyeWl9psuLV77pFaOYj+Hd7LcqoshQr7kgfMqexDoAZAGGDeCGBqLmhT5dTBCewnFjPDeTvxqNoVPtrl6/bTvgqSt9ZJir5sfM2UOsOu5BpbALDjWMBEIiqz4kniQxqHckeFDKy+BJ8BK8cCMAxrcZQu2RMzfeGW35TBJ4+wfrSC6X2OZqOHwto8oPX4rkDIibMB4oqIOoEVvwNjqIElLl1+HGM416XWdYInAOoAONSWc1CguXe8V+gkIF4T0mC20mNXB4qBM/r9XSApcgm79X8Yk5U05xdVTslTwa8ZMdIqyNfwT+cifyDiw8r6kEXggvda1SIAY3AqgJjjTc89mP6+fXFYc+TtpxcOCfFeJROaF82U2T5oue8d4yPgv8Kra+I8V36Fe5gEV1OK47CuZcZ60xQAjoaNkHlKTb1a8HTCqKOtM/tPu9jkksb+pNCDm/c6l/MlKMzhbI4rRYBRQjxwjdmBkgURc1ndBpOJxilS8V4LjZUN5cIatnEmbexHi+5eMsQC7aRaHBpeUvLBvI0myIz85JDBkuAMzvmS5wGUgY+zDiRzZpndyRLSzgr3hUYtMqSmc7kbUmlW1tozzsjVLovHUCYXcsQG0tPMxad9TUbMderF5bKTXo0Xn5XdUXDt447KZrTQLbhrvuxAKqGTWc=,iv:H7ci3CFDt6lCOThtPzYvFJ+z02CEknchIUMo//slDpM=,tag:frPn0VYJLcdtTwRZqyAp1w==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -73,14 +72,14 @@ sops:
         - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBYdUFDM21KcXhRWmloeEQy
-            QThNRHJmWEVHTHV3RnJVajJJN2FhYzQyV0NFCnJDb1QxTFZZekEyMllpQWRIWU5Z
-            YXlKRWF3RVB6dWE1NVdQNm51d1B5cjAKLS0tIHFSZk9pWU82aXhvdUdib2tHeGNq
-            RG5CZkZsZ0NOREJlNE5iQ2E2RjI0ZXMKKWBjihi4EXmHnHr0Gc0PfmkBlEvLYs1d
-            s0EEbN2qQ8L2YuIdJ+pVN0x7Ck5uL9irSnQxSABDBklhTKIjCOL0CQ==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBVNy9HSFBlQmJLV0VCQ2po
+            QytyTnBmOUpvdFZENUJmMDJLaFVhREdOWFNBCmF2VnBxc210N1NBNkZBZURqQnNT
+            ck5Kd0YrMm82T3pDbnkyQ0U2SUZGRzQKLS0tIE00ZUNyc0JEUlNCenh6Yk9lcVVH
+            Wk40cTJlSXJSRStVNUFmdXpHRFBsTHMKBTFefqVugSfrKnVW48aak56AXVl0NbcU
+            zJGjjhVzeLpJHSfMA1GGz1/jGZdO8QIYdPsIi7nCQpzxjPFFg0dTew==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-03-17T13:30:40Z"
-    mac: ENC[AES256_GCM,data:ywuMHZmwg0g/nN/JOdvfXmZ4ioA2VRhNguLhoyba05dhIjyOYTFjTcEtkemeNPdLolDVmpdKbySG1GZJgeaHb4O+VhazqCaiAWTqonSB/MrS9hzC9+PLPBXdua6QoD57NEGR8fi7Pu0ANVwG3VzqHxLFFkt1XpqC/9oIZTAKEfc=,iv:xufTFM8CSeVMSr42uyiiq7DIOyOVhL15fFuuopQGQ7Q=,tag:Ol0QEWaaR5y17Qrbf3P3qA==,type:str]
+    lastmodified: "2024-03-17T13:40:24Z"
+    mac: ENC[AES256_GCM,data:Vu0knN6dMcJDoOiZiiYJp1w6FepiIjn+vjoLt6ajwCj5itgNUzYHeyCiF+V5L9m7OSgnuKZFcYsYWQeq95tBGCT2QoFEDE44uxSZGzF5HBDpCUIt936yOF7wT3nyNC+4Q1cQzxFvL8KPviFyAYAc2PJLrP7fqyXAWRZioakomgE=,iv:TbGGcXayVjXePlrUgg7G2cF77O9lrNj/cEia5EIx6f8=,tag:+oTD1SdRz1R60YgIVO8q2g==,type:str]
     pgp: []
     encrypted_regex: ^(data|stringData)$
     version: 3.8.1
