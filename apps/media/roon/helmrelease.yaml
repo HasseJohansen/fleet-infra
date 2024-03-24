@@ -29,7 +29,7 @@ spec:
         size: 350Gi
         storageClass: "longhorn"
         retain: true
-        accessMode: "ReadWriteOnce"
+        accessMode: "ReadOnlyMany"
       backups:
         enabled: true
         size: 20Gi
