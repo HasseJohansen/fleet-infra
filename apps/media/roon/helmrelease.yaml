@@ -30,6 +30,7 @@ spec:
         storageClass: "longhorn"
         retain: true
         accessMode: "ReadOnlyMany"
+        readOnly: true
       backups:
         enabled: true
         size: 20Gi
