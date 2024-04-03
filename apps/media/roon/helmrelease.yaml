@@ -15,6 +15,7 @@ spec:
   interval: 10m
   values:
     image:
+      tag: 2.0.1388
       pullPolicy: Always
     persistence:
       config:
