@@ -44,4 +44,4 @@ spec:
         # -- Set the service type
         type: LoadBalancer
 
-        ports: [9003]
+        ports: ['9003']
