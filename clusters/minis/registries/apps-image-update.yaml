@@ -19,7 +19,7 @@ spec:
   interval: 30m0s
   sourceRef:
     kind: GitRepository
-    name: fleet-infra
+    name: flux-system
   update:
     path: ./apps
     strategy: Setters
