@@ -36,12 +36,3 @@ spec:
         storageClass: "longhorn"
         retain: true
         accessMode: "ReadWriteOnce"
-    service:
-      main:
-        # -- Enables or disables the service
-        enabled: true
-
-        # -- Set the service type
-        type: LoadBalancer
-
-        ports: ['9003']
