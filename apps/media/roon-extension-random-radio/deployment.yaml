@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  labels:
+    app: roon-extension-random-radio
+  name: roon-extension-random-radio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: roon-extension-random-radio
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: roon-extension-random-radio
+    spec:
+      hostNetwork: true
+      containers:
+      - image: theappgineer/roon-extension-random-radio
+        name: roon-extension-random-radio
+        env:
+        - name: TZ
+          value: Europe/Copenhagen
+        resources: {}
+status: {}
