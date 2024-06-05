@@ -1,0 +1,7 @@
+resources:
+- deployment.yaml
+
+configMapGenerator:
+- name: alarm-clock-config
+  files:
+  - config.json
