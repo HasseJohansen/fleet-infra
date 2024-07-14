@@ -75,7 +75,8 @@ data:
           - "0e"
           - "ef"
           - "fe"
-    #      - "ff"
+        deviceClassBlacklist:
+          - "ff"
     #    deviceLabelFields:
     #      - "class"
     #      - "vendor"
