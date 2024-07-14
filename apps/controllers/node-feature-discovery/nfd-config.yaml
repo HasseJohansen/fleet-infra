@@ -71,12 +71,13 @@ data:
     #      - "subsystem_vendor"
     #      - "subsystem_device"
       usb:
-        deviceClassWhitelist:
-          - "0e"
-          - "ef"
-          - "fe"
+    #    deviceClassWhitelist:
+    #      - "0e"
+    #      - "ef"
+    #      - "fe"
         deviceClassBlacklist:
-          - "ff"
+          - "*"
+    #      - "ff"
     #    deviceLabelFields:
     #      - "class"
     #      - "vendor"
