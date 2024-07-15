@@ -35,7 +35,15 @@ spec:
           - mountPath: /music
             name: music                                                                                                                                                                                                                    
           - name: whipper-config
-            mountPath: /root/.config/whipper/whipper.conf
+            mountPath: /root/.config/whipper
+      initContainers:
+      - image: my-container-image:1.1 (important to use the same image rather than a busybox or etc)
+        name: create-cdrom-symlink
+        command:
+          - sh
+          - '-ec'
+          - >-
+            ln -sf /dev/sr0 /dev/cdrom
       volumes:
         - name: config-volume
           configMap:
