@@ -1,9 +1,8 @@
-core:
+#core:
 #  labelWhiteList:
 #  noPublish: false
 #  sleepInterval: 60s
 #  featureSources: [all]
-  featureSources: [usb]
 #  labelSources: [all]
 #  klog:
 #    addDirHeader: false
@@ -70,14 +69,11 @@ sources:
 #      - "subsystem_device"
   usb:
     deviceClassWhitelist:
-      - "08"
-      #- "0e"
-      #- "ef"
-      #- "fe"
-      #- "ff"
-      #- "00"
-    deviceClassBlacklist:
+      - "0e"
+      - "ef"
+      - "fe"
       - "ff"
+      - "08"
 #    deviceLabelFields:
 #      - "class"
 #      - "vendor"
