@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  labels:
+    app: roon-extension-cd-ripper
+  name: roon-extension-cd-ripper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: roon-extension-cd-ripper
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: roon-extension-cd-ripper
+    spec:
+      hostNetwork: true
+      containers:
+      - image: theappgineer/roon-extension-cd-ripper
+        name: roon-extension-cd-ripper
+        env:
+        - name: TZ
+          value: Europe/Copenhagen
+        resources: {}
+          #volumeMounts:
+          #  - name: config-volume
+          #    mountPath: /usr/src/app/config.json
+          #    subPath: config.json
+      volumes:
+        - name: config-volume
+          configMap:
+            name: cd-ripper-config
+      nodeSelector:
+        feature.node.kubernetes.io/usb-08_05ac_1500.present: true
+status: {}
