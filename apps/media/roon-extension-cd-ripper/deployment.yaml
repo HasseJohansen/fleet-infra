@@ -20,7 +20,6 @@ spec:
       containers:
       - image: theappgineer/roon-extension-cd-ripper
         name: roon-extension-cd-ripper
-        privileged: true
         env:
         - name: TZ
           value: Europe/Copenhagen
@@ -37,7 +36,7 @@ spec:
             name: cd-ripper-config
         - name: cdrom
           hostPath:
-            path: /dev/cdrom
+            path: /dev/sr0
       nodeSelector:
         feature.node.kubernetes.io/usb-08_05ac_1500.present: 'true'
 status: {}
