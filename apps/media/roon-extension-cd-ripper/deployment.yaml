@@ -37,7 +37,7 @@ spec:
           - name: whipper-config
             mountPath: /root/.config/whipper
       initContainers:
-      - image: my-container-image:1.1 (important to use the same image rather than a busybox or etc)
+      - image: theappgineer/roon-extension-cd-ripper
         name: create-cdrom-symlink
         command:
           - sh
