@@ -33,5 +33,5 @@ spec:
           configMap:
             name: cd-ripper-config
       nodeSelector:
-        feature.node.kubernetes.io/usb-08_05ac_1500.present: true
+        feature.node.kubernetes.io/usb-08_05ac_1500.present: 'true'
 status: {}
