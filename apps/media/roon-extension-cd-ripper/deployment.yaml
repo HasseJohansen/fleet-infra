@@ -31,14 +31,14 @@ spec:
           #  mountPath: /usr/src/app/config.json
           #  subPath: config.json
           - name: cdrom
-            mountPath: /dev/sr0
+            mountPath: /dev/cdrom
       volumes:
         - name: config-volume
           configMap:
             name: cd-ripper-config
         - name: cdrom
           hostPath:
-            path: /dev/sr0
+            path: /dev/cdrom
       nodeSelector:
         feature.node.kubernetes.io/usb-08_05ac_1500.present: 'true'
 status: {}
