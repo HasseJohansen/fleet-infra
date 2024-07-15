@@ -40,14 +40,6 @@ spec:
             name: music                                                                                                                                                                                                                    
           - name: whipper-config
             mountPath: /root/.config/whipper
-      initContainers:
-      - image: theappgineer/roon-extension-cd-ripper
-        name: create-cdrom-symlink
-        command:
-          - sh
-          - '-ec'
-          - >-
-            ln -sf /dev/sr0 /dev/cdrom
       volumes:
         - name: config-volume
           configMap:
