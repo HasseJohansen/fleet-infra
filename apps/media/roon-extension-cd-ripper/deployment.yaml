@@ -29,7 +29,7 @@ spec:
           #  mountPath: /usr/src/app/config.json
           #  subPath: config.json
           - name: cdrom
-            mountPath: /dev/cdrom
+            mountPath: /dev/sr0
       volumes:
         - name: config-volume
           configMap:
