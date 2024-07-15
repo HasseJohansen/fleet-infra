@@ -32,6 +32,8 @@ spec:
           #  subPath: config.json
           - name: cdrom
             mountPath: /dev/cdrom
+          - mountPath: /music
+            name: music                                                                                                                                                                                                                    
       volumes:
         - name: config-volume
           configMap:
@@ -39,6 +41,9 @@ spec:
         - name: cdrom
           hostPath:
             path: /dev/cdrom
+        - name: music
+          persistentVolumeClaim:
+            claimName: roon-music
       nodeSelector:
         feature.node.kubernetes.io/usb-08_05ac_1500.present: 'true'
 status: {}
