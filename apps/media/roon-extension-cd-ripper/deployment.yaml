@@ -32,12 +32,17 @@ spec:
           #  subPath: config.json
           #- name: cdrom
           #  mountPath: /dev/cdrom
-          #- mountPath: /music
-          #  name: music                                                                                                                                                                                                                    
+          - mountPath: /music
+            name: music                                                                                                                                                                                                                    
+          - name: whipper-config
+            mountPath: /root/.config/whipper/whipper.conf
       volumes:
         - name: config-volume
           configMap:
             name: cd-ripper-config
+        - name: whipper-config
+          configMap:
+            name: whipper-config
         - name: cdrom
           hostPath:
             path: /dev/cdrom
