@@ -1,8 +1,8 @@
-#core:
+core:
 #  labelWhiteList:
 #  noPublish: false
 #  sleepInterval: 60s
-#  featureSources: [all]
+  featureSources: [pci]
 #  labelSources: [all]
 #  klog:
 #    addDirHeader: false
