@@ -7,4 +7,4 @@ configMapGenerator:
   - name: nfd-worker-conf
     behavior: replace
     files:
-      - nfd-config.yaml
+      - nfd-worker.conf=nfd-config.yaml
