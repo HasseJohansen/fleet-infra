@@ -1,0 +1,8 @@
+namespace: default
+resources:
+- deployment.yaml
+
+configMapGenerator:
+- name: cd-ripper-config
+  files:
+  - config.json
