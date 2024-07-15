@@ -30,10 +30,10 @@ spec:
           #- name: config-volume
           #  mountPath: /usr/src/app/config.json
           #  subPath: config.json
-          - name: cdrom
-            mountPath: /dev/cdrom
-          - mountPath: /music
-            name: music                                                                                                                                                                                                                    
+          #- name: cdrom
+          #  mountPath: /dev/cdrom
+          #- mountPath: /music
+          #  name: music                                                                                                                                                                                                                    
       volumes:
         - name: config-volume
           configMap:
