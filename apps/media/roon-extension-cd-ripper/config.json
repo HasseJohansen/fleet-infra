@@ -1,56 +1,10 @@
-{
-    "settings": {
-        "selected_timer": 1,
-        "alarm_count": 3,
-        "timer_active_0": true,
-        "zone_0": {
-            "output_id": "17019e3eb37559cefb3702a7d9c13b3216bc",
-            "name": "Soveværelse"
-        },
-        "wake_action_0": 1,
-        "wake_day_0": 9,
-        "wake_time_0": "05:58",
-        "wake_volume_0": 38,
-        "transition_type_0": 0,
-        "transition_time_0": "3",
-        "transfer_zone_0": null,
-        "repeat_0": true,
-        "source_type_0": 3,
-        "source_entry_0": "DR P4 København",
-        "config_rev": 4,
-        "timer_active_1": true,
-        "zone_1": {
-            "output_id": "17019e3eb37559cefb3702a7d9c13b3216bc",
-            "name": "Soveværelse"
-        },
-        "wake_action_1": 3,
-        "wake_day_1": 9,
-        "wake_time_1": "07:08",
-        "wake_volume_1": 38,
-        "transition_type_1": 0,
-        "transition_time_1": "3",
-        "transfer_zone_1": null,
-        "repeat_1": true,
-        "source_type_1": 0,
-        "source_entry_1": null,
-        "profile": "Hasse Hagen Johansen",
-        "timer_active_2": false,
-        "zone_2": null,
-        "wake_action_2": 1,
-        "wake_day_2": 7,
-        "wake_time_2": "07:00",
-        "wake_volume_2": null,
-        "transition_type_2": 0,
-        "transition_time_2": "3",
-        "transfer_zone_2": null,
-        "repeat_2": false,
-        "source_type_2": 0,
-        "source_entry_2": null
-    },
-    "roonstate": {
-        "tokens": {
-            "f80a934b-0a3e-45de-b2e1-37be531aff04": "9ef6df92-54e8-44d9-b331-ecf34a98fa07"
-        },
-        "paired_core_id": "f80a934b-0a3e-45de-b2e1-37be531aff04"
-    }
+{                                                                                                                                                                                                                                            
+    "roonstate": {                                                                                                                                                                                                                           
+        "tokens": {                                                                                                                                                                                                                          
+            "f80a934b-0a3e-45de-b2e1-37be531aff04": "8cb73371-4639-432e-96fc-4f92319c15c3"                                                                                                                                                   
+        }                                                                                                                                                                                                                                    
+    },                                                                                                                                                                                                                                       
+    "settings": {                                                                                                                                                                                                                            
+        "share": "/music"                                                                                                                                                                                                                    
+    }                                                                                                                                                                                                                                        
 }
