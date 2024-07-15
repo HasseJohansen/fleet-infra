@@ -20,6 +20,10 @@ spec:
       containers:
       - image: theappgineer/roon-extension-cd-ripper
         name: roon-extension-cd-ripper
+        command:
+          - /bin/sh
+          - -c
+          - "ln -s /dev/sr0 /dev/cdrom && exec node /home/worker /output"
         securityContext:
           privileged: true
         env:
