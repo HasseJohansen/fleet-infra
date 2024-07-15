@@ -6,3 +6,6 @@ configMapGenerator:
 - name: cd-ripper-config
   files:
   - config.json
+- name: whipper-config
+  files:
+  - whipper.conf
