@@ -20,6 +20,7 @@ spec:
       containers:
       - image: theappgineer/roon-extension-cd-ripper
         name: roon-extension-cd-ripper
+        privileged: true
         env:
         - name: TZ
           value: Europe/Copenhagen
