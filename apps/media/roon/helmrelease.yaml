@@ -36,3 +36,5 @@ spec:
         storageClass: "longhorn"
         retain: true
         accessMode: "ReadWriteOnce"
+      nodeSelector:
+        kubernetes.io/hostname: 'minis-20be'
