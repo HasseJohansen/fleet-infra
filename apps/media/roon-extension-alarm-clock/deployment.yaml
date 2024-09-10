@@ -26,7 +26,7 @@ spec:
         resources: {}
         volumeMounts:
           - name: config-volume
-            mountPath: /usr/src/app/config.json
+            mountPath: /usr/src/app/
             subPath: config.json
       volumes:
         - name: config-volume
