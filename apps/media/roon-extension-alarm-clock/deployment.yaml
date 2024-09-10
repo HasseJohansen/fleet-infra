@@ -30,6 +30,19 @@ spec:
             subPath: config.json
       volumes:
         - name: config-volume
-          configMap:
-            name: alarm-clock-config
+          persistentVolumeClaim:
+            claimName: alarm-clock-volume-claim
 status: {}
+--
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: alarm-clock-volume-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 128MB
+  storageClassName: longhorn
