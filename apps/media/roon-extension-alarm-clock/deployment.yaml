@@ -33,7 +33,7 @@ spec:
           persistentVolumeClaim:
             claimName: alarm-clock-volume-claim
 status: {}
---
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
