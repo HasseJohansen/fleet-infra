@@ -10,7 +10,8 @@ spec:
   selector:
     matchLabels:
       app: roon-extension-alarm-clock
-  strategy:                                                                                                                                                                                                                                                                       ││     type: Recreate
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
