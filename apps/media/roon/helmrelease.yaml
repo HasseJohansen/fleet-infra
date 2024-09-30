@@ -37,4 +37,4 @@ spec:
         retain: true
         accessMode: "ReadWriteOnce"
     nodeSelector:
-      kubernetes.io/hostname: 'minis-20be'
+      kubernetes.io/hostname: 'minis-7373'
