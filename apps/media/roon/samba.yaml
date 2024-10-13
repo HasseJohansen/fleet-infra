@@ -6,4 +6,5 @@ spec:
   storage:
     pvc:
       name: roon-music
+      namespace: default
   readOnly: false
