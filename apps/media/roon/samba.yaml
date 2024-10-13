@@ -1,0 +1,9 @@
+apiVersion: samba-operator.samba.org/v1alpha1
+kind: SmbShare
+metadata:
+  name: music
+spec:
+  storage:
+    pvc:
+      name: roon-music
+  readOnly: false
