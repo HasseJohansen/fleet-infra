@@ -2,6 +2,7 @@ apiVersion: samba-operator.samba.org/v1alpha1
 kind: SmbShare
 metadata:
   name: music
+  namespace: default
 spec:
   storage:
     pvc:
