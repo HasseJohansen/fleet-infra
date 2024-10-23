@@ -13,3 +13,6 @@ spec:
         kind: HelmRepository
         name: prometheus-repo
   interval: 1m0s
+  values:
+    service:
+      type: LoadBalancer
