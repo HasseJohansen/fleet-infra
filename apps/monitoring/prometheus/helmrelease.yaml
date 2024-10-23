@@ -16,3 +16,4 @@ spec:
   values:
     service:
       type: LoadBalancer
+      externalIPs: ["192.168.8.13"]
