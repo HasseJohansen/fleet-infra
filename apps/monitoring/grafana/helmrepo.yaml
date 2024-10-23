@@ -6,5 +6,5 @@ metadata:
   namespace: monitoring
 spec:
   interval: 5m
-  url: https://github.com/grafana/helm-charts/tree/main/charts/grafana
+  url: https://grafana.github.io/helm-charts
 
