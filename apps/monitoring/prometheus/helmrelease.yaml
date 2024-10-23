@@ -16,4 +16,4 @@ spec:
   values:
     service:
       type: LoadBalancer
-      externalIPs: ["192.168.8.13"]
+      externalIPs: ["192.168.8.13","192.168.8.14","192.168.8.15","192.168.8.16","192.168.8.17"]
