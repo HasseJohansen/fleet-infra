@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Secret
 metadata:
-    name: samba-users
+    name: users1
     namespace: default
 type: Opaque
 stringData:
-    samba-users: ENC[AES256_GCM,data:ywh2A/vrQoamnF9vudfOfGYJ8Z9/JF0YESpR5T4QkfIyEYDNtTJYArL9w1Py+vIZXbAPZWm6BwZKoFP8MwA1JNbDcYHi4SFWK9V+t+kxB614xhgWiSHrQES0wRuJZNaWO5RDCofT21dqT0s0CxkGmwrruvUwXZcS9Lmgq06ELSBlcbqcZaa2dKa/rkucm13Lt9YT4VbR2x3FW8zQCW1o3tE7,iv:GFgzNeUQ2tb68Pm7YUU7867RcwzI8PIUsh94vRWXSDg=,tag:uhUPP054LJYYrGXOLEzt4A==,type:str]
+    demousers: ENC[AES256_GCM,data:EVb51Y5YCdQdIJqLWfvLGpXW/2Y57wxACoAZh+gIvYdNPzzjzfcorN3N6+h2xDlM63sHEfw+yRf+7IJhZ2GbnEEXaECT8E2Geb+Avv6TyY49EpbfkPiYY9lbUk23s77o0nliwySlbIMSglNtp0ijKYvGIPor3uj82Gq1Mum81znlyNwbuywRrQnYFAIvaosv8bKDYIxbRPO1nUS9a/74JxlI,iv:hn0AUcSE4HnQuOXB+90n+d4zYZLV6OEWMbh1f8pKtJs=,tag:SM1ntmc7xJimg27gzwZEqw==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -15,14 +15,14 @@ sops:
         - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBSOERZOUhMSW82ZGxpYWJ6
-            NnhBYThrVGdyaWhhQWlyb3RMd3ZabUpHUFg4Ci9OZHFwdFpZMldUYmFqa3BVNlkz
-            SUZwZU1uQjRmOWU0L09MbXRoU3NxNUEKLS0tIE0rdU1Rdi9GNnB0dUZoL3FJNGcv
-            dGdJdmtCM0dPM2tHd0JrTTdDWENGMzQK5igdmgnkE+oG+FUCEykeVuOYNHCNie8l
-            XloY2mFEdXVoHOSNxfzDLkyec6g7Pxv5dTnT/I1ELKq5bmqpehtaiA==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBVRnlRK3FRNUlDeVo2VzUr
+            eW1BcmxwM3ZiY085ZVhBV1ZQeFpjRzJHU25FCmlOYTBPMTF2ZU1jelVNZ3g4WDRa
+            YmJGVDBRUXQvZTRPREhnQnRVTmFXcnMKLS0tIGFPOTFsQ3RhSXAzQVZNWHc4MnhL
+            V1NuRExrVkJIZjZLM0Z4VHkvcEpKdlUKIVkI3T2Gy5CrztkT5UmazUGatHbGiA6E
+            z5yJcCqGbembSdgTydpW3PjAjLmwqMoHkqWtdLQi15kCZ7NPwsWcNg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-10-24T08:43:32Z"
-    mac: ENC[AES256_GCM,data:FZl+nD/JhO5IYUYhGF0ILjc0adCZwtN/770G0xlCnh6kbXsFXGxdbRHHSQMvvVOFkvO8OQqXwku0yoxPNd8McXvQ852QphtqU4N2z65eOGrR1FiZvwlCiTx3oGUovvXaU/6cEWm/Dk27fVXsCNOheG88P9IHyFUi2sfmAazGv3s=,iv:L2jHuJk6VqLvJ+8RnlpS0prxpKj+iu3exJWQDtv+cmY=,tag:MFZBP+AP4qfgcuQl9FuC2w==,type:str]
+    lastmodified: "2024-10-24T09:11:05Z"
+    mac: ENC[AES256_GCM,data:tpPeG1oyG0a0nL80oa5FhbaZkTNl5xtFiWZ252cpYZl1jbMQ29ZiJcsqYQBnfDUXM0ggqeywNEma44DwCcmed4B0LD4XePzK8sFcNtm7bE1bA1X++p2YSt0jgzZeU5iClL14uqyPBrRArH+94Ajfq5iML9Zk5KMPu5D99XMbQK0=,iv:BVN1WNfRxcebIBMGNDmzYWHiSsuZ8KsPA6vJzj9GZ8Y=,tag:BgWuO3i3lMXzrSpQ32J7OA==,type:str]
     pgp: []
     encrypted_regex: ^(data|stringData)$
     version: 3.9.1
@@ -30,13 +30,13 @@ sops:
 apiVersion: samba-operator.samba.org/v1alpha1
 kind: SmbSecurityConfig
 metadata:
-    name: samba-users
+    name: myusers
     namespace: default
 spec:
     mode: user
     users:
-        secret: samba-users
-        key: samba-users
+        secret: users1
+        key: demousers
 sops:
     kms: []
     gcp_kms: []
@@ -46,14 +46,14 @@ sops:
         - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBSOERZOUhMSW82ZGxpYWJ6
-            NnhBYThrVGdyaWhhQWlyb3RMd3ZabUpHUFg4Ci9OZHFwdFpZMldUYmFqa3BVNlkz
-            SUZwZU1uQjRmOWU0L09MbXRoU3NxNUEKLS0tIE0rdU1Rdi9GNnB0dUZoL3FJNGcv
-            dGdJdmtCM0dPM2tHd0JrTTdDWENGMzQK5igdmgnkE+oG+FUCEykeVuOYNHCNie8l
-            XloY2mFEdXVoHOSNxfzDLkyec6g7Pxv5dTnT/I1ELKq5bmqpehtaiA==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBVRnlRK3FRNUlDeVo2VzUr
+            eW1BcmxwM3ZiY085ZVhBV1ZQeFpjRzJHU25FCmlOYTBPMTF2ZU1jelVNZ3g4WDRa
+            YmJGVDBRUXQvZTRPREhnQnRVTmFXcnMKLS0tIGFPOTFsQ3RhSXAzQVZNWHc4MnhL
+            V1NuRExrVkJIZjZLM0Z4VHkvcEpKdlUKIVkI3T2Gy5CrztkT5UmazUGatHbGiA6E
+            z5yJcCqGbembSdgTydpW3PjAjLmwqMoHkqWtdLQi15kCZ7NPwsWcNg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-10-24T08:43:32Z"
-    mac: ENC[AES256_GCM,data:FZl+nD/JhO5IYUYhGF0ILjc0adCZwtN/770G0xlCnh6kbXsFXGxdbRHHSQMvvVOFkvO8OQqXwku0yoxPNd8McXvQ852QphtqU4N2z65eOGrR1FiZvwlCiTx3oGUovvXaU/6cEWm/Dk27fVXsCNOheG88P9IHyFUi2sfmAazGv3s=,iv:L2jHuJk6VqLvJ+8RnlpS0prxpKj+iu3exJWQDtv+cmY=,tag:MFZBP+AP4qfgcuQl9FuC2w==,type:str]
+    lastmodified: "2024-10-24T09:11:05Z"
+    mac: ENC[AES256_GCM,data:tpPeG1oyG0a0nL80oa5FhbaZkTNl5xtFiWZ252cpYZl1jbMQ29ZiJcsqYQBnfDUXM0ggqeywNEma44DwCcmed4B0LD4XePzK8sFcNtm7bE1bA1X++p2YSt0jgzZeU5iClL14uqyPBrRArH+94Ajfq5iML9Zk5KMPu5D99XMbQK0=,iv:BVN1WNfRxcebIBMGNDmzYWHiSsuZ8KsPA6vJzj9GZ8Y=,tag:BgWuO3i3lMXzrSpQ32J7OA==,type:str]
     pgp: []
     encrypted_regex: ^(data|stringData)$
     version: 3.9.1
@@ -75,14 +75,14 @@ sops:
         - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBSOERZOUhMSW82ZGxpYWJ6
-            NnhBYThrVGdyaWhhQWlyb3RMd3ZabUpHUFg4Ci9OZHFwdFpZMldUYmFqa3BVNlkz
-            SUZwZU1uQjRmOWU0L09MbXRoU3NxNUEKLS0tIE0rdU1Rdi9GNnB0dUZoL3FJNGcv
-            dGdJdmtCM0dPM2tHd0JrTTdDWENGMzQK5igdmgnkE+oG+FUCEykeVuOYNHCNie8l
-            XloY2mFEdXVoHOSNxfzDLkyec6g7Pxv5dTnT/I1ELKq5bmqpehtaiA==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBVRnlRK3FRNUlDeVo2VzUr
+            eW1BcmxwM3ZiY085ZVhBV1ZQeFpjRzJHU25FCmlOYTBPMTF2ZU1jelVNZ3g4WDRa
+            YmJGVDBRUXQvZTRPREhnQnRVTmFXcnMKLS0tIGFPOTFsQ3RhSXAzQVZNWHc4MnhL
+            V1NuRExrVkJIZjZLM0Z4VHkvcEpKdlUKIVkI3T2Gy5CrztkT5UmazUGatHbGiA6E
+            z5yJcCqGbembSdgTydpW3PjAjLmwqMoHkqWtdLQi15kCZ7NPwsWcNg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-10-24T08:43:32Z"
-    mac: ENC[AES256_GCM,data:FZl+nD/JhO5IYUYhGF0ILjc0adCZwtN/770G0xlCnh6kbXsFXGxdbRHHSQMvvVOFkvO8OQqXwku0yoxPNd8McXvQ852QphtqU4N2z65eOGrR1FiZvwlCiTx3oGUovvXaU/6cEWm/Dk27fVXsCNOheG88P9IHyFUi2sfmAazGv3s=,iv:L2jHuJk6VqLvJ+8RnlpS0prxpKj+iu3exJWQDtv+cmY=,tag:MFZBP+AP4qfgcuQl9FuC2w==,type:str]
+    lastmodified: "2024-10-24T09:11:05Z"
+    mac: ENC[AES256_GCM,data:tpPeG1oyG0a0nL80oa5FhbaZkTNl5xtFiWZ252cpYZl1jbMQ29ZiJcsqYQBnfDUXM0ggqeywNEma44DwCcmed4B0LD4XePzK8sFcNtm7bE1bA1X++p2YSt0jgzZeU5iClL14uqyPBrRArH+94Ajfq5iML9Zk5KMPu5D99XMbQK0=,iv:BVN1WNfRxcebIBMGNDmzYWHiSsuZ8KsPA6vJzj9GZ8Y=,tag:BgWuO3i3lMXzrSpQ32J7OA==,type:str]
     pgp: []
     encrypted_regex: ^(data|stringData)$
     version: 3.9.1
@@ -93,7 +93,7 @@ metadata:
     name: music
     namespace: default
 spec:
-    securityConfig: samba-users
+    securityConfig: myusers
     commonConfig: music
     storage:
         pvc:
@@ -108,14 +108,14 @@ sops:
         - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBSOERZOUhMSW82ZGxpYWJ6
-            NnhBYThrVGdyaWhhQWlyb3RMd3ZabUpHUFg4Ci9OZHFwdFpZMldUYmFqa3BVNlkz
-            SUZwZU1uQjRmOWU0L09MbXRoU3NxNUEKLS0tIE0rdU1Rdi9GNnB0dUZoL3FJNGcv
-            dGdJdmtCM0dPM2tHd0JrTTdDWENGMzQK5igdmgnkE+oG+FUCEykeVuOYNHCNie8l
-            XloY2mFEdXVoHOSNxfzDLkyec6g7Pxv5dTnT/I1ELKq5bmqpehtaiA==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBVRnlRK3FRNUlDeVo2VzUr
+            eW1BcmxwM3ZiY085ZVhBV1ZQeFpjRzJHU25FCmlOYTBPMTF2ZU1jelVNZ3g4WDRa
+            YmJGVDBRUXQvZTRPREhnQnRVTmFXcnMKLS0tIGFPOTFsQ3RhSXAzQVZNWHc4MnhL
+            V1NuRExrVkJIZjZLM0Z4VHkvcEpKdlUKIVkI3T2Gy5CrztkT5UmazUGatHbGiA6E
+            z5yJcCqGbembSdgTydpW3PjAjLmwqMoHkqWtdLQi15kCZ7NPwsWcNg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-10-24T08:43:32Z"
-    mac: ENC[AES256_GCM,data:FZl+nD/JhO5IYUYhGF0ILjc0adCZwtN/770G0xlCnh6kbXsFXGxdbRHHSQMvvVOFkvO8OQqXwku0yoxPNd8McXvQ852QphtqU4N2z65eOGrR1FiZvwlCiTx3oGUovvXaU/6cEWm/Dk27fVXsCNOheG88P9IHyFUi2sfmAazGv3s=,iv:L2jHuJk6VqLvJ+8RnlpS0prxpKj+iu3exJWQDtv+cmY=,tag:MFZBP+AP4qfgcuQl9FuC2w==,type:str]
+    lastmodified: "2024-10-24T09:11:05Z"
+    mac: ENC[AES256_GCM,data:tpPeG1oyG0a0nL80oa5FhbaZkTNl5xtFiWZ252cpYZl1jbMQ29ZiJcsqYQBnfDUXM0ggqeywNEma44DwCcmed4B0LD4XePzK8sFcNtm7bE1bA1X++p2YSt0jgzZeU5iClL14uqyPBrRArH+94Ajfq5iML9Zk5KMPu5D99XMbQK0=,iv:BVN1WNfRxcebIBMGNDmzYWHiSsuZ8KsPA6vJzj9GZ8Y=,tag:BgWuO3i3lMXzrSpQ32J7OA==,type:str]
     pgp: []
     encrypted_regex: ^(data|stringData)$
     version: 3.9.1
