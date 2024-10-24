@@ -1,3 +1,63 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: users1
+    namespace: default
+type: Opaque
+stringData:
+    demousers: ENC[AES256_GCM,data:C4HkGuR2fOqZdcAZuYmKN46Iym4FuUWb0c+sZEJIzv5fQFY1EZkv2uwPmH2R1VGWreqcU+Mmn5lHl1nDA0Ro6VyS8Pf2HPn6D1UIs/maGA98eXXDa2QcQPf6XzC7pIW06E6zsf13rmSvmPze3JAelQbOHJXntQKZckn7vmBpsflGZ21d2WnqTog9aFnDGZVqsO0+oDC5Wo6TLjPCBZ4GAy6yazQWYpR+txaNH0ssLpcdcdNv7Neh1grFHeAOhXLB7KWUEL8H/av4bFhGUSrt3SiAgF2cNmiQgHOWUkWbidpZS18=,iv:IHW/qAhDDSAdkIBXxFdUtIIjE1h/uxxoy5JSQ+sZSto=,tag:0l4pc+GoUywyYIbax6oSVg==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAveFdvYkl2MGtUamwxR0Fj
+            UndPQkVqbi9OWnl1ZzE4SmdEZk5Ha3ZYNmw0CjF6VHhZcERjZWVuaHVCSEVJaFI2
+            eksyM1JRalVxNGdiSEtwZTBoNVQ2VVEKLS0tIGR0VC9RdTZzS2ZLOWRXR05ybmtk
+            TmhoTnpRRlFza3Z4dHNKSUw1Tm9uUjAKB6XQM71FVtUeDTpF1VdBIfP16oc4PVpx
+            0eliPghZOUYuxWM1srP9tjX+1JD3UMViY/p57azUWXrA1pzYLSnzUw==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2024-10-24T11:11:10Z"
+    mac: ENC[AES256_GCM,data:gaZoS74cAhoRAe9NTBnMZsGIb3rsNI70x8zy1+P7Fdgdaa6R2Rhie3amI5B9JDmK8oUvYfuZOsyPeDGyKwJcGX2URlLPxQ76UGYJGRMDvaOMnY1ZQU3YTQAoiG7cblh4daAp/M4/X78jnyuhHgg27Cfw3aqh9Ne6Z7JVgq8H0Nk=,iv:eC+yI0Wy2DlQbATck+rRL1TFSlKTTiNGYXXPhGYBYwU=,tag:t6Qhq3bz2QSScOKqQXdiHA==,type:str]
+    pgp: []
+    encrypted_regex: ^(data|stringData)$
+    version: 3.9.1
+---
+apiVersion: samba-operator.samba.org/v1alpha1
+kind: SmbSecurityConfig
+metadata:
+    name: myusers
+    namespace: default
+spec:
+    mode: user
+    users:
+        secret: users1
+        key: demousers
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAveFdvYkl2MGtUamwxR0Fj
+            UndPQkVqbi9OWnl1ZzE4SmdEZk5Ha3ZYNmw0CjF6VHhZcERjZWVuaHVCSEVJaFI2
+            eksyM1JRalVxNGdiSEtwZTBoNVQ2VVEKLS0tIGR0VC9RdTZzS2ZLOWRXR05ybmtk
+            TmhoTnpRRlFza3Z4dHNKSUw1Tm9uUjAKB6XQM71FVtUeDTpF1VdBIfP16oc4PVpx
+            0eliPghZOUYuxWM1srP9tjX+1JD3UMViY/p57azUWXrA1pzYLSnzUw==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2024-10-24T11:11:10Z"
+    mac: ENC[AES256_GCM,data:gaZoS74cAhoRAe9NTBnMZsGIb3rsNI70x8zy1+P7Fdgdaa6R2Rhie3amI5B9JDmK8oUvYfuZOsyPeDGyKwJcGX2URlLPxQ76UGYJGRMDvaOMnY1ZQU3YTQAoiG7cblh4daAp/M4/X78jnyuhHgg27Cfw3aqh9Ne6Z7JVgq8H0Nk=,iv:eC+yI0Wy2DlQbATck+rRL1TFSlKTTiNGYXXPhGYBYwU=,tag:t6Qhq3bz2QSScOKqQXdiHA==,type:str]
+    pgp: []
+    encrypted_regex: ^(data|stringData)$
+    version: 3.9.1
+---
 apiVersion: samba-operator.samba.org/v1alpha1
 kind: SmbCommonConfig
 metadata:
@@ -6,6 +66,26 @@ metadata:
 spec:
     network:
         publish: external
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAveFdvYkl2MGtUamwxR0Fj
+            UndPQkVqbi9OWnl1ZzE4SmdEZk5Ha3ZYNmw0CjF6VHhZcERjZWVuaHVCSEVJaFI2
+            eksyM1JRalVxNGdiSEtwZTBoNVQ2VVEKLS0tIGR0VC9RdTZzS2ZLOWRXR05ybmtk
+            TmhoTnpRRlFza3Z4dHNKSUw1Tm9uUjAKB6XQM71FVtUeDTpF1VdBIfP16oc4PVpx
+            0eliPghZOUYuxWM1srP9tjX+1JD3UMViY/p57azUWXrA1pzYLSnzUw==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2024-10-24T11:11:10Z"
+    mac: ENC[AES256_GCM,data:gaZoS74cAhoRAe9NTBnMZsGIb3rsNI70x8zy1+P7Fdgdaa6R2Rhie3amI5B9JDmK8oUvYfuZOsyPeDGyKwJcGX2URlLPxQ76UGYJGRMDvaOMnY1ZQU3YTQAoiG7cblh4daAp/M4/X78jnyuhHgg27Cfw3aqh9Ne6Z7JVgq8H0Nk=,iv:eC+yI0Wy2DlQbATck+rRL1TFSlKTTiNGYXXPhGYBYwU=,tag:t6Qhq3bz2QSScOKqQXdiHA==,type:str]
+    pgp: []
+    encrypted_regex: ^(data|stringData)$
+    version: 3.9.1
 ---
 apiVersion: samba-operator.samba.org/v1alpha1
 kind: SmbShare
@@ -13,8 +93,29 @@ metadata:
     name: music
     namespace: default
 spec:
+    securityConfig: myusers
     commonConfig: music
     storage:
         pvc:
             name: roon-music
     readOnly: true
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAveFdvYkl2MGtUamwxR0Fj
+            UndPQkVqbi9OWnl1ZzE4SmdEZk5Ha3ZYNmw0CjF6VHhZcERjZWVuaHVCSEVJaFI2
+            eksyM1JRalVxNGdiSEtwZTBoNVQ2VVEKLS0tIGR0VC9RdTZzS2ZLOWRXR05ybmtk
+            TmhoTnpRRlFza3Z4dHNKSUw1Tm9uUjAKB6XQM71FVtUeDTpF1VdBIfP16oc4PVpx
+            0eliPghZOUYuxWM1srP9tjX+1JD3UMViY/p57azUWXrA1pzYLSnzUw==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2024-10-24T11:11:10Z"
+    mac: ENC[AES256_GCM,data:gaZoS74cAhoRAe9NTBnMZsGIb3rsNI70x8zy1+P7Fdgdaa6R2Rhie3amI5B9JDmK8oUvYfuZOsyPeDGyKwJcGX2URlLPxQ76UGYJGRMDvaOMnY1ZQU3YTQAoiG7cblh4daAp/M4/X78jnyuhHgg27Cfw3aqh9Ne6Z7JVgq8H0Nk=,iv:eC+yI0Wy2DlQbATck+rRL1TFSlKTTiNGYXXPhGYBYwU=,tag:t6Qhq3bz2QSScOKqQXdiHA==,type:str]
+    pgp: []
+    encrypted_regex: ^(data|stringData)$
+    version: 3.9.1
