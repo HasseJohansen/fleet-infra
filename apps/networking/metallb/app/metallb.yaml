@@ -1,38 +1,49 @@
 ---
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: GitRepository
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
 metadata:
   name: metallb
   namespace: flux-system
 spec:
-  interval: 30m0s
-  ref:
-    tag: v0.14.8
-  url: https://github.com/metallb/metallb
+  interval: 15m
+  url: https://metallb.github.io/metallb
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: metallb
+  name: metallb--metallb-system
   namespace: flux-system
 spec:
-  interval: 30m
-  targetNamespace: metallb-system
+  interval: 15m
+  path: ./apps/networking/metallb/app
+  prune: true # remove any elements later removed from the above path
+  timeout: 2m # if not set, this defaults to interval duration, which is 1h
   sourceRef:
     kind: GitRepository
-    name: metallb
-  path: "./config/native"
-  prune: true
-  timeout: 1m
-  wait: true
-  patches:
-    - patch: |-
-      apiVersion: apiextensions.k8s.io/v1
-      kind: CustomResourceDefinition
-      metadata:
-        name: bgppeers.metallb.io
-      annotations:
-        kustomize.toolkit.fluxcd.io/ssa: "Ignore"
-      target:
-        kind: CustomResourceDefinition
-        name: bgppeers.metallb.io
+    name: flux-system
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: metallb-controller
+      namespace: metallb-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: config--metallb-system
+  namespace: flux-system
+spec:
+  interval: 15m
+  dependsOn:
+  - name: metallb--metallb-system
+  path: ./apps/networking/metallb/config
+  prune: true # remove any elements later removed from the above path
+  timeout: 2m # if not set, this defaults to interval duration, which is 1h
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: metallb-controller
+      namespace: metallb-system
