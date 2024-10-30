@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - ./metallb/ks.yaml
   - ./samba-operator/samba-operator.yaml
+  - ./external-dns-unifi/kustomization.yaml
