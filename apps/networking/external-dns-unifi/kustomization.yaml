@@ -1,25 +1,6 @@
-configMapGenerator:
-    - name: external-dns-unifi-secret
-      literals:
-        - ENC[AES256_GCM,data:66ENvkjIiuwzeuzjyuqrw5L4pJG5,iv:OBshvvv3bAP86DnPQsW18mhKy+YuKIYgLZZMrT/VFlQ=,tag:fNb6oDpSG6PMEZwr5qS+rw==,type:str]
-        - ENC[AES256_GCM,data:7etsnYAd20kW7M+7CGJdgsiz867U8pdTgdkU25Y=,iv:IfgnmEWlQQl4cm/tAIuWt2OHz6n59dRuXN9dPEx0JeE=,tag:93zy/5St2L+5J/TN37dPaw==,type:str]
-sops:
-    kms: []
-    gcp_kms: []
-    azure_kv: []
-    hc_vault: []
-    age:
-        - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
-          enc: |
-            -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBXc0I0RDVHT2xscnRjM0Ur
-            T0NPdlYvZHRaMGErdnUxSDZ2T0RsUEZmRTJZCnlISzZIL2x3Rkl0dExoYU9OZ3ZE
-            eVN5Z0xSMjdoOGllZGk2OXQxT0JzUkkKLS0tIEh0WTRaajZwMWpvcFNkWjIwVUVE
-            ZVZuck15b3VaUEY4U2R4V2NveTFxQVkKAEDtoppPGSWxq6xfGEOQ/bGD+GJRByrG
-            OltGmXXprZxMwVA8q95WX/f6WGZyUu069jglxDYzUR63T1/eKrOgEA==
-            -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-10-30T14:38:24Z"
-    mac: ENC[AES256_GCM,data:B6DNd7Bx2X7bSexpZJRHS7Y4peaXNt3CKTTrnLmcvYSieJUcqGAs0A80eEphjb72VTKK3nZTeQOB8MQyUL/Nal9zr9ApWc4LJItka5hNqrYk0EYtJAMXMmD11082twv91GKcbOYHFMnz/NjFcEtFKe+pnkucwFCHGdj10fM7ks4=,iv:5VsqdPyyUAJcwtxxmbvEsGZVDq3+QTxQC7GPwXPC90A=,tag:Rp9mYXLG40hVQQNlBCxhKw==,type:str]
-    pgp: []
-    encrypted_regex: literals
-    version: 3.9.1
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ns.yaml
+  - helmrepo.yaml
+  - helmrelease.yaml
