@@ -1,7 +1,0 @@
-resources:
-  - controllers
-  - media
-  - monitoring
-  - networking
-  - policy
-  - storage
