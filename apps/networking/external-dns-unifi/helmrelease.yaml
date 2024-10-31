@@ -59,4 +59,5 @@ spec:
     sources: ["ingress", "service"]
     txtOwnerId: default
     txtPrefix: k8s.
-    domainFilters: ["1mx.dk"] # replace with your domain
+    domainFilters:
+      - 1mx.dk # replace with your domain
