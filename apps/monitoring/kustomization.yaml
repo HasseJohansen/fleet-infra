@@ -9,6 +9,6 @@ configMapGenerator:
   namespace: monitoring
   files:
   - values.yaml
-  behaviour: replace
+  behavior: replace
   options:
     disableNameSuffixHash: true
