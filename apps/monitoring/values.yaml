@@ -1,4 +1,6 @@
 grafana:
   service:
     type: LoadBalancer
-    annotations: ["external-dns.alpha.kubernetes.io/hostname=grafana.k8s.musikcheck.dk."]
+    annotations: {
+      external-dns.alpha.kubernetes.io/hostname: grafana.k8s.musikcheck.dk.
+    }
