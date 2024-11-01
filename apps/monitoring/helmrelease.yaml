@@ -17,3 +17,5 @@ spec:
     grafana:
       service:
         type: LoadBalancer
+        annotations:
+          - external-dns.alpha.kubernetes.io/hostname: longhorn.k8s.musikcheck.dk.
