@@ -8,14 +8,12 @@ spec:
   chart:
     spec:
       chart: kube-prometheus-stack
-      reconcileStrategy: Revision
+      reconcileStrategy: ChartVersion
       sourceRef:
         kind: HelmRepository
         name: prometheus-repo
   interval: 15m0s
-  values:
-    grafana:
-      service:
-        type: LoadBalancer
-        annotations:
-          - external-dns.alpha.kubernetes.io/hostname: longhorn.k8s.musikcheck.dk.
+  valuesFrom:
+    - kind: ConfigMap
+      name: prometheus-values
+      valuesKey: values.yaml
