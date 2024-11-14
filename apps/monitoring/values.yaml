@@ -4,3 +4,8 @@ grafana:
     annotations: {
       external-dns.alpha.kubernetes.io/hostname: grafana.k8s.musikcheck.dk.
     }
+  dashboards:
+    default:  
+      longhorn:
+        gnetId: 16888
+
