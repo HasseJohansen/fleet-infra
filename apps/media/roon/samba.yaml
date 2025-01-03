@@ -4,6 +4,9 @@ metadata:
     name: music
     namespace: default
 spec:
+    podSettings:
+      nodeSelector:
+        "kubernetes.io/hostname": "minis-7373"
     network:
         publish: external
 ---
