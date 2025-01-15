@@ -14,7 +14,7 @@ spec:
   interval: 10m
   values:
     image:
-      tag: 2.0.1490 # {"$imagepolicy": "flux-system:roon:tag"}
+      tag: 2.0.1496 # {"$imagepolicy": "flux-system:roon:tag"}
       pullPolicy: Always
     persistence:
       config:
