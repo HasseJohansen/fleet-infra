@@ -8,6 +8,4 @@ configMapGenerator:
 - name: prometheus-values
   namespace: monitoring
   files:
-  - values.yaml
-  options:
-    disableNameSuffixHash: true
+  - values.yaml=my-values.yaml
