@@ -9,3 +9,5 @@ configMapGenerator:
   namespace: monitoring
   files:
   - values.yaml=my-values.yaml
+configurations:
+  - kustomizeconfig.yaml
