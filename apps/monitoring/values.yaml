@@ -8,4 +8,9 @@ grafana:
     default:  
       longhorn:
         gnetId: 16888
-
+prometheus:
+  service:
+    type: LoadBalancer
+    annotations: {
+      external-dns.alpha.kubernetes.io/hostname: prometheus.k8s.musikcheck.dk.
+    }
