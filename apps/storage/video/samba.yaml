@@ -1,0 +1,25 @@
+apiVersion: samba-operator.samba.org/v1alpha1
+kind: SmbCommonConfig
+metadata:
+    name: video
+    namespace: default
+spec:
+    network:
+        publish: external
+---
+apiVersion: samba-operator.samba.org/v1alpha1
+kind: SmbShare
+metadata:
+    name: video
+    namespace: default
+spec:
+    commonConfig: video
+    storage:
+        pvc:
+            name: video
+            spec:
+              resources:
+                requests:
+                  storage: 610Gi
+    readOnly: false
+~
