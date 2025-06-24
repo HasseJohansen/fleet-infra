@@ -13,7 +13,6 @@ metadata:
   name: video
   namespace: default
 spec:
-  commonConfig: video
   readOnly: false
   storage:
     pvc:
