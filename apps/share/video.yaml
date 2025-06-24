@@ -1,0 +1,16 @@
+apiVersion: samba-operator.samba.org/v1alpha1
+kind: SmbShare
+metadata:
+  name: video
+  namespace: default
+spec:
+  commonConfig: music
+  readOnly: false
+  storage:
+    pvc:
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 610Gi
