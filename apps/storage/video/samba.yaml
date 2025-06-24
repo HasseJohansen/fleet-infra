@@ -11,8 +11,10 @@ apiVersion: samba-operator.samba.org/v1alpha1
 kind: SmbShare
 metadata:
   name: video
+  namespace: default
 spec:
   commonConfig: video
+  readOnly: false
   storage:
     pvc:
       spec:
@@ -21,5 +23,4 @@ spec:
         resources:
           requests:
             storage: 610Gi
-  readOnly: false
 ~
