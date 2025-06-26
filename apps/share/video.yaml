@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Secret
 metadata:
     name: videousers
+    namespace: default
 type: Opaque
 stringData:
     demousers: ENC[AES256_GCM,data:oARDk6GHSiYSmpCEEAV8etYCvb+ma4LqjwQa+y6nR3wDdkM6aPwWbdBmFiaJAhtaocN9hu8BujRdYklNv5lz/eiTrZhWXZ5trriTZkTkGMjQ1H/l9+Kr7SkcoDNfiiiqYEh6ScbQ0QdBeFlXpT8vm0fxJQpDe+EcOZ07dQ4MmWTmEBOx72x13ceAm5fKsBSHAgncjqcEXaOM1Q==,iv:XgJEI4VoUDL7bHglTw+fshfgvUEVxOnIDr4z/N0XOG8=,tag:8PL+hhAd6U0pOoohWARYlQ==,type:str]
