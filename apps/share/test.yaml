@@ -1,0 +1,81 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: users1
+    namespace: default
+type: Opaque
+stringData:
+    demousers: ENC[AES256_GCM,data:glhEjl1ZJigBuqcvMiYDmUfkFPttLJiXYuqp1W9SZZ9VPQrSzjsCfXLw1Zvh+0Zev0bXQSzo+0+Yt0RcWja7crP5Qrr6dkzIV/HJjKoKXzsAnXkSjAXs0C0bOTOa5oDXNAoX32j4psMvEn/fJ2jYeY7hHssvabuEClwLZijnHnFnzBVjc89StWf+EORklUh9Ow36Sb+gKukPch/sV9/fME5aVAwf/rLT838/BKTwEBRM6bsHuWy8S+W7nqjhGTzbsOvk0hEdYoHw91ykhJRnXR90n5C6PAAREFBVIDI7Ige0/gU=,iv:0JwCBylcYHpp8VszieXtKiFkFp7Fi7Hm/dk8HmsQIgQ=,tag:cnb0HRcJb4XxPqHUxpIJLg==,type:str]
+sops:
+    age:
+        - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBpTHdlRVZ5YkhNbmFCZFNh
+            VVZBUUdZL0JGMXlSVG9NVlh1ekN0N3o5M1Q4CnpGK3RNNWJQRDl1R0FLaUlOaXBN
+            OXppaFRIeUpvKzZyWSt0UzJuam84WmMKLS0tIElTNVNpUWQzR2RQU3NPYXdzT0pH
+            L1pxRjV2OHlndXA1M0NobTFxdUJZTDAKvdGfUEu5x/Z/1rlyjffhgK+n60hbDRD4
+            wa1u1KmYNxQrOjugH1myWldVlzw5QWIGRA3PWV1yHZAep/pX6GI/Dg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-06-27T08:06:54Z"
+    mac: ENC[AES256_GCM,data:JdjUlWPLRNlzAY+izbRjIadAhrvT36NmknWOkd2MgY83wgiZj7sGEd+YrNLnDDwP9dEQpIQKWl7d67IhWCgWDJFB41mTU6NkQisoUmruGS14uSxzLqrxb8VCcweAZ7nGCPArijfWUEeVuXZkoxNFeBAl0dGCrZbA068dqyLlwPU=,iv:cFdvxPso/dY6cDXuTo+fTzVQxoryA5Bm1+zcQ+5m7AU=,tag:Ytl/N4w8lnstf7hkI+PYVA==,type:str]
+    encrypted_regex: ^(data|stringData)$
+    version: 3.10.2
+---
+apiVersion: samba-operator.samba.org/v1alpha1
+kind: SmbSecurityConfig
+metadata:
+    name: myusers
+    namespace: default
+spec:
+    mode: user
+    users:
+        secret: users1
+        key: demousers
+sops:
+    age:
+        - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBpTHdlRVZ5YkhNbmFCZFNh
+            VVZBUUdZL0JGMXlSVG9NVlh1ekN0N3o5M1Q4CnpGK3RNNWJQRDl1R0FLaUlOaXBN
+            OXppaFRIeUpvKzZyWSt0UzJuam84WmMKLS0tIElTNVNpUWQzR2RQU3NPYXdzT0pH
+            L1pxRjV2OHlndXA1M0NobTFxdUJZTDAKvdGfUEu5x/Z/1rlyjffhgK+n60hbDRD4
+            wa1u1KmYNxQrOjugH1myWldVlzw5QWIGRA3PWV1yHZAep/pX6GI/Dg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-06-27T08:06:54Z"
+    mac: ENC[AES256_GCM,data:JdjUlWPLRNlzAY+izbRjIadAhrvT36NmknWOkd2MgY83wgiZj7sGEd+YrNLnDDwP9dEQpIQKWl7d67IhWCgWDJFB41mTU6NkQisoUmruGS14uSxzLqrxb8VCcweAZ7nGCPArijfWUEeVuXZkoxNFeBAl0dGCrZbA068dqyLlwPU=,iv:cFdvxPso/dY6cDXuTo+fTzVQxoryA5Bm1+zcQ+5m7AU=,tag:Ytl/N4w8lnstf7hkI+PYVA==,type:str]
+    encrypted_regex: ^(data|stringData)$
+    version: 3.10.2
+---
+apiVersion: samba-operator.samba.org/v1alpha1
+kind: SmbShare
+metadata:
+    name: myshare
+    namespace: default
+spec:
+    securityConfig: myusers
+    readOnly: false
+    storage:
+        pvc:
+            spec:
+                accessModes:
+                    - ReadWriteOnce
+                resources:
+                    requests:
+                        storage: 1Gi
+sops:
+    age:
+        - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBpTHdlRVZ5YkhNbmFCZFNh
+            VVZBUUdZL0JGMXlSVG9NVlh1ekN0N3o5M1Q4CnpGK3RNNWJQRDl1R0FLaUlOaXBN
+            OXppaFRIeUpvKzZyWSt0UzJuam84WmMKLS0tIElTNVNpUWQzR2RQU3NPYXdzT0pH
+            L1pxRjV2OHlndXA1M0NobTFxdUJZTDAKvdGfUEu5x/Z/1rlyjffhgK+n60hbDRD4
+            wa1u1KmYNxQrOjugH1myWldVlzw5QWIGRA3PWV1yHZAep/pX6GI/Dg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-06-27T08:06:54Z"
+    mac: ENC[AES256_GCM,data:JdjUlWPLRNlzAY+izbRjIadAhrvT36NmknWOkd2MgY83wgiZj7sGEd+YrNLnDDwP9dEQpIQKWl7d67IhWCgWDJFB41mTU6NkQisoUmruGS14uSxzLqrxb8VCcweAZ7nGCPArijfWUEeVuXZkoxNFeBAl0dGCrZbA068dqyLlwPU=,iv:cFdvxPso/dY6cDXuTo+fTzVQxoryA5Bm1+zcQ+5m7AU=,tag:Ytl/N4w8lnstf7hkI+PYVA==,type:str]
+    encrypted_regex: ^(data|stringData)$
+    version: 3.10.2
