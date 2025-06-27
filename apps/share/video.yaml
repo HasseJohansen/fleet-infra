@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: videousers
+  namespace: default
+type: Opaque
+stringData:
+  demousers: |
+    {
+      "samba-container-config": "v0",
+      "users": {
+        "all_entries": [
+          {
+            "name": "hhj",
+            "password": "HelloGold!"
+          }
+        ]
+      }
+    }
+---
+apiVersion: samba-operator.samba.org/v1alpha1
+kind: SmbSecurityConfig
+metadata:
+  name: videousers
+  namespace: default
+spec:
+  mode: user
+  users:
+    secret: videousers
+    key: demousers
+---
+apiVersion: samba-operator.samba.org/v1alpha1
+kind: SmbShare
+metadata:
+  name: video
+  namespace: default
+spec:
+  securityConfig: videousers
+  commonConfig: music
+  readOnly: false
+  storage:
+    pvc:
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 610Gi
