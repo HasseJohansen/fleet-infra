@@ -15,3 +15,9 @@ spec:
   interval: 15m
   timeout: 5m
   releaseName: metallb
+  driftDetection:
+    ignore:
+    - paths:
+      - /spec/conversion/webhook/clientConfig/caBundle
+      target:
+        kind: CustomResourceDefinition
