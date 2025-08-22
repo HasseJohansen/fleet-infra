@@ -6,8 +6,10 @@ grafana:
     }
   dashboards:
     default:  
-      prometheus-stats:
+      longhorn:
         gnetId: 16888
+        revision: 9
+        datasource: prometheus
 prometheus:
   service:
     type: LoadBalancer
