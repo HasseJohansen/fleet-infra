@@ -4,6 +4,18 @@ grafana:
     annotations: {
       external-dns.alpha.kubernetes.io/hostname: grafana.k8s.musikcheck.dk.
     }
+  dashboardProviders:
+    dashboardproviders.yaml:
+     apiVersion: 1
+     providers:
+     - name: 'default'
+       orgId: 1
+       folder: 'default'
+       type: file
+       disableDeletion: true
+       editable: true
+       options:
+         path: /var/lib/grafana/dashboards/standard
   dashboards:
     default:  
       longhorn:
