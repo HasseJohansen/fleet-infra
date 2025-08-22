@@ -29,8 +29,11 @@ prometheus:
       external-dns.alpha.kubernetes.io/hostname: prometheus.k8s.musikcheck.dk.
     }
 alertmanager:
+  baseURL: "alartmanager.k8s.musikcheck.dk"
   service:
     type: LoadBalancer
     annotations: {
       external-dns.alpha.kubernetes.io/hostname: alertmanager.k8s.musikcheck.dk.
     }
+    port: 80
+
