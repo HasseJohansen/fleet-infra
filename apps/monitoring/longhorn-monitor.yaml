@@ -10,6 +10,15 @@ spec:
   groups:
   - name: longhorn.rules
     rules:
+    - alert: TestAlert
+      annotations:
+        description: Test getting an alarm if nodes is more than 2 which they always are
+        summary: The actual nodes are more than 2
+      expr: longhorn_node_count_total > 2
+      for: 5m
+      labels:
+        issue: The actual number of nodes are higher than 2
+        severity: critical
     - alert: LonghornVolumeActualSpaceUsedWarning
       annotations:
         description: The actual space used by Longhorn volume {{$labels.volume}} on {{$labels.node}} is at {{$value}}% capacity for
