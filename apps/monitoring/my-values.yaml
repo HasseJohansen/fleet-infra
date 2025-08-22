@@ -29,7 +29,7 @@ prometheus:
       external-dns.alpha.kubernetes.io/hostname: prometheus.k8s.musikcheck.dk.
     }
 alertmanager:
-  alermanagerSpec:
+  alertmanagerSpec:
     replicas: 3
   baseURL: "alartmanager.k8s.musikcheck.dk"
   service:
