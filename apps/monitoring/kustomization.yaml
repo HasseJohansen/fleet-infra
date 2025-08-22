@@ -4,6 +4,9 @@ resources:
   - ns.yaml
   - helmrepo.yaml
   - helmrelease.yaml
+  - pushover-creds.yaml
+  - alertmanager-pushover.yaml
+
 configMapGenerator:
 - name: prometheus-values
   namespace: monitoring
