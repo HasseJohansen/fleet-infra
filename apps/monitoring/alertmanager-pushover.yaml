@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1beta1
+kind: AlertmanagerConfig
+metadata:
+  name: pushover-recv
+  namespace: monitoring
+spec:
+  route:
+    receiver: pushover
+    groupBy: ["alertname"]
+  receivers:
+  - name: pushover
+    pushoverConfigs:
+    - token:
+        name: pushover-creds
+        key: token
+      userKey:
+        name: pushover-creds
+        key: userKey
