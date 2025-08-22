@@ -6,7 +6,7 @@ grafana:
     }
   dashboards:
     default:  
-      longhorn:
+      prometheus-stats:
         gnetId: 16888
 prometheus:
   service:
