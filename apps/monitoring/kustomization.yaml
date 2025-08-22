@@ -6,6 +6,7 @@ resources:
   - helmrelease.yaml
   - pushover-creds.yaml
   - alertmanager-pushover.yaml
+  - longhorn-monitor.yaml
 
 configMapGenerator:
 - name: prometheus-values
