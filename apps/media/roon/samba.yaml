@@ -5,22 +5,22 @@ metadata:
     namespace: default
 type: Opaque
 stringData:
-    demousers: ENC[AES256_GCM,data:r0Zl869RWj7zUSjYaoRrwe2HdhGCutXVByxBhjggR+rtfXX0OKe8emvmtXQc2v/eZkvr+xc1UztfiCRPbhYfacdUUWhu7HcRBd7x7u8mv61vj+PqNpmNGrdrmDL66n1oumUe+xoh6mjYF/2wAt++7Cg73oJlOItqRYh2X7cR/etnLi5a9TDMZ8IM3Qgc+ZBppVzJz5GDHuPU7w==,iv:0WdSHySPOvtolG8gr2hdV2WbHcrWymbnyrCpxb2sicc=,tag:8TVdCOQJKW+jT71S9B7BuQ==,type:str]
+    demousers: ENC[AES256_GCM,data:p8OB0kC7U/7lCI+nv7PQbmR2iBO4D6DIaS9xGBxcXpqzNnocZeUyd2Abqz2rFprjAIM22fo/q1NgfeFVGaUKaPopQbqj8kBE4a8Ls6qCU+1EuBUNPGBkXugxP58Rh5dfYrO0wi5AWw3IFxLNxW6KB7JlFhW4cUALz0/YoF4HII+eJ5jNUd7+ZFuRK2LTdBUovi5D4qJi+cwKfQ==,iv:JcMlF1Ow6n128I+bX3x9GFXUc3T5wIfvY5uN1cSnaao=,tag:UEG/VZlupXSWPptJ6M2KCg==,type:str]
 sops:
     age:
         - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBjd25LdDFGUkV1M1NCNzE5
-            bUMvVHR1VUtpRVV3NG5rQTZGYkRmYUNxc0dNCmQvelQ4VTdBN3U3UVl0WUZSa3o0
-            SkQyNy9pT2xDRHdsWUhZVGVTbGZqVW8KLS0tIDJqclZ0OGQ4cXBNRlQwbis2S0FX
-            ejZLTzlsOTdWRy9rcXdUZ2g4c1lvL2MKwzuHx85NX2hY5Z9mhnFwdWWO4w1FB4c/
-            g6i9XFj+0Tw8YMeKs/V9je/BJRM6g7QK/SjAwz0XPKIqqAHdlsnXTw==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAvOVlNVmloSDBrQ2ZkbG9X
+            S28wM3RjWTBrektGSnhNWW9zOWlXdWFXdGhzClVDcnpvZHg4ZDNLT2orM09jV1Vk
+            dGRwZFdsUy9LaVhEUmo4Y1JGMmZvK0EKLS0tIDYrQVh0dXUwaWpCT2xORndMVmxX
+            RXJRYjZ2eFBONGZ2bjFOb0s3bkNDL28Ke0pDqa20Dh7b0Z4nntrdEyzjIyTyqkc/
+            9YgS+4rocKiBLMG2tZQb31Q7T+Da5JmK4adJDkch7oLHZG2vl0KGpw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-06-27T17:11:48Z"
-    mac: ENC[AES256_GCM,data:KFHMrvnDZx2ATvE7o3gPMbPnldiAJm60Eii83YX2Yu8j+OXtNiSnPG0NWxLejnQ/tQ6AGB/sK1VEO8C9Zs4W1kBYByxTcVOc7p8V29QBKRJoyA2jRLUlyIk88ELNVzh8gdQpO/muYaQsoCZ429q6Bz4hmMEhDpOJ2qs8T8tnBrY=,iv:aIIFfYJBdLfFki8zktSdoD0ZNtQi2Qyw+zcNYj+m52w=,tag:JkRlq48ZAWKWJ9xliXv3Hw==,type:str]
+    lastmodified: "2025-10-06T13:36:45Z"
+    mac: ENC[AES256_GCM,data:2DSkaeG5bwzGaP5+LHeR3+k4LpggZ0HP1gjl3+75EuPPpUtAzaOjik84Sc5OwyaLJGx1/SU7R7enydr7BR9UDelWYVd8ZObb9v6nZNbCskaJdZMyDRVKVAJ1zEBKANcrCDn2OVhd0ra/+9DGof4FIp2QJ4zS1wRAPqtlI5u3hqQ=,iv:AGOT19l9F/lieQahdP1tFB2+XvuO3c8TUgu9PKbRGvs=,tag:CVVlRMcB/0s2RajufQSo/A==,type:str]
     encrypted_regex: ^(data|stringData)$
-    version: 3.10.2
+    version: 3.11.0
 ---
 apiVersion: samba-operator.samba.org/v1alpha1
 kind: SmbSecurityConfig
@@ -37,16 +37,16 @@ sops:
         - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBjd25LdDFGUkV1M1NCNzE5
-            bUMvVHR1VUtpRVV3NG5rQTZGYkRmYUNxc0dNCmQvelQ4VTdBN3U3UVl0WUZSa3o0
-            SkQyNy9pT2xDRHdsWUhZVGVTbGZqVW8KLS0tIDJqclZ0OGQ4cXBNRlQwbis2S0FX
-            ejZLTzlsOTdWRy9rcXdUZ2g4c1lvL2MKwzuHx85NX2hY5Z9mhnFwdWWO4w1FB4c/
-            g6i9XFj+0Tw8YMeKs/V9je/BJRM6g7QK/SjAwz0XPKIqqAHdlsnXTw==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAvOVlNVmloSDBrQ2ZkbG9X
+            S28wM3RjWTBrektGSnhNWW9zOWlXdWFXdGhzClVDcnpvZHg4ZDNLT2orM09jV1Vk
+            dGRwZFdsUy9LaVhEUmo4Y1JGMmZvK0EKLS0tIDYrQVh0dXUwaWpCT2xORndMVmxX
+            RXJRYjZ2eFBONGZ2bjFOb0s3bkNDL28Ke0pDqa20Dh7b0Z4nntrdEyzjIyTyqkc/
+            9YgS+4rocKiBLMG2tZQb31Q7T+Da5JmK4adJDkch7oLHZG2vl0KGpw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-06-27T17:11:48Z"
-    mac: ENC[AES256_GCM,data:KFHMrvnDZx2ATvE7o3gPMbPnldiAJm60Eii83YX2Yu8j+OXtNiSnPG0NWxLejnQ/tQ6AGB/sK1VEO8C9Zs4W1kBYByxTcVOc7p8V29QBKRJoyA2jRLUlyIk88ELNVzh8gdQpO/muYaQsoCZ429q6Bz4hmMEhDpOJ2qs8T8tnBrY=,iv:aIIFfYJBdLfFki8zktSdoD0ZNtQi2Qyw+zcNYj+m52w=,tag:JkRlq48ZAWKWJ9xliXv3Hw==,type:str]
+    lastmodified: "2025-10-06T13:36:45Z"
+    mac: ENC[AES256_GCM,data:2DSkaeG5bwzGaP5+LHeR3+k4LpggZ0HP1gjl3+75EuPPpUtAzaOjik84Sc5OwyaLJGx1/SU7R7enydr7BR9UDelWYVd8ZObb9v6nZNbCskaJdZMyDRVKVAJ1zEBKANcrCDn2OVhd0ra/+9DGof4FIp2QJ4zS1wRAPqtlI5u3hqQ=,iv:AGOT19l9F/lieQahdP1tFB2+XvuO3c8TUgu9PKbRGvs=,tag:CVVlRMcB/0s2RajufQSo/A==,type:str]
     encrypted_regex: ^(data|stringData)$
-    version: 3.10.2
+    version: 3.11.0
 ---
 apiVersion: samba-operator.samba.org/v1alpha1
 kind: SmbCommonConfig
@@ -59,21 +59,24 @@ spec:
             kubernetes.io/hostname: minis-7373
     network:
         publish: external
+    customGlobalConfig:
+        configs:
+            additionalProperties: vfs_objects = streams_xattr
 sops:
     age:
         - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBjd25LdDFGUkV1M1NCNzE5
-            bUMvVHR1VUtpRVV3NG5rQTZGYkRmYUNxc0dNCmQvelQ4VTdBN3U3UVl0WUZSa3o0
-            SkQyNy9pT2xDRHdsWUhZVGVTbGZqVW8KLS0tIDJqclZ0OGQ4cXBNRlQwbis2S0FX
-            ejZLTzlsOTdWRy9rcXdUZ2g4c1lvL2MKwzuHx85NX2hY5Z9mhnFwdWWO4w1FB4c/
-            g6i9XFj+0Tw8YMeKs/V9je/BJRM6g7QK/SjAwz0XPKIqqAHdlsnXTw==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAvOVlNVmloSDBrQ2ZkbG9X
+            S28wM3RjWTBrektGSnhNWW9zOWlXdWFXdGhzClVDcnpvZHg4ZDNLT2orM09jV1Vk
+            dGRwZFdsUy9LaVhEUmo4Y1JGMmZvK0EKLS0tIDYrQVh0dXUwaWpCT2xORndMVmxX
+            RXJRYjZ2eFBONGZ2bjFOb0s3bkNDL28Ke0pDqa20Dh7b0Z4nntrdEyzjIyTyqkc/
+            9YgS+4rocKiBLMG2tZQb31Q7T+Da5JmK4adJDkch7oLHZG2vl0KGpw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-06-27T17:11:48Z"
-    mac: ENC[AES256_GCM,data:KFHMrvnDZx2ATvE7o3gPMbPnldiAJm60Eii83YX2Yu8j+OXtNiSnPG0NWxLejnQ/tQ6AGB/sK1VEO8C9Zs4W1kBYByxTcVOc7p8V29QBKRJoyA2jRLUlyIk88ELNVzh8gdQpO/muYaQsoCZ429q6Bz4hmMEhDpOJ2qs8T8tnBrY=,iv:aIIFfYJBdLfFki8zktSdoD0ZNtQi2Qyw+zcNYj+m52w=,tag:JkRlq48ZAWKWJ9xliXv3Hw==,type:str]
+    lastmodified: "2025-10-06T13:36:45Z"
+    mac: ENC[AES256_GCM,data:2DSkaeG5bwzGaP5+LHeR3+k4LpggZ0HP1gjl3+75EuPPpUtAzaOjik84Sc5OwyaLJGx1/SU7R7enydr7BR9UDelWYVd8ZObb9v6nZNbCskaJdZMyDRVKVAJ1zEBKANcrCDn2OVhd0ra/+9DGof4FIp2QJ4zS1wRAPqtlI5u3hqQ=,iv:AGOT19l9F/lieQahdP1tFB2+XvuO3c8TUgu9PKbRGvs=,tag:CVVlRMcB/0s2RajufQSo/A==,type:str]
     encrypted_regex: ^(data|stringData)$
-    version: 3.10.2
+    version: 3.11.0
 ---
 apiVersion: samba-operator.samba.org/v1alpha1
 kind: SmbShare
@@ -92,13 +95,13 @@ sops:
         - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBjd25LdDFGUkV1M1NCNzE5
-            bUMvVHR1VUtpRVV3NG5rQTZGYkRmYUNxc0dNCmQvelQ4VTdBN3U3UVl0WUZSa3o0
-            SkQyNy9pT2xDRHdsWUhZVGVTbGZqVW8KLS0tIDJqclZ0OGQ4cXBNRlQwbis2S0FX
-            ejZLTzlsOTdWRy9rcXdUZ2g4c1lvL2MKwzuHx85NX2hY5Z9mhnFwdWWO4w1FB4c/
-            g6i9XFj+0Tw8YMeKs/V9je/BJRM6g7QK/SjAwz0XPKIqqAHdlsnXTw==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAvOVlNVmloSDBrQ2ZkbG9X
+            S28wM3RjWTBrektGSnhNWW9zOWlXdWFXdGhzClVDcnpvZHg4ZDNLT2orM09jV1Vk
+            dGRwZFdsUy9LaVhEUmo4Y1JGMmZvK0EKLS0tIDYrQVh0dXUwaWpCT2xORndMVmxX
+            RXJRYjZ2eFBONGZ2bjFOb0s3bkNDL28Ke0pDqa20Dh7b0Z4nntrdEyzjIyTyqkc/
+            9YgS+4rocKiBLMG2tZQb31Q7T+Da5JmK4adJDkch7oLHZG2vl0KGpw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-06-27T17:11:48Z"
-    mac: ENC[AES256_GCM,data:KFHMrvnDZx2ATvE7o3gPMbPnldiAJm60Eii83YX2Yu8j+OXtNiSnPG0NWxLejnQ/tQ6AGB/sK1VEO8C9Zs4W1kBYByxTcVOc7p8V29QBKRJoyA2jRLUlyIk88ELNVzh8gdQpO/muYaQsoCZ429q6Bz4hmMEhDpOJ2qs8T8tnBrY=,iv:aIIFfYJBdLfFki8zktSdoD0ZNtQi2Qyw+zcNYj+m52w=,tag:JkRlq48ZAWKWJ9xliXv3Hw==,type:str]
+    lastmodified: "2025-10-06T13:36:45Z"
+    mac: ENC[AES256_GCM,data:2DSkaeG5bwzGaP5+LHeR3+k4LpggZ0HP1gjl3+75EuPPpUtAzaOjik84Sc5OwyaLJGx1/SU7R7enydr7BR9UDelWYVd8ZObb9v6nZNbCskaJdZMyDRVKVAJ1zEBKANcrCDn2OVhd0ra/+9DGof4FIp2QJ4zS1wRAPqtlI5u3hqQ=,iv:AGOT19l9F/lieQahdP1tFB2+XvuO3c8TUgu9PKbRGvs=,tag:CVVlRMcB/0s2RajufQSo/A==,type:str]
     encrypted_regex: ^(data|stringData)$
-    version: 3.10.2
+    version: 3.11.0
