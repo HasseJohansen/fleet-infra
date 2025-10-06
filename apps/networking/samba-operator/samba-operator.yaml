@@ -7,7 +7,7 @@ metadata:
 spec:
   interval: 30m0s
   ref:
-    tag: v0.6
+    tag: 7a96dbc17391a0eaff6d6a7263cfe058b0377fc9
   url: https://github.com/samba-in-kubernetes/samba-operator
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
