@@ -7,8 +7,7 @@ metadata:
 spec:
   interval: 30m0s
   ref:
-    branch: master
-    commit: "f41c1f3ae165d73eb595366a7d18699f6a2bb989"
+    name: "refs/heads/master"
   url: https://github.com/samba-in-kubernetes/samba-operator
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
