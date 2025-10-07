@@ -1,0 +1,107 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: musicusers
+    namespace: default
+type: Opaque
+stringData:
+    demousers: ENC[AES256_GCM,data:d7WBVoNCgXXprC8hX13lVAhnsLz10FQXk/HB21/nX6owqbM0gHu2MXxLBFNYMITO4siBl53Uosp6T79f0JuML4a3JQFxZ4/3RonD0euZ1dHuBIiVt8feHvK5sCGuBMIUn+loNq1uZLKwRz2DzxfgjyRmQe/Fhuy6xkxBiwQRCl36Dme15qRNXVBzxXPp2Pt+LgAT8ek7IiAttg==,iv:7lNm4JkVIdy4GshJSROmlCxHt3lekn1VeI3Dixoz4aY=,tag:hrLORyzoEflFda+8pIqOPQ==,type:str]
+sops:
+    age:
+        - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBSK1RHZ1NaTHNNekM3UWF3
+            WERPRFNhS21IZGh4cVVwVkVqaE1UNDNMWUc0CnovSG5tVDJnZ0RkYjVCa0VRc1Zz
+            YlFreVpPU0dNSDZ5dUI1Nm9ydjhkVjAKLS0tIHBBOFJQRzRIdFoyZGtsbm9PVHl3
+            aGk2SXl4TUlUVzhyY0NKTnJPeXdWb3cKBdpYngpmChtBxXxgvL7lczOyt6ysR+Gu
+            bsqB/6ckvJabBptFL7k7g1ybTVF+9d5JVSPigRugigul3CU70Ci7VQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-10-07T08:09:15Z"
+    mac: ENC[AES256_GCM,data:Z1qEnrQwmzrhw9GgCoZk1d5P3CQTLYSJIix6nnwbzdoZwmxfvSphcr+LBOrfzq304V7sRUVtggmAZEolIq8ZjgNhoKXzjpFnpK6ek6eP8TLM+/Jl37NyYkEISv+il+TPnwQNnoBIVzoSYvred0XlpyAX9qya1NxDtSApjM2/OEA=,iv:RC414DT7wHCpmWDKK4BagRuTccqPQGJpmo1b0Wz1qu8=,tag:ameGC8o4+3Rc1RPTvMK8/g==,type:str]
+    encrypted_regex: ^(data|stringData)$
+    version: 3.11.0
+---
+apiVersion: samba-operator.samba.org/v1alpha1
+kind: SmbSecurityConfig
+metadata:
+    name: musicusers
+    namespace: default
+spec:
+    mode: user
+    users:
+        secret: musicusers
+        key: demousers
+sops:
+    age:
+        - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBSK1RHZ1NaTHNNekM3UWF3
+            WERPRFNhS21IZGh4cVVwVkVqaE1UNDNMWUc0CnovSG5tVDJnZ0RkYjVCa0VRc1Zz
+            YlFreVpPU0dNSDZ5dUI1Nm9ydjhkVjAKLS0tIHBBOFJQRzRIdFoyZGtsbm9PVHl3
+            aGk2SXl4TUlUVzhyY0NKTnJPeXdWb3cKBdpYngpmChtBxXxgvL7lczOyt6ysR+Gu
+            bsqB/6ckvJabBptFL7k7g1ybTVF+9d5JVSPigRugigul3CU70Ci7VQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-10-07T08:09:15Z"
+    mac: ENC[AES256_GCM,data:Z1qEnrQwmzrhw9GgCoZk1d5P3CQTLYSJIix6nnwbzdoZwmxfvSphcr+LBOrfzq304V7sRUVtggmAZEolIq8ZjgNhoKXzjpFnpK6ek6eP8TLM+/Jl37NyYkEISv+il+TPnwQNnoBIVzoSYvred0XlpyAX9qya1NxDtSApjM2/OEA=,iv:RC414DT7wHCpmWDKK4BagRuTccqPQGJpmo1b0Wz1qu8=,tag:ameGC8o4+3Rc1RPTvMK8/g==,type:str]
+    encrypted_regex: ^(data|stringData)$
+    version: 3.11.0
+---
+apiVersion: samba-operator.samba.org/v1alpha1
+kind: SmbCommonConfig
+metadata:
+    name: music
+    namespace: default
+spec:
+    podSettings:
+        nodeSelector:
+            kubernetes.io/hostname: minis-7373
+    network:
+        publish: external
+    customGlobalConfig:
+        configs:
+            additionalProperties: vfs_objects = streams_xattr
+sops:
+    age:
+        - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBSK1RHZ1NaTHNNekM3UWF3
+            WERPRFNhS21IZGh4cVVwVkVqaE1UNDNMWUc0CnovSG5tVDJnZ0RkYjVCa0VRc1Zz
+            YlFreVpPU0dNSDZ5dUI1Nm9ydjhkVjAKLS0tIHBBOFJQRzRIdFoyZGtsbm9PVHl3
+            aGk2SXl4TUlUVzhyY0NKTnJPeXdWb3cKBdpYngpmChtBxXxgvL7lczOyt6ysR+Gu
+            bsqB/6ckvJabBptFL7k7g1ybTVF+9d5JVSPigRugigul3CU70Ci7VQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-10-07T08:09:15Z"
+    mac: ENC[AES256_GCM,data:Z1qEnrQwmzrhw9GgCoZk1d5P3CQTLYSJIix6nnwbzdoZwmxfvSphcr+LBOrfzq304V7sRUVtggmAZEolIq8ZjgNhoKXzjpFnpK6ek6eP8TLM+/Jl37NyYkEISv+il+TPnwQNnoBIVzoSYvred0XlpyAX9qya1NxDtSApjM2/OEA=,iv:RC414DT7wHCpmWDKK4BagRuTccqPQGJpmo1b0Wz1qu8=,tag:ameGC8o4+3Rc1RPTvMK8/g==,type:str]
+    encrypted_regex: ^(data|stringData)$
+    version: 3.11.0
+---
+apiVersion: samba-operator.samba.org/v1alpha1
+kind: SmbShare
+metadata:
+    name: music
+    namespace: default
+spec:
+    securityConfig: musicusers
+    commonConfig: music
+    storage:
+        pvc:
+            name: roon-music
+    readOnly: false
+sops:
+    age:
+        - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBSK1RHZ1NaTHNNekM3UWF3
+            WERPRFNhS21IZGh4cVVwVkVqaE1UNDNMWUc0CnovSG5tVDJnZ0RkYjVCa0VRc1Zz
+            YlFreVpPU0dNSDZ5dUI1Nm9ydjhkVjAKLS0tIHBBOFJQRzRIdFoyZGtsbm9PVHl3
+            aGk2SXl4TUlUVzhyY0NKTnJPeXdWb3cKBdpYngpmChtBxXxgvL7lczOyt6ysR+Gu
+            bsqB/6ckvJabBptFL7k7g1ybTVF+9d5JVSPigRugigul3CU70Ci7VQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-10-07T08:09:15Z"
+    mac: ENC[AES256_GCM,data:Z1qEnrQwmzrhw9GgCoZk1d5P3CQTLYSJIix6nnwbzdoZwmxfvSphcr+LBOrfzq304V7sRUVtggmAZEolIq8ZjgNhoKXzjpFnpK6ek6eP8TLM+/Jl37NyYkEISv+il+TPnwQNnoBIVzoSYvred0XlpyAX9qya1NxDtSApjM2/OEA=,iv:RC414DT7wHCpmWDKK4BagRuTccqPQGJpmo1b0Wz1qu8=,tag:ameGC8o4+3Rc1RPTvMK8/g==,type:str]
+    encrypted_regex: ^(data|stringData)$
+    version: 3.11.0
