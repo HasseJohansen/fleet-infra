@@ -1,0 +1,82 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: videousers
+    namespace: default
+type: Opaque
+stringData:
+    demousers: ENC[AES256_GCM,data:OknTD9mwj9wagKOc+Kaju8O4YiXClDJOXU5oYfozTOnNIfWVfVFc0dzpZO9MarTLbPnfVS0hWKUZRLMWrFL3PNNGKAeCGN8E15TpPnja42ESuYvnCoepE8Hvl0vma++UjGmx+sRDm7uiCbJprP+lWApuWvJmry/WZSPD7P1kGfTQ6JIAXoMXsmok8icR+GG6lWrXLJhiRz3BaQ==,iv:Vjhv6/n1MAJsqtaiYzPyMp/EKKuCjh6uZ7EQoUEe3MQ=,tag:Y1JsSkGLhwML01O+ulcq0Q==,type:str]
+sops:
+    age:
+        - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBFOC9sR1cxT2tzSzRwNnp4
+            ZzNVN21nMzAwVXoydE1ReGVJS1ZCVmlubENVCkFnTSs3bDBPL2ZPVy91dTJjYkFG
+            VGY3Q1BjKy9YRW5ta1lqMzc1aEs2WFUKLS0tIHRpTXV0c05EOFEzVzFMcTh2Z2Fh
+            TG5QcXJEbWxoQmRKTnV5M3piT2E3N2sKPD3QWqalXM7cW8YM7VIO9VsRRIQ2sRFm
+            /Jt/iEFLP0E6JYO86kbVTM1lGlLyrHDoGQH5uGs9hledD0bHpsv1Ew==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-10-07T11:30:09Z"
+    mac: ENC[AES256_GCM,data:GbnRl/hZ54mg7ne4LMsbkAht1Wf+8hRnyrg2tmvRF/lfIhAClKcwRebftNPQ54z5Hy6vhdN8R6G0a6Pwnmvn6EoUlOTdhRnE5LIaoIpTzkte7rh3VZu5rQ1dhE7QnXHsFeRFt9176ShdBiFkfSDG4fXP1spGMobSyIYoOP61ag4=,iv:eaDin3zqPNlESdh1exEJ5tWoUOqhxuLd2cpJINfXR7o=,tag:c0/7cyPQ6KFpz3yhYfNsFQ==,type:str]
+    encrypted_regex: ^(data|stringData)$
+    version: 3.11.0
+---
+apiVersion: samba-operator.samba.org/v1alpha1
+kind: SmbSecurityConfig
+metadata:
+    name: videousers
+    namespace: default
+spec:
+    mode: user
+    users:
+        secret: videousers
+        key: demousers
+sops:
+    age:
+        - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBFOC9sR1cxT2tzSzRwNnp4
+            ZzNVN21nMzAwVXoydE1ReGVJS1ZCVmlubENVCkFnTSs3bDBPL2ZPVy91dTJjYkFG
+            VGY3Q1BjKy9YRW5ta1lqMzc1aEs2WFUKLS0tIHRpTXV0c05EOFEzVzFMcTh2Z2Fh
+            TG5QcXJEbWxoQmRKTnV5M3piT2E3N2sKPD3QWqalXM7cW8YM7VIO9VsRRIQ2sRFm
+            /Jt/iEFLP0E6JYO86kbVTM1lGlLyrHDoGQH5uGs9hledD0bHpsv1Ew==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-10-07T11:30:09Z"
+    mac: ENC[AES256_GCM,data:GbnRl/hZ54mg7ne4LMsbkAht1Wf+8hRnyrg2tmvRF/lfIhAClKcwRebftNPQ54z5Hy6vhdN8R6G0a6Pwnmvn6EoUlOTdhRnE5LIaoIpTzkte7rh3VZu5rQ1dhE7QnXHsFeRFt9176ShdBiFkfSDG4fXP1spGMobSyIYoOP61ag4=,iv:eaDin3zqPNlESdh1exEJ5tWoUOqhxuLd2cpJINfXR7o=,tag:c0/7cyPQ6KFpz3yhYfNsFQ==,type:str]
+    encrypted_regex: ^(data|stringData)$
+    version: 3.11.0
+---
+apiVersion: samba-operator.samba.org/v1alpha1
+kind: SmbShare
+metadata:
+    name: video
+    namespace: default
+spec:
+    securityConfig: videousers
+    commonConfig: music
+    readOnly: false
+    storage:
+        pvc:
+            spec:
+                accessModes:
+                    - ReadWriteOnce
+                resources:
+                    requests:
+                        storage: 1100Gi
+sops:
+    age:
+        - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBFOC9sR1cxT2tzSzRwNnp4
+            ZzNVN21nMzAwVXoydE1ReGVJS1ZCVmlubENVCkFnTSs3bDBPL2ZPVy91dTJjYkFG
+            VGY3Q1BjKy9YRW5ta1lqMzc1aEs2WFUKLS0tIHRpTXV0c05EOFEzVzFMcTh2Z2Fh
+            TG5QcXJEbWxoQmRKTnV5M3piT2E3N2sKPD3QWqalXM7cW8YM7VIO9VsRRIQ2sRFm
+            /Jt/iEFLP0E6JYO86kbVTM1lGlLyrHDoGQH5uGs9hledD0bHpsv1Ew==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-10-07T11:30:09Z"
+    mac: ENC[AES256_GCM,data:GbnRl/hZ54mg7ne4LMsbkAht1Wf+8hRnyrg2tmvRF/lfIhAClKcwRebftNPQ54z5Hy6vhdN8R6G0a6Pwnmvn6EoUlOTdhRnE5LIaoIpTzkte7rh3VZu5rQ1dhE7QnXHsFeRFt9176ShdBiFkfSDG4fXP1spGMobSyIYoOP61ag4=,iv:eaDin3zqPNlESdh1exEJ5tWoUOqhxuLd2cpJINfXR7o=,tag:c0/7cyPQ6KFpz3yhYfNsFQ==,type:str]
+    encrypted_regex: ^(data|stringData)$
+    version: 3.11.0
