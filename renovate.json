@@ -2,5 +2,14 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "packageRules": [
+    {
+      "description": "Only use GitHub Releases for NFD Kustomize remote",
+      "matchManagers": ["kustomize"],
+      "matchDepNames": ["kubernetes-sigs/node-feature-discovery"],
+      "overrideDatasource": "github-releases",
+      "minimumReleaseAge": "3 days"
+    }
   ]
 }
