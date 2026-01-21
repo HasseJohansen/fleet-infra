@@ -38,9 +38,9 @@ spec:
           #  mountPath: /dev/cdrom
           - mountPath: /music
             name: music                                                                                                                                                                                                                    
-          - name: whipper-config
-            mountPath: /root/.config/whipper/whipper.conf
-            subPath: whipper.conf
+#          - name: whipper-config
+#            mountPath: /root/.config/whipper/whipper.conf
+#            subPath: whipper.conf
       volumes:
         - name: config-volume
           configMap:
