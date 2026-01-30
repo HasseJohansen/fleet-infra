@@ -17,8 +17,8 @@ sops:
             Smx2ZXVwcmEzRzN1T01ZM1BtSDZNV3cKL9+13R55f7Jg0Z4hjqLRIP/nPm7p4NBO
             DeZtEzW9nNbJRkLbrhnlFTWxB/JzYOfCKiOaf64kDT2/9FgvQKODZQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-01-29T14:03:49Z"
-    mac: ENC[AES256_GCM,data:+Q2KPACxIADR866c6FzoElCm9isbNwb3hwgHf8aSp0lfghEe1OC+08vlqL0nikzQ5xzTPay7p4pO/QOd+ncpup3ruwDDMB0ojlZ2i3w0oi7yeSO0BhHuxWUIgWoj5NGColdSst88bkD6g+d6HydqL3DlNA2qXscahFdAFCTdYTM=,iv:u4H8HW48Mo1P0dk2FWwbZ4V1zdTiU9lcAp0CY3fM2dk=,tag:j6I8twYGLWxwUmRMhrgx+w==,type:str]
+    lastmodified: "2026-01-30T08:23:49Z"
+    mac: ENC[AES256_GCM,data:JiH7YEo8LPZjw7mJY6dRj3FXXPYAkqAcqEEgahaZ3k7RbbNAYxh4WpHE/uBjY6DpirtXx1x8nCAiJdEoGJ1Ej9cDYDW0e8Kn+5kSTc8Ekx7VioHljSD1bzTa1ewwXbGStRKRUGbdolmkSP0cGRuiK7mEF+DHvQgk3bF164fe1Ow=,iv:y+ZJr22AW0slIqZooXGlaOXA3wtJdb9J2iGwx0000Lc=,tag:cUF7JmuFyLEvd7OPcxvqWw==,type:str]
     encrypted_regex: ^(data|stringData)$
     version: 3.11.0
 ---
@@ -43,8 +43,8 @@ sops:
             Smx2ZXVwcmEzRzN1T01ZM1BtSDZNV3cKL9+13R55f7Jg0Z4hjqLRIP/nPm7p4NBO
             DeZtEzW9nNbJRkLbrhnlFTWxB/JzYOfCKiOaf64kDT2/9FgvQKODZQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-01-29T14:03:49Z"
-    mac: ENC[AES256_GCM,data:+Q2KPACxIADR866c6FzoElCm9isbNwb3hwgHf8aSp0lfghEe1OC+08vlqL0nikzQ5xzTPay7p4pO/QOd+ncpup3ruwDDMB0ojlZ2i3w0oi7yeSO0BhHuxWUIgWoj5NGColdSst88bkD6g+d6HydqL3DlNA2qXscahFdAFCTdYTM=,iv:u4H8HW48Mo1P0dk2FWwbZ4V1zdTiU9lcAp0CY3fM2dk=,tag:j6I8twYGLWxwUmRMhrgx+w==,type:str]
+    lastmodified: "2026-01-30T08:23:49Z"
+    mac: ENC[AES256_GCM,data:JiH7YEo8LPZjw7mJY6dRj3FXXPYAkqAcqEEgahaZ3k7RbbNAYxh4WpHE/uBjY6DpirtXx1x8nCAiJdEoGJ1Ej9cDYDW0e8Kn+5kSTc8Ekx7VioHljSD1bzTa1ewwXbGStRKRUGbdolmkSP0cGRuiK7mEF+DHvQgk3bF164fe1Ow=,iv:y+ZJr22AW0slIqZooXGlaOXA3wtJdb9J2iGwx0000Lc=,tag:cUF7JmuFyLEvd7OPcxvqWw==,type:str]
     encrypted_regex: ^(data|stringData)$
     version: 3.11.0
 ---
@@ -64,7 +64,7 @@ spec:
                     - ReadWriteOnce
                 resources:
                     requests:
-                        storage: 1300Gi
+                        storage: 1800Gi
 sops:
     age:
         - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
@@ -76,7 +76,7 @@ sops:
             Smx2ZXVwcmEzRzN1T01ZM1BtSDZNV3cKL9+13R55f7Jg0Z4hjqLRIP/nPm7p4NBO
             DeZtEzW9nNbJRkLbrhnlFTWxB/JzYOfCKiOaf64kDT2/9FgvQKODZQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-01-29T14:03:49Z"
-    mac: ENC[AES256_GCM,data:+Q2KPACxIADR866c6FzoElCm9isbNwb3hwgHf8aSp0lfghEe1OC+08vlqL0nikzQ5xzTPay7p4pO/QOd+ncpup3ruwDDMB0ojlZ2i3w0oi7yeSO0BhHuxWUIgWoj5NGColdSst88bkD6g+d6HydqL3DlNA2qXscahFdAFCTdYTM=,iv:u4H8HW48Mo1P0dk2FWwbZ4V1zdTiU9lcAp0CY3fM2dk=,tag:j6I8twYGLWxwUmRMhrgx+w==,type:str]
+    lastmodified: "2026-01-30T08:23:49Z"
+    mac: ENC[AES256_GCM,data:JiH7YEo8LPZjw7mJY6dRj3FXXPYAkqAcqEEgahaZ3k7RbbNAYxh4WpHE/uBjY6DpirtXx1x8nCAiJdEoGJ1Ej9cDYDW0e8Kn+5kSTc8Ekx7VioHljSD1bzTa1ewwXbGStRKRUGbdolmkSP0cGRuiK7mEF+DHvQgk3bF164fe1Ow=,iv:y+ZJr22AW0slIqZooXGlaOXA3wtJdb9J2iGwx0000Lc=,tag:cUF7JmuFyLEvd7OPcxvqWw==,type:str]
     encrypted_regex: ^(data|stringData)$
     version: 3.11.0
