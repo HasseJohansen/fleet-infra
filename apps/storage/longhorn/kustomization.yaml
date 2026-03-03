@@ -5,3 +5,4 @@ resources:
   - helmrepo.yaml
   - ns.yaml
   - secret.yaml
+  - idrive-secret.yaml

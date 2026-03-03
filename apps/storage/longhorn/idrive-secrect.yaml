@@ -1,0 +1,24 @@
+apiVersion: v1
+data:
+    AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:yOY0geT7YoZUxn521QTThCMWbFLB2XaKk9/02Q==,iv:6vwIVTAeCbk/D6p5bL63NUuQcWLD8Z7ymG1FxJpuTGQ=,tag:e6bOXmTLGIAj5clT7UY2Xg==,type:str]
+    AWS_ENDPOINTS: ENC[AES256_GCM,data:H3kZ37qBwDUgpOdfMdXKPDeCtfzXcYGWYuTmIidD8jgtrW/NyhmEMQ==,iv:1GccISCjHlMeiydBAEO9+DUnRGdNIkApbZLLGofj80Q=,tag:JIjYLHK2bJR/UoxI0JTaVg==,type:str]
+    AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:fazg891a2lNqbEjrxF49MsVYQpnfk9O5ayL/0RwKK3D+NezQpjlOtnl28QEMX9P7X/BJDT4mOX4=,iv:xUU0XQ/UNKf2fv8WcUwzIKLq9CheBBAtbapzivi6w7k=,tag:jLbnDkMApuoRaczDehhzKA==,type:str]
+kind: Secret
+metadata:
+    name: idrive-longhorn-secret
+    namespace: longhorn-system
+sops:
+    age:
+        - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBIRmkzOVY4b2hoSWNNZURW
+            eGwrVjV5eWZrWHdkNUdaRzVrbmNBVEFGYm53CkNyQTcrYWZyenhxMWdkbFNBckEz
+            K0M3V2Y1UVFrUnVJTHBsNUNJTU5xb3cKLS0tIGgwN1dxWFM1dGpaS29vNFBHS2w2
+            dDM1MDJxSDVoZWlBd0FvdzU5RGZvUDAKCYUf4wf6IgAkGpS8CpiJpwk5NMfd2EqL
+            p/igjoWmiB0JcmlPY5mAOwsPVeqJmdOL7OVKenLM7ocT9nyo0CumfQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-03-03T15:11:41Z"
+    mac: ENC[AES256_GCM,data:vITYdz/pa5AmSX5+6YsmQ4C84pwy6aqOtyBu0EAbxB2arlNGkYkIKcqUFDCi5u5aMIDY69KyQMOiMPsHmHWaNTYprwZNeOSvyIALmnKEtCVC/Wfft6TqkEJzMglxEHRew3p+TlOcclPOj/Y7LJT1UMmJIE1+rmQQmrk0v5zYoNM=,iv:Y0Be4mfmj08RP4NzflhgteLfiI13+3sWuSOWW3GA+7Y=,tag:jTFPCk1fslxRiipANUp3lQ==,type:str]
+    encrypted_regex: ^(data|stringData)$
+    version: 3.12.1
