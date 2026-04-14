@@ -10,8 +10,6 @@ spec:
     selector:
         matchLabels:
             app: roon-extension-ikea-tradfri
-    nodeSelector:
-        kubernetes.io/hostname: 'minis-7373'
     strategy: {}
     template:
         metadata:
@@ -37,6 +35,8 @@ spec:
                 - name: config-volume
                   configMap:
                     name: ikea-tradfri-config
+            nodeSelector:
+              kubernetes.io/hostname: 'minis-7373'
 status: {}
 sops:
     kms: []
