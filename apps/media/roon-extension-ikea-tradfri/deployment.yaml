@@ -18,7 +18,7 @@ spec:
         spec:
             hostNetwork: true
             containers:
-                - image: hassejohansen/roon-extension-ikea-tradfri:0.0.18
+                - image: hassejohansen/roon-extension-ikea-tradfri:0.0.19
                   name: roon-extension-ikea-tradfri
                   command:
                     - sh
