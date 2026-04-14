@@ -24,4 +24,6 @@ spec:
         - name: TZ
           value: Europe/Copenhagen
         resources: {}
+      nodeSelector:
+        kubernetes.io/hostname: 'minis-7373'
 status: {}
