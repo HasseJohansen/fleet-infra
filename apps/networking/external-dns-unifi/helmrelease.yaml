@@ -12,7 +12,6 @@ spec:
         kind: HelmRepository
         name: external-dns
         namespace: external-dns
-      reconcileStrategy: Revision
   interval: 15m
   timeout: 5m
   releaseName: external-dns
