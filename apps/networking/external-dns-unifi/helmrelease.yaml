@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: external-dns
-      version: 1.15.0
+      version: 1.21.1
       sourceRef:
         kind: HelmRepository
         name: external-dns
@@ -23,7 +23,7 @@ spec:
       webhook:
         image:
           repository: ghcr.io/kashalls/external-dns-unifi-webhook
-          tag: v0.3.1 # replace with a versioned release tag
+          tag: v0.8.2 # replace with a versioned release tag
         env:
           - name: UNIFI_HOST
             value: https://192.168.0.1 # replace with the address to your UniFi router/controller
