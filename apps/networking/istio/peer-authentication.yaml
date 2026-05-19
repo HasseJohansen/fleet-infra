@@ -25,5 +25,5 @@ spec:
   # Port-level overrides for specific ports
   portLevelMtls:
     # Allow plaintext on the workload container port
-    80:
+    "80":
       mode: PERMISSIVE
