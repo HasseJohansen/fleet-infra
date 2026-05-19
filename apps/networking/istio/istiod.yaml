@@ -20,6 +20,7 @@ spec:
         name: istio
         namespace: flux-system
   values:
+    istio_cni.enabled: true
     # Global mesh configuration
     global:
       # Set the mesh ID for multi-cluster setups
