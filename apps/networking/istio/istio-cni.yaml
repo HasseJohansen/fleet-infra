@@ -16,5 +16,10 @@ spec:
         name: istio
         namespace: flux-system
   values:
-    cni.ambient.enabled: true
+    cni:
+      ambient:
+        enabled: true
+      excludeNamespaces:
+        - istio-system
+        - kube-system
     cniConfDir: /var/lib/rancher/k3s/agent/etc/cni/net.d
