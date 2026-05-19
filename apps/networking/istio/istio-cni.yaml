@@ -9,7 +9,7 @@ spec:
   interval: 10m
   chart:
     spec:
-      chart: istio-cni
+      chart: cni
       version: "1.30.0"
       sourceRef:
         kind: HelmRepository
