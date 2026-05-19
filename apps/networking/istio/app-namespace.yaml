@@ -1,0 +1,11 @@
+# app-namespace.yaml
+# Namespace with Istio sidecar injection enabled
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: istio-test-namespace
+  labels:
+    # This label enables automatic sidecar injection
+    istio-injection: enabled
+    # Pod security standards
+    pod-security.kubernetes.io/enforce: baseline

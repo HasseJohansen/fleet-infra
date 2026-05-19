@@ -1,0 +1,42 @@
+# sample-app.yaml
+# Sample deployment with Istio sidecar
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpbin
+  namespace: istio-test-namespace
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: httpbin
+  template:
+    metadata:
+      labels:
+        app: httpbin
+        # Version label for traffic management
+        version: v1
+    spec:
+      containers:
+        - name: httpbin
+          image: docker.io/kong/httpbin:0.1.0
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+---
+# Service for the sample app
+apiVersion: v1
+kind: Service
+metadata:
+  name: httpbin
+  namespace: istio-test-namespace
+spec:
+  selector:
+    app: httpbin
+  ports:
+    - port: 80
+      targetPort: 80
+      name: http
