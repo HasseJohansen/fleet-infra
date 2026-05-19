@@ -4,7 +4,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: istio-cni
-  namespace: kube-system
+  namespace: istio-system
 spec:
   interval: 10m
   chart:
