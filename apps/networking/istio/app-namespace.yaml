@@ -9,3 +9,4 @@ metadata:
     istio-injection: enabled
     # Pod security standards
     pod-security.kubernetes.io/enforce: baseline
+    istio.io/dataplane-mode: ambient
