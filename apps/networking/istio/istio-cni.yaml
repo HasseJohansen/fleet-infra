@@ -24,3 +24,4 @@ spec:
         - istio-system
         - kube-system
     cniConfDir: /var/lib/rancher/k3s/agent/etc/cni/net.d
+    cniBinDir: /var/lib/rancher/k3s/data/cni
