@@ -17,7 +17,7 @@ spec:
         # Version label for traffic management
         version: v1
       annotations:
-        sidecar.istio.io/interceptionMode: ""  # Empty string, not "NONE"
+        sidecar.istio.io/interceptionMode: "NONE"
     spec:
       containers:
         - name: httpbin
