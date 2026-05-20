@@ -9,5 +9,3 @@ metadata:
     istio-injection: enabled
     # Pod security standards
     pod-security.kubernetes.io/enforce: baseline
-  annotations:
-    sidecar.istio.io/interceptionMode: "NONE"

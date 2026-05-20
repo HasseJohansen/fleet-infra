@@ -16,8 +16,6 @@ spec:
         app: httpbin
         # Version label for traffic management
         version: v1
-      annotations:
-        sidecar.istio.io/interceptionMode: "NONE"
     spec:
       containers:
         - name: httpbin
