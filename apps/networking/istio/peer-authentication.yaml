@@ -1,0 +1,29 @@
+# peer-authentication.yaml
+# PeerAuthentication to enforce strict mTLS across the mesh
+apiVersion: security.istio.io/v1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: istio-system
+spec:
+  # Enforce strict mTLS for all workloads in the mesh
+  mtls:
+    mode: STRICT
+---
+# Per-workload PeerAuthentication with a port override (if needed)
+apiVersion: security.istio.io/v1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: my-app
+spec:
+  selector:
+    matchLabels:
+      app: httpbin
+  mtls:
+    mode: STRICT
+  # Port-level overrides for specific ports
+  portLevelMtls:
+    # Allow plaintext on the workload container port
+    "80":
+      mode: PERMISSIVE
