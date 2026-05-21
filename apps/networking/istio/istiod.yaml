@@ -44,8 +44,10 @@ spec:
       # Enable status updates for Istio resources
       env:
         PILOT_ENABLE_STATUS: "true"
+        ENABLE_AMBIENT: "true"
     # Mesh-wide configuration
     meshConfig:
+      enableAmbient: true
       # Enable access logging
       accessLogFile: /dev/stdout
       # Access log format
