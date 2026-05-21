@@ -17,5 +17,3 @@ spec:
   values:
     namespace: istio-system
     image: "docker.io/istio/ztunnel:1.30.0"  # <-- Full image name here
-    podAnnotations:
-      sidecar.istio.io/inject: "false"  # Disable sidecar injection
