@@ -16,8 +16,6 @@ spec:
         namespace: flux-system
   values:
     namespace: istio-system
-    hub: "docker.io/istio"  # Explicitly set the hub
-    tag: "1.30.0"           # Explicitly set the tag
-    image: "ztunnel"       # Explicitly set the image name
+    image: "docker.io/istio/ztunnel:1.30.0"  # <-- Full image name here
     podAnnotations:
       sidecar.istio.io/inject: "false"  # Disable sidecar injection
