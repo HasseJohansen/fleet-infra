@@ -66,10 +66,3 @@ spec:
       # Outbound traffic policy - allow or restrict
       outboundTrafficPolicy:
         mode: REGISTRY_ONLY
-    # Ensure ztunnel is enabled
-    ztunnel:
-      enabled: true  # <-- Explicitly enable ztunnel
-      hub: ""  # Use default Istio images
-      tag: ""  # Use default Istio images
-      image: ""  # Use default Istio images
-      namespace: istio-system  # Explicitly set namespace
