@@ -66,3 +66,6 @@ spec:
       # Outbound traffic policy - allow or restrict
       outboundTrafficPolicy:
         mode: REGISTRY_ONLY
+    # Ensure ztunnel is enabled
+    ztunnel:
+      enabled: true  # <-- Explicitly enable ztunnel
