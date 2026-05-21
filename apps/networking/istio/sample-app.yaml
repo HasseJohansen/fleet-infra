@@ -16,7 +16,6 @@ spec:
         app: httpbin
         # Version label for traffic management
         version: v1
-        istio.io/use-waypoint: my-waypoint
     spec:
       containers:
         - name: httpbin
@@ -34,6 +33,8 @@ kind: Service
 metadata:
   name: httpbin
   namespace: my-app
+  labels:
+    istio.io/use-waypoint: my-waypoint
 spec:
   selector:
     app: httpbin
