@@ -1,0 +1,21 @@
+# gateway-api-crds.yaml
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: gateway-api-crds
+  namespace: flux-system
+spec:
+  interval: 1h
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: gateway-api
+    namespace: flux-system
+  path: ./config/crd  # Path to the CRDs in the Gateway API repo
+  healthChecks:
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: gateways.gateway.networking.k8s.io
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: httproutes.gateway.networking.k8s.io
