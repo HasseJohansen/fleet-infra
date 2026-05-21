@@ -5,8 +5,6 @@ kind: Namespace
 metadata:
   name: my-app
   labels:
-    # This label enables automatic sidecar injection
-    istio-injection: enabled
     # Pod security standards
     pod-security.kubernetes.io/enforce: baseline
     istio.io/dataplane-mode: ambient
