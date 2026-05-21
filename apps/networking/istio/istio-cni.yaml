@@ -16,6 +16,12 @@ spec:
         name: istio
         namespace: flux-system
   values:
+    ambient:
+      enabled: true
+      redirectMode: ebpf
+    repair:
+      enabled: true
+      deletePods: true
     cni:
       chained: true
       excludeNamespaces:
