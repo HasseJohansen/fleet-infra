@@ -1,25 +1,103 @@
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
 metadata:
-  name: my-app-vpa
+  name: vpa-music
   namespace: default
 spec:
   targetRef:
     apiVersion: "apps/v1"
     kind: Deployment
-    name: my-app
+    name: music
   updatePolicy:
     updateMode: "Auto"
 ---
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
 metadata:
-  name: my-app-vpa
+  name: vpa-roon
+  namespace: default
+spec:
+  targetRef:
+    apiVersion: "apps/v1"
+    kind: Deployment
+    name: roon
+  updatePolicy:
+    updateMode: "Auto"
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: vpa-roon-extension-alarm-clock
+  namespace: default
+spec:
+  targetRef:
+    apiVersion: "apps/v1"
+    kind: Deployment
+    name: roon-extension-alarm-clock
+  updatePolicy:
+    updateMode: "Auto"
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: vpa-roon-extension-cd-ripper
+  namespace: default
+spec:
+  targetRef:
+    apiVersion: "apps/v1"
+    kind: Deployment
+    name: roon-extension-cd-ripper
+  updatePolicy:
+    updateMode: "Auto"
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: vpa-roon-extension-ikea-tradfri
+  namespace: default
+spec:
+  targetRef:
+    apiVersion: "apps/v1"
+    kind: Deployment
+    name: roon-extension-ikea-tradfri
+  updatePolicy:
+    updateMode: "Auto"
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: vpa-roon-extension-random-radio
+  namespace: default
+spec:
+  targetRef:
+    apiVersion: "apps/v1"
+    kind: Deployment
+    name: roon-extension-random-radio
+  updatePolicy:
+    updateMode: "Auto"
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: vpa-httpbin
   namespace: my-app
 spec:
   targetRef:
     apiVersion: "apps/v1"
     kind: Deployment
-    name: my-app
+    name: httpbin
+  updatePolicy:
+    updateMode: "Auto"
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: vpa-my-waypoint
+  namespace: my-app
+spec:
+  targetRef:
+    apiVersion: "apps/v1"
+    kind: Deployment
+    name: my-waypoint
   updatePolicy:
     updateMode: "Auto"
