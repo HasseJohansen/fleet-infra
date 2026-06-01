@@ -9,7 +9,8 @@ spec:
     kind: Deployment
     name: music
   updatePolicy:
-    updateMode: "Auto"
+    updateMode: "InPlaceOrRecreate"
+    minReplicas: 1
 ---
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
@@ -22,7 +23,8 @@ spec:
     kind: Deployment
     name: roon
   updatePolicy:
-    updateMode: "Auto"
+    updateMode: "InPlaceOrRecreate"
+    minReplicas: 1
 ---
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
@@ -35,7 +37,8 @@ spec:
     kind: Deployment
     name: roon-extension-alarm-clock
   updatePolicy:
-    updateMode: "Auto"
+    updateMode: "InPlaceOrRecreate"
+    minReplicas: 1
 ---
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
@@ -48,7 +51,8 @@ spec:
     kind: Deployment
     name: roon-extension-cd-ripper
   updatePolicy:
-    updateMode: "Auto"
+    updateMode: "InPlaceOrRecreate"
+    minReplicas: 1
 ---
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
@@ -61,7 +65,8 @@ spec:
     kind: Deployment
     name: roon-extension-ikea-tradfri
   updatePolicy:
-    updateMode: "Auto"
+    updateMode: "InPlaceOrRecreate"
+    minReplicas: 1
 ---
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
@@ -74,7 +79,8 @@ spec:
     kind: Deployment
     name: roon-extension-random-radio
   updatePolicy:
-    updateMode: "Auto"
+    updateMode: "InPlaceOrRecreate"
+    minReplicas: 1
 ---
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
@@ -88,6 +94,7 @@ spec:
     name: httpbin
   updatePolicy:
     updateMode: "Auto"
+    minReplicas: 1
 ---
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
