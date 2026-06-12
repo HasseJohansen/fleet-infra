@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    namespace: default
+    labels:
+        app: roon-extension-spotify-playlist
+    name: roon-extension-spotify-playlist
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: roon-extension-spotify-playlist
+    strategy: {}
+    template:
+        metadata:
+            labels:
+                app: roon-extension-spotify-playlist
+        spec:
+            hostNetwork: true
+            containers:
+                - image: hassejohansen/roon-extension-spotify-playlist:latest
+                  name: roon-extension-spotify-playlist
+                  command:
+                    - sh
+                    - -c
+                  args:
+                    - |
+                      cp /home/node/temp/config.json /home/node/config.json
+                      node .
+                  resources: {}
+                  volumeMounts:
+                    - name: config-volume
+                      mountPath: /home/node/temp
+            volumes:
+                - name: config-volume
+                  configMap:
+                    name: roon-extension-spotify-playlist-config
+            nodeSelector:
+                kubernetes.io/hostname: minis-7373
+status: {}
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBpTE5ZVWJpK0pGV0J6cjV1
+            SnR1MS9HVkZkb0FieVdVNHpBTnY2Qlo3UmcwCnY1KzBqeTVMUW5SNi92R1FTWDlh
+            VUtVU0xvNFNXcXVuUEJTaXJrdXYzeUEKLS0tIHRtZGZPQUE0RHVQM2M3ZjVSdW1V
+            R0tSa3hScUhLZm5JdlBROW5nOVlhTDQK9b7gYhLXawm4w+jBHu7uYdlsISqIsL3y
+            eccLJekwZpR7pREhX+zqnISaoQp7HPI5n34Qsyv8oe4skxmpUb9NWg==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
+    encrypted_regex: ^(data|stringData)$
+    lastmodified: "2026-06-12T19:19:48Z"
+    mac: ENC[AES256_GCM,data:bRRf1XsQJGiWrimDWeG9g97dckn05RfUniyh4lUY3WTEW56/6WUeSIjoSt974bz3jrvTkms4VQqZX6DEXzLQ04lboq1vE7xeu4NHhoINSxxb11Wd6BFHj+gTxGFtzKnMP6O8ceDHH6zDcJiiYeG13a4OjGXvaTpTOVHrqYpl9FE=,iv:cSpGoQQn2jFA1FTN6CAydVMJ4xbFX9cQjRXlm1wi0AM=,tag:NiRjzWRK9v7Exe3qyirr3Q==,type:str]
+    version: 3.13.1
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: roon-extension-spotify-playlist-config
+    namespace: default
+data:
+    config.json: ENC[AES256_GCM,data:9LQh,iv:qe00hmPH5CmlUYryOtgYVwTImtfKtMH3T9IYPOnrrfw=,tag:x0MJ+LGBmUdj3d3kxSZWbQ==,type:str]
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBpTE5ZVWJpK0pGV0J6cjV1
+            SnR1MS9HVkZkb0FieVdVNHpBTnY2Qlo3UmcwCnY1KzBqeTVMUW5SNi92R1FTWDlh
+            VUtVU0xvNFNXcXVuUEJTaXJrdXYzeUEKLS0tIHRtZGZPQUE0RHVQM2M3ZjVSdW1V
+            R0tSa3hScUhLZm5JdlBROW5nOVlhTDQK9b7gYhLXawm4w+jBHu7uYdlsISqIsL3y
+            eccLJekwZpR7pREhX+zqnISaoQp7HPI5n34Qsyv8oe4skxmpUb9NWg==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
+    encrypted_regex: ^(data|stringData)$
+    lastmodified: "2026-06-12T19:19:48Z"
+    mac: ENC[AES256_GCM,data:bRRf1XsQJGiWrimDWeG9g97dckn05RfUniyh4lUY3WTEW56/6WUeSIjoSt974bz3jrvTkms4VQqZX6DEXzLQ04lboq1vE7xeu4NHhoINSxxb11Wd6BFHj+gTxGFtzKnMP6O8ceDHH6zDcJiiYeG13a4OjGXvaTpTOVHrqYpl9FE=,iv:cSpGoQQn2jFA1FTN6CAydVMJ4xbFX9cQjRXlm1wi0AM=,tag:NiRjzWRK9v7Exe3qyirr3Q==,type:str]
+    version: 3.13.1
