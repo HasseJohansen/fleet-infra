@@ -36,16 +36,11 @@ spec:
                   configMap:
                     name: ikea-tradfri-config
             nodeSelector:
-              kubernetes.io/hostname: 'minis-7373'
+                kubernetes.io/hostname: minis-7373
 status: {}
 sops:
-    kms: []
-    gcp_kms: []
-    azure_kv: []
-    hc_vault: []
     age:
-        - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
-          enc: |
+        - enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
             YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBpTE5ZVWJpK0pGV0J6cjV1
             SnR1MS9HVkZkb0FieVdVNHpBTnY2Qlo3UmcwCnY1KzBqeTVMUW5SNi92R1FTWDlh
@@ -53,11 +48,11 @@ sops:
             R0tSa3hScUhLZm5JdlBROW5nOVlhTDQK9b7gYhLXawm4w+jBHu7uYdlsISqIsL3y
             eccLJekwZpR7pREhX+zqnISaoQp7HPI5n34Qsyv8oe4skxmpUb9NWg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-03-17T13:44:45Z"
-    mac: ENC[AES256_GCM,data:ogcd2ei7NxsWZ641a2TOuLSx+ze8MTMx+XdA0zIG0CJInyVMPTtom0ErN5WFnPd1loQfj+3K+WcYm6h/xWG37FDnlR8mvVhEkI8ppDXts/JPBrmVrb4Qa9yxmagVKnCTy6NM66g29Ha5WTd7wfG9Zk+N/51DqjK3p/GPjv5B5cw=,iv:CaGE0mzC0bXAfiJXLfaM4BmfTqijLwBVIoZz/iyh9jE=,tag:Tm5jSTP3ElinEshj2TkcWQ==,type:str]
-    pgp: []
+          recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
     encrypted_regex: ^(data|stringData)$
-    version: 3.8.1
+    lastmodified: "2026-06-12T19:15:58Z"
+    mac: ENC[AES256_GCM,data:+ovcM0y8oyPoeOjydl7+rJuDLjV7A9TSSWnsrNTNYK+orALaVlJxVAUPNxmAPmBCAWfUjU5prwHKQuVJEOPc3k01WJuHTod9iAge2H/UuHu7731XBqHbrCVtLc1a7boKUGcYKl1Rk05gA8yBPC225Dc0P4m8kShgE/sxZ/Sj2R4=,iv:K0jqfSpzOCksIaZQpTyLPG2mapw5skCJ/8RN8jq4Qfc=,tag:zqrG5VKQVK9h4mv6zFabSQ==,type:str]
+    version: 3.13.1
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -67,13 +62,8 @@ metadata:
 data:
     config.json: ENC[AES256_GCM,data:poVf0tcjoJEb9uC8xUiJ4Elxil0OW370aiMt7ZDk2LKljIrkAz6LutBAlHy9/6e3Xs7U42yrT8BBIxChlqaRunfWMZShHR2jUA5q+dU4GCvx3dbyq04S6oiy4a7jUrZ4rBgol8aYiM5b1LVvcmMhsU9z8C2vQ+7G9RdfDFT21ejeDkzA9lhF3Kp8R973P1FFD4x9Ey1+AjT+4RvCR8hwMgrcBF3l1NU/SHG3LUoHXdfbyzKlgM1D/5813aTr5JZw8TixBDksBsX0aduoPUOQCaxU50Xma4/n8CGbazqI3rXn7R7bjiXP+lXudu4Dk2BYLMkuwry+YjlOj4gNtg4jBm7xIU7/BY8iOajTSH2V/1iGd7D/CkSDFecjI+9l4oPM9R+bFmrP+Y3CFWC6rGgt2I/T72x8IuXMjpays5k2cpEd3DeZwNGZk3pOksQqBrXZ5gs1p6GAFVzs8yOTfCATTXjZLRsvtzP66NHrGB4BbeCcFmDqbInkRpacty6p9/+XhKFVD7Dvx1wiMw8Mb+Y0jvKw5YBNOwB4sgNEBlcQMIy18NOhgQq2gRLOLhM72hudqeCfR8vJizPgeaxn33rURFC/Uj3nt0+dmCxPIjnLZ2tVjFinWGJYcdi9DHQ24hjobNaUVBJSTf8FOlXjg/EdDMcl3TlgyvV8PjhTOWK60OOQufQSOxK/3LSCbTeioYE=,iv:YWHZP8198fKD/Kzr9kI/z4rMkmtM/5I7mNxkHWp+GGk=,tag:rpOIw8KwT+lWQUZLUKIfQg==,type:str]
 sops:
-    kms: []
-    gcp_kms: []
-    azure_kv: []
-    hc_vault: []
     age:
-        - recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
-          enc: |
+        - enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
             YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBpTE5ZVWJpK0pGV0J6cjV1
             SnR1MS9HVkZkb0FieVdVNHpBTnY2Qlo3UmcwCnY1KzBqeTVMUW5SNi92R1FTWDlh
@@ -81,8 +71,8 @@ sops:
             R0tSa3hScUhLZm5JdlBROW5nOVlhTDQK9b7gYhLXawm4w+jBHu7uYdlsISqIsL3y
             eccLJekwZpR7pREhX+zqnISaoQp7HPI5n34Qsyv8oe4skxmpUb9NWg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-03-17T13:44:45Z"
-    mac: ENC[AES256_GCM,data:ogcd2ei7NxsWZ641a2TOuLSx+ze8MTMx+XdA0zIG0CJInyVMPTtom0ErN5WFnPd1loQfj+3K+WcYm6h/xWG37FDnlR8mvVhEkI8ppDXts/JPBrmVrb4Qa9yxmagVKnCTy6NM66g29Ha5WTd7wfG9Zk+N/51DqjK3p/GPjv5B5cw=,iv:CaGE0mzC0bXAfiJXLfaM4BmfTqijLwBVIoZz/iyh9jE=,tag:Tm5jSTP3ElinEshj2TkcWQ==,type:str]
-    pgp: []
+          recipient: age1k4pr9evth7r8f6dajz6jee945582dklr72mklj9gpwcvnxkgc5asruclml
     encrypted_regex: ^(data|stringData)$
-    version: 3.8.1
+    lastmodified: "2026-06-12T19:15:58Z"
+    mac: ENC[AES256_GCM,data:+ovcM0y8oyPoeOjydl7+rJuDLjV7A9TSSWnsrNTNYK+orALaVlJxVAUPNxmAPmBCAWfUjU5prwHKQuVJEOPc3k01WJuHTod9iAge2H/UuHu7731XBqHbrCVtLc1a7boKUGcYKl1Rk05gA8yBPC225Dc0P4m8kShgE/sxZ/Sj2R4=,iv:K0jqfSpzOCksIaZQpTyLPG2mapw5skCJ/8RN8jq4Qfc=,tag:zqrG5VKQVK9h4mv6zFabSQ==,type:str]
+    version: 3.13.1
