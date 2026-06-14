@@ -33,7 +33,7 @@ spec:
                       mountPath: /home/node/config
             volumes:
                 - name: config-volume
-                  persistenVolumeClaim:
+                  persistentVolumeClaim:
                     claimName: roon-extension-spotify-playlist-config
             nodeSelector:
                 kubernetes.io/hostname: minis-7373
@@ -51,3 +51,4 @@ spec:
     resources:
         requests:
             storage: 100Mi
+
