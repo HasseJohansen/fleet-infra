@@ -17,6 +17,18 @@ spec:
                 app: roon-extension-spotify-playlist
         spec:
             hostNetwork: true
+            initContainers:
+                  - name: fix-perms
+                    image: busybox:1.36
+                    command:
+                      - sh
+                      - -c
+                      - mkdir -p /app/config && chown -R 1001:1001 /app/config
+                    securityContext:
+                      runAsUser: 0          # need root to chown the root-owned mount
+                    volumeMounts:
+                      - name: config-volume
+                        mountPath: /app/config
             containers:
                 - image: hassejohansen/roon-extension-spotify-playlist:0.1.0
                   name: roon-extension-spotify-playlist
