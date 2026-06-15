@@ -23,7 +23,7 @@ spec:
                     command:
                       - sh
                       - -c
-                      - mkdir -p /app/config && chown -R nodejs:nodejs /app/config
+                      - mkdir -p /app/config && chown -R 1001:1001 /app/config
                     securityContext:
                       runAsUser: 0          # need root to chown the root-owned mount
                     volumeMounts:
