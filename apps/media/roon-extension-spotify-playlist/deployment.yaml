@@ -18,19 +18,19 @@ spec:
         spec:
             hostNetwork: true
             containers:
-                - image: hassejohansen/roon-extension-spotify-playlist:latest
+                - image: hassejohansen/roon-extension-spotify-playlist:0.1.0
                   name: roon-extension-spotify-playlist
                   command:
                     - sh
                     - -c
                   args:
                     - |
-                      ln -sf  /home/node/config/config.json /home/node/config.json
+                      ln -sf  /app/config/config.json /app/config.json
                       node .
                   resources: {}
                   volumeMounts:
                     - name: config-volume
-                      mountPath: /home/node/config
+                      mountPath: /app/config
             volumes:
                 - name: config-volume
                   persistentVolumeClaim:

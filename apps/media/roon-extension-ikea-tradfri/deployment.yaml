@@ -19,19 +19,19 @@ spec:
         spec:
             hostNetwork: true
             containers:
-                - image: hassejohansen/roon-extension-ikea-tradfri:latest
+                - image: hassejohansen/roon-extension-ikea-tradfri:0.2.2
                   name: roon-extension-ikea-tradfri
                   command:
                     - sh
                     - -c
                   args:
                     - |
-                      ln -sf /home/node/config/config.json /home/node/config.json
+                      ln -sf /app/config/config.json /app/config.json
                       node .
                   resources: {}
                   volumeMounts:
                     - name: config-volume
-                      mountPath: /home/node/config
+                      mountPath: /app/config
             volumes:
                 - name: config-volume
                   persistentVolumeClaim:
