@@ -30,7 +30,7 @@ spec:
                       - name: config-volume
                         mountPath: /app/config
             containers:
-                - image: hassejohansen/roon-extension-spotify-playlist:0.1.0
+                - image: hassejohansen/roon-extension-spotify-playlist:0.1.1
                   name: roon-extension-spotify-playlist
                   command:
                     - sh
