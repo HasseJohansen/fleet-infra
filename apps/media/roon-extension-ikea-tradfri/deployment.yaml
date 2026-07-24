@@ -32,7 +32,7 @@ spec:
                         mountPath: /app/config
             containers:
               - image: hassejohansen/roon-extension-ikea-tradfri:0.2.5
-                  name: roon-extension-ikea-tradfri
+                name: roon-extension-ikea-tradfri
                   command:
                     - sh
                     - -c
