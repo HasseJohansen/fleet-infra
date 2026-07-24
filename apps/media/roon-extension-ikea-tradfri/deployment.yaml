@@ -33,17 +33,17 @@ spec:
             containers:
               - image: hassejohansen/roon-extension-ikea-tradfri:0.2.5
                 name: roon-extension-ikea-tradfri
-                  command:
-                    - sh
-                    - -c
-                  args:
-                    - |
-                      ln -sf /app/config/config.json /app/config.json
-                      node .
-                  resources: {}
-                  volumeMounts:
-                    - name: config-volume
-                      mountPath: /app/config
+                command:
+                  - sh
+                  - -c
+                args:
+                  - |
+                    ln -sf /app/config/config.json /app/config.json
+                    node .
+                resources: {}
+                volumeMounts:
+                  - name: config-volume
+                    mountPath: /app/config
             volumes:
                 - name: config-volume
                   persistentVolumeClaim:
