@@ -3,4 +3,3 @@ kind: Kustomization
 resources:
   - metallb
   - external-dns-unifi
-  - samba-operator
