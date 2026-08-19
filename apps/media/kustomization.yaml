@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - roon
+  - roon-extension-alarm-clock
+  - roon-extension-cd-ripper
+  - roon-extension-ikea-tradfri
+  - roon-extension-random-radio
+  - roon-extension-spotify-playlist
