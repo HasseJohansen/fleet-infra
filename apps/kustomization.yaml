@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - controllers
   - media
+  - monitoring
   - networking
   - policy
   - share
