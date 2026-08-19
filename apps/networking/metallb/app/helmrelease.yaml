@@ -4,11 +4,6 @@ metadata:
   name: metallb
   namespace: metallb-system
 spec:
-  install:
-    createNamespace: true
-    crds: CreateReplace
-  upgrade:
-    crds: CreateReplace
   chart:
     spec:
       chart: metallb
@@ -17,6 +12,9 @@ spec:
         kind: HelmRepository
         name: metallb
         namespace: flux-system
+      values:
+        crds:
+          enabled: true
   interval: 15m
   timeout: 5m
   releaseName: metallb
