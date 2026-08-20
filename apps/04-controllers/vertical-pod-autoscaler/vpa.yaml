@@ -10,19 +10,36 @@ spec:
   ref:
     branch: master
 ---
-apiVersion: helm.toolkit.fluxcd.io/v2
-kind: HelmRelease
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
 metadata:
-  name: vertical-pod-autoscaler
-  namespace: vpa
+  name: vertical-pod-autoscaler--vpa
+  namespace: flux-system
 spec:
   interval: 15m
-  chart:
-    spec:
-      chart: ./vertical-pod-autoscaler/charts/vertical-pod-autoscaler
-      sourceRef:
-        kind: GitRepository
-        name: vertical-pod-autoscaler
-        namespace: flux-system
-  values:
-    installCRDs: true
+  path: ./apps/04-controllers/vertical-pod-autoscaler/app
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: vertical-pod-autoscaler-admission-controller
+      namespace: vpa
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: vertical-pod-autoscaler--config
+  namespace: flux-system
+spec:
+  interval: 15m
+  dependsOn:
+    - name: vertical-pod-autoscaler--vpa
+      namespace: flux-system
+  path: ./apps/04-controllers/vertical-pod-autoscaler/config
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
