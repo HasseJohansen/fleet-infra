@@ -1,0 +1,23 @@
+# telemetry.yaml
+# Telemetry configuration for the mesh
+apiVersion: telemetry.istio.io/v1
+kind: Telemetry
+metadata:
+  name: mesh-default
+  namespace: istio-system
+spec:
+  # Configure metrics
+  metrics:
+    - providers:
+        - name: prometheus
+      overrides:
+        # Enable all default metrics
+        - match:
+            mode: CLIENT_AND_SERVER
+          disabled: false
+  # Configure access logging
+  accessLogging:
+    - providers:
+        - name: envoy
+      filter:
+        expression: "response.code >= 400"

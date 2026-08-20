@@ -1,0 +1,10 @@
+# app-namespace.yaml
+# Namespace with Istio sidecar injection enabled
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: my-app
+  labels:
+    # Pod security standards
+    pod-security.kubernetes.io/enforce: baseline
+    istio.io/dataplane-mode: ambient
