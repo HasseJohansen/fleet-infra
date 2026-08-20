@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 15m
-  path: ./apps/monitoring/app
+  path: ./apps/01-monitoring/app
   prune: true
   timeout: 2m
   sourceRef:
@@ -22,7 +22,7 @@ spec:
   interval: 15m
   dependsOn:
   - name: monitoring--monitoring
-  path: ./apps/monitoring/config
+  path: ./apps/01-monitoring/config
   prune: true
   timeout: 2m
   sourceRef:
