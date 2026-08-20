@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - app-namespace.yaml
   - istio-helm-repo.yaml
+  - istio.yaml
   - istio-base.yaml
   - istiod.yaml
   - istio-ingress.yaml
