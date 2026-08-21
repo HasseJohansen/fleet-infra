@@ -17,11 +17,12 @@ spec:
   values:
     longhornUI:
       ingress:
-        annotations:
-          external-dns.alpha.kubernetes.io/hostname: longhorn.k8s.musikcheck.dk.
+        enabled: false
     service:
       ui:
         type: LoadBalancer
+        annotations:
+          external-dns.alpha.kubernetes.io/hostname: longhorn.k8s.musikcheck.dk.
     defaultSettings:
       backupTarget: s3://1mx.dk-longhorn-backup@eu-central-2/
       backupTargetCredentialSecret: wasabi-longhorn-secret
