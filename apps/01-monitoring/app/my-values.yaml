@@ -4,6 +4,10 @@ grafana:
     annotations: {
       external-dns.alpha.kubernetes.io/hostname: grafana.k8s.musikcheck.dk.
     }
+  grafana.ini:
+    server:
+      domain: grafana.k8s.musikcheck.dk
+      root_url: "%(protocol)s://%(domain)s"
   dashboardProviders:
     dashboardproviders.yaml:
      apiVersion: 1
