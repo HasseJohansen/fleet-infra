@@ -18,7 +18,7 @@ spec:
     longhornUI:
       ingress:
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: longhorn.k8s.1mx.dk.
+          external-dns.alpha.kubernetes.io/hostname: longhorn.k8s.musikcheck.dk.
     service:
       ui:
         type: LoadBalancer

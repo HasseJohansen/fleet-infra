@@ -31,7 +31,7 @@ prometheus:
 alertmanager:
   alertmanagerSpec:
     replicas: 3
-  baseURL: "alartmanager.k8s.musikcheck.dk"
+  baseURL: "alertmanager.k8s.musikcheck.dk"
   service:
     type: LoadBalancer
     annotations: {
