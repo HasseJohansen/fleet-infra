@@ -60,5 +60,4 @@ spec:
     txtOwnerId: default
     txtPrefix: k8s.
     domainFilters:
-      - musikcheck.dk
-      - 1mx.dk
+      - musikcheck.dk # replace with your domain
