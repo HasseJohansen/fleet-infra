@@ -19,18 +19,10 @@ spec:
     spec:
       hostNetwork: true
       initContainers:
-      - name: cleanup-pvc
+      - name: ensure-config-file
         image: busybox
         command: ["sh", "-c", "[ -d /config/config.json ] && rm -rf /config/config.json 2>/dev/null; [ ! -f /config/config.json ] && touch /config/config.json 2>/dev/null || true"]
         volumeMounts:
-          - name: config-volume
-            mountPath: /config
-      - name: setup-app-data
-        image: theappgineer/roon-extension-alarm-clock
-        command: ["sh", "-c", "cp -r /usr/src/app/. /app-data/ 2>/dev/null; rm -rf /app-data/config.json 2>/dev/null; ln -sf /config/config.json /app-data/config.json 2>/dev/null || true"]
-        volumeMounts:
-          - name: app-data
-            mountPath: /app-data
           - name: config-volume
             mountPath: /config
       containers:
@@ -41,16 +33,13 @@ spec:
           value: Europe/Copenhagen
         resources: {}
         volumeMounts:
-          - name: app-data
-            mountPath: /usr/src/app
           - name: config-volume
-            mountPath: /config
+            mountPath: /usr/src/app/config.json
+            subPath: config.json
       volumes:
         - name: config-volume
           persistentVolumeClaim:
             claimName: alarm-clock-volume-claim
-        - name: app-data
-          emptyDir: {}
 status: {}
 ---
 apiVersion: v1
