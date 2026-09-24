@@ -21,13 +21,13 @@ spec:
       initContainers:
       - name: cleanup-pvc
         image: busybox
-        command: ["sh", "-c", "[ -d /config/config.json ] && rm -rf /config/config.json; [ ! -f /config/config.json ] && touch /config/config.json"]
+        command: ["sh", "-c", "[ -d /config/config.json ] && rm -rf /config/config.json 2>/dev/null; [ ! -f /config/config.json ] && touch /config/config.json 2>/dev/null || true"]
         volumeMounts:
           - name: config-volume
             mountPath: /config
       - name: setup-app-data
         image: theappgineer/roon-extension-alarm-clock
-        command: ["sh", "-c", "cp -r /usr/src/app/. /app-data/ 2>/dev/null; rm -rf /app-data/config.json; ln -sf /config/config.json /app-data/config.json"]
+        command: ["sh", "-c", "cp -r /usr/src/app/. /app-data/ 2>/dev/null; rm -rf /app-data/config.json 2>/dev/null; ln -sf /config/config.json /app-data/config.json 2>/dev/null || true"]
         volumeMounts:
           - name: app-data
             mountPath: /app-data
