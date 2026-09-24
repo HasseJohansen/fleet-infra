@@ -21,10 +21,8 @@ spec:
       initContainers:
       - name: setup-app-data
         image: theappgineer/roon-extension-alarm-clock
-        command: ["sh", "-c", "cp -r /usr/src/app/. /app-data/ && rm -rf /app-data/config.json && [ -f /config/config.json ] || touch /config/config.json && ln -s /config/config.json /app-data/config.json"]
+        command: ["sh", "-c", "cp -r /usr/src/app/. /app-data/ && rm -rf /app-data/config.json"]
         volumeMounts:
-          - name: config-volume
-            mountPath: /config
           - name: app-data
             mountPath: /app-data
       containers:
@@ -36,7 +34,8 @@ spec:
         resources: {}
         volumeMounts:
           - name: config-volume
-            mountPath: /config
+            mountPath: /usr/src/app/config.json
+            subPath: config.json
           - name: app-data
             mountPath: /usr/src/app
       volumes:
