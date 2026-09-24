@@ -18,6 +18,15 @@ spec:
         app: roon-extension-alarm-clock
     spec:
       hostNetwork: true
+      initContainers:
+      - name: copy-and-setup
+        image: theappgineer/roon-extension-alarm-clock
+        command: ["sh", "-c", "cp -r /usr/src/app/. /app-data/ && rm -f /app-data/config.json && ln -s /config/config.json /app-data/config.json"]
+        volumeMounts:
+          - name: config-volume
+            mountPath: /config
+          - name: app-data
+            mountPath: /app-data
       containers:
       - image: theappgineer/roon-extension-alarm-clock
         name: roon-extension-alarm-clock
@@ -28,14 +37,14 @@ spec:
         volumeMounts:
           - name: config-volume
             mountPath: /config
-        lifecycle:
-          postStart:
-            exec:
-              command: ["/bin/sh", "-c", "rm -rf /usr/src/app/config.json && ln -s /config/config.json /usr/src/app/config.json"]
+          - name: app-data
+            mountPath: /usr/src/app
       volumes:
         - name: config-volume
           persistentVolumeClaim:
             claimName: alarm-clock-volume-claim
+        - name: app-data
+          emptyDir: {}
 status: {}
 ---
 apiVersion: v1
