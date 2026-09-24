@@ -21,7 +21,7 @@ spec:
       initContainers:
       - name: cleanup-pvc
         image: busybox
-        command: ["sh", "-c", "rm -rf /config/config.json && touch /config/config.json"]
+        command: ["sh", "-c", "[ -d /config/config.json ] && rm -rf /config/config.json; [ ! -f /config/config.json ] && touch /config/config.json"]
         volumeMounts:
           - name: config-volume
             mountPath: /config
