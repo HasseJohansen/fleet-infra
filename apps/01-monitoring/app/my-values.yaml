@@ -1,4 +1,8 @@
 grafana:
+  persistence:
+    enabled: true
+    storageClassName: longhorn
+    size: 10Gi
   service:
     type: LoadBalancer
     annotations: {
@@ -32,6 +36,32 @@ prometheus:
     annotations: {
       external-dns.alpha.kubernetes.io/hostname: prometheus.k8s.musikcheck.dk.
     }
+  prometheusSpec:
+    replicas: 2
+    retention: 14d
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 50Gi
+# k3s: control-plane component metrics are not scrapeable (bound to localhost),
+# so disable their ServiceMonitors and pointless Down alerts
+kubeControllerManager:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeProxy:
+  enabled: false
+kubeEtcd:
+  enabled: false
+defaultRules:
+  disabled:
+    KubeControllerManagerDown: true
+    KubeSchedulerDown: true
+    KubeProxyDown: true
 alertmanager:
   alertmanagerSpec:
     replicas: 3

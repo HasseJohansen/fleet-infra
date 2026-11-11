@@ -6,11 +6,16 @@ metadata:
 spec:
   route:
     receiver: pushover
-    groupBy: ["alertname"]
+    groupBy: ["namespace", "alertname"]
+    matchers:
+      - 'severity="critical"'
+    groupInterval: 15m
+    repeatInterval: 24h
   receivers:
   - name: pushover
     pushoverConfigs:
-    - token:
+    - sendResolved: true
+      token:
         name: pushover-creds
         key: token
       userKey:
