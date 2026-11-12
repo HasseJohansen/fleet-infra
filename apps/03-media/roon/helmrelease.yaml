@@ -20,20 +20,20 @@ spec:
       config:
         enabled: true
         mountPath: /var/roon/
-        size: 6Gi
-        storageClass: "longhorn"
+        size: 10Gi
+        storageClass: "longhorn-static"
         retain: true
         accessMode: "ReadWriteOnce"
       music:
         enabled: true
         size: 380Gi
-        storageClass: "longhorn"
+        storageClass: "longhorn-static"
         retain: true
         accessMode: "ReadWriteOnce"
       backups:
         enabled: true
-        size: 20Gi
-        storageClass: "longhorn"
+        size: 30Gi
+        storageClass: "longhorn-static"
         retain: true
         accessMode: "ReadWriteOnce"
     nodeSelector:
