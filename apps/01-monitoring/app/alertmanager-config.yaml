@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: alertmanager-config
+  namespace: monitoring
+type: Opaque
+stringData:
+  alertmanager.yaml: |
+    global:
+      resolve_timeout: 5m
+    route:
+      receiver: "null"
+      group_by:
+      - namespace
+      - alertname
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 24h
+      routes:
+      - receiver: pushover
+        matchers:
+        - 'severity="critical"'
+        continue: false
+    inhibit_rules:
+    - source_matchers:
+      - 'severity="critical"'
+      target_matchers:
+      - 'severity=~"warning|info"'
+      equal:
+      - namespace
+      - alertname
+    - source_matchers:
+      - 'severity="warning"'
+      target_matchers:
+      - 'severity="info"'
+      equal:
+      - namespace
+      - alertname
+    - source_matchers:
+      - 'alertname="InfoInhibitor"'
+      target_matchers:
+      - 'severity="info"'
+      equal:
+      - namespace
+    - target_matchers:
+      - 'alertname="InfoInhibitor"'
+    receivers:
+    - name: "null"
+    - name: pushover
+      pushover_configs:
+      - send_resolved: true
+        user_key_file: /etc/alertmanager/secrets/pushover-creds/userKey
+        token_file: /etc/alertmanager/secrets/pushover-creds/token
+        priority: "2"
+        title: '{{ .Status | toUpper }} {{ .CommonLabels.alertname }}{{ if .CommonLabels.namespace }} ({{ .CommonLabels.namespace }}){{ end }}'
+        message: |
+          {{ range .Alerts }}{{ .Annotations.summary }}
+
+          {{ .Annotations.description }}
+
+          {{ end }}

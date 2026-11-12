@@ -65,6 +65,9 @@ defaultRules:
 alertmanager:
   alertmanagerSpec:
     replicas: 3
+    configSecret: alertmanager-config
+    secrets:
+      - pushover-creds
   baseURL: "alertmanager.k8s.musikcheck.dk"
   service:
     type: LoadBalancer
