@@ -8,7 +8,9 @@ spec:
     receiver: pushover
     groupBy: ["namespace", "alertname"]
     matchers:
-      - 'severity="critical"'
+      - matchType: "="
+        name: severity
+        value: critical
     groupInterval: 15m
     repeatInterval: 24h
   receivers:
