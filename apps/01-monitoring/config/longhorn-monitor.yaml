@@ -3,6 +3,7 @@ kind: PrometheusRule
 metadata:
   labels:
     prometheus: longhorn
+    release: prometheus-release
     role: alert-rules
   name: prometheus-longhorn-rules
   namespace: monitoring
