@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - helmrelease.yaml
   - helmrepo.yaml
+  - manager-metrics-network-policy.yaml
   - ns.yaml
   - secret.yaml
   - idrive-secret.yaml

@@ -1,0 +1,24 @@
+# The Longhorn chart's own `longhorn-manager` NetworkPolicy only allows ingress
+# from within longhorn-system, which blocks Prometheus (monitoring namespace)
+# from scraping the manager's :9500 /metrics endpoint. NetworkPolicies are
+# additive, so this policy opens exactly that one port from monitoring while
+# the chart-managed policy keeps its other restrictions.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: longhorn-manager-metrics-from-monitoring
+  namespace: longhorn-system
+spec:
+  podSelector:
+    matchLabels:
+      app: longhorn-manager
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: monitoring
+    ports:
+    - protocol: TCP
+      port: 9500
