@@ -90,3 +90,26 @@ spec:
       labels:
         issue: Longhorn node {{$labels.node}} experiences high CPU pressure.
         severity: warning
+    - alert: LonghornBackupJobFailed
+      annotations:
+        description: The recurring Longhorn backup job (c-opnfsi, daily 02:00, 2h deadline) has failed. Volume
+          backups did not complete; note the job failed after running into its active deadline if reads stall.
+        summary: The daily Longhorn backup job failed.
+      expr: sum(((kube_job_status_failed{namespace="longhorn-system",job_name=~"c-opnfsi.*"}
+        == 1) and ((time() - kube_job_status_start_time{namespace="longhorn-system",job_name=~"c-opnfsi.*"})
+        < 86400)) or on() vector(0)) > 0
+      for: 15m
+      labels:
+        issue: The daily Longhorn backup job failed within the last 24h.
+        severity: critical
+    - alert: LonghornBackupStale
+      annotations:
+        description: The most recent successful Longhorn backup job (c-opnfsi) completed over 52 hours
+          ago ({{ $value | humanizeDuration }} before now). Daily backups are not completing or not running.
+        summary: No successful Longhorn backup for over 52 hours.
+      expr: time() - (max(kube_job_status_completion_time{namespace="longhorn-system",job_name=~"c-opnfsi.*"})
+        or on() vector(0)) > 187200
+      for: 15m
+      labels:
+        issue: Longhorn backups are stale - no successful completion in over 52h.
+        severity: critical
