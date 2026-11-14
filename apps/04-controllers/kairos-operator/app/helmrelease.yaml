@@ -1,0 +1,15 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kairos-operator
+  namespace: kairos-operator
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: kairos-operator
+      version: "0.3.0"
+      reconcileStrategy: Revision
+      sourceRef:
+        kind: HelmRepository
+        name: kairos-operator-repo
