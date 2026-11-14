@@ -8,8 +8,8 @@
       "description": "Watch Kairos GitHub releases and bump the pinned channel file",
       "fileMatch": ["^kairos-channel\\.yaml$"],
       "matchStrings": ["kairosRelease: (?<currentValue>\\S+)"],
-      "datasource": "github-releases",
-      "depName": "kairos-io/kairos"
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "kairos-io/kairos"
     }
   ],
   "packageRules": [
