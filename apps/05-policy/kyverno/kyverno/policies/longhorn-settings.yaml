@@ -3,6 +3,12 @@ kind: ClusterPolicy
 metadata:
   name: add-longhorn-annotation
 spec:
+  # Node writes must not fail-close: this policy targets existing Nodes, which
+  # makes Kyverno register core/v1 nodes in the resource-validating webhook.
+  # During node boot k3s UPDATEs the Node before flannel is up, and a Fail
+  # policy there deadlocks the whole node (webhook unreachable). Ignore keeps
+  # boot working; mutation still applies once the cluster is reachable.
+  failurePolicy: Ignore
   mutateExistingOnPolicyUpdate: true
   rules:
   - name: add-longhorn-disks
