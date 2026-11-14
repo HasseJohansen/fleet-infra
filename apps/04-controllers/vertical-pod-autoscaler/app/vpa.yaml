@@ -26,3 +26,7 @@ spec:
         namespace: flux-system
   values:
     installCRDs: true
+    featureGates:
+      # VPA's own gate for the pure InPlace updateMode (eviction-free resizes).
+      # Kubernetes-side InPlacePodVerticalScaling is GA in 1.37 already.
+      InPlace: true
