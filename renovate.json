@@ -3,12 +3,26 @@
   "extends": [
     "config:recommended"
   ],
+  "regexManagers": [
+    {
+      "description": "Watch Kairos GitHub releases and bump the pinned channel file",
+      "fileMatch": ["^kairos-channel\\.yaml$"],
+      "matchStrings": ["kairosRelease: (?<currentValue>\\S+)"],
+      "datasource": "github-releases",
+      "depName": "kairos-io/kairos"
+    }
+  ],
   "packageRules": [
     {
       "description": "Only use GitHub Releases for NFD Kustomize remote",
       "matchManagers": ["kustomize"],
       "matchDepNames": ["kubernetes-sigs/node-feature-discovery"],
       "overrideDatasource": "github-releases",
+      "minimumReleaseAge": "3 days"
+    },
+    {
+      "description": "Let new Kairos releases settle before proposing them",
+      "matchDepNames": ["kairos-io/kairos"],
       "minimumReleaseAge": "3 days"
     }
   ]
