@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spamd
+  namespace: mail
+  labels:
+    app: spamd
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: spamd
+  template:
+    metadata:
+      labels:
+        app: spamd
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: spamd
+                topologyKey: kubernetes.io/hostname
+      initContainers:
+        - name: fix-bayes-perms
+          image: busybox:1.36
+          command: ["sh", "-c", "chmod 777 /var/lib/spamassassin || true"]
+          volumeMounts:
+            - name: bayes
+              mountPath: /var/lib/spamassassin
+      containers:
+        - name: spamd
+          image: dinkel/spamassassin:latest
+          command: ["/usr/sbin/spamd"]
+          args:
+            - "-d"
+            - "-i"
+            - "0.0.0.0:783"
+            - "--allow-tell"
+            - "--create-prefs"
+            - "--max-children"
+            - "5"
+            - "--min-spamd-children"
+            - "1"
+            - "--timeout-child"
+            - "600"
+          ports:
+            - name: spamd
+              containerPort: 783
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: spamd
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: spamd
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          volumeMounts:
+            - name: bayes
+              mountPath: /var/lib/spamassassin
+            - name: config-mail
+              mountPath: /etc/mail/spamassassin/local.cf
+              subPath: local.cf
+            - name: config-etc
+              mountPath: /etc/spamassassin/local.cf
+              subPath: local.cf
+      volumes:
+        - name: bayes
+          persistentVolumeClaim:
+            claimName: spamd-bayes
+        - name: config-mail
+          configMap:
+            name: spamd-local-cf
+        - name: config-etc
+          configMap:
+            name: spamd-local-cf

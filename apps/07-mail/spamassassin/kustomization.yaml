@@ -1,0 +1,13 @@
+namespace: mail
+resources:
+  - ns.yaml
+  - configmap.yaml
+  - pvc.yaml
+  - deployment.yaml
+  - service.yaml
+  - hpa.yaml
+  - pdb.yaml
+  - secret.yaml
+  - cronjob.yaml
+  - sa-update-cronjob.yaml
+  - rbac.yaml

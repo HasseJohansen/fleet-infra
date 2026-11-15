@@ -1,0 +1,10 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: spamd
+  namespace: mail
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: spamd

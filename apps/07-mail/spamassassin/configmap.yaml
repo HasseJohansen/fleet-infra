@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spamd-local-cf
+  namespace: mail
+data:
+  # Adapted from the primary MX host /etc/spamassassin/local.cf:
+  # - dns_server 127.0.0.1 dropped: pod resolv.conf already points at cluster DNS (10.43.0.10)
+  # - lock_method flock -> fcntl: bayes DB lives on an RWX (NFS) Longhorn volume, flock is unsafe over NFS
+  # - trusted_networks extended with cluster CIDRs and the tailscale range (exim on the Hetzner host)
+  # - bayes_path pinned to the shared PVC
+  local.cf: |
+    trusted_networks 192.168.0. 10.42.0.0/16 10.43.0.0/16 100.64.0.0/10
+
+    # bayes DB on the shared RWX volume
+    bayes_path /var/lib/spamassassin/bayes
+    lock_method fcntl
+
+    bayes_ignore_header X-Bogosity
+    bayes_ignore_header X-Spam-Flag
+    bayes_ignore_header X-Spam-Status
+    bayes_ignore_header X-Spam_flag
+    bayes_ignore_header X-Spam_score
+    bayes_ignore_header X-Spam_bar
+    bayes_ignore_header X-Spam_report
+
+    ifplugin Mail::SpamAssassin::Plugin::Shortcircuit
+    shortcircuit USER_IN_WHITELIST       on
+    shortcircuit USER_IN_DEF_WHITELIST   on
+    shortcircuit USER_IN_ALL_SPAM_TO     on
+    shortcircuit SUBJECT_IN_WHITELIST    on
+    shortcircuit USER_IN_BLACKLIST       on
+    shortcircuit USER_IN_BLACKLIST_TO    on
+    shortcircuit SUBJECT_IN_BLACKLIST    on
+    shortcircuit ALL_TRUSTED             on
+    shortcircuit BAYES_99                spam
+    shortcircuit BAYES_00                ham
+    endif
+
+    pyzor_options --homedir /etc/spamassassin
+    razor_config /etc/spamassassin/.razor/razor-agent.conf
+    clear_report_template
+    report (_SCORE_ / _REQD_ requ) _TESTSSCORES(,)_ autolearn=_AUTOLEARN
+    rbl_timeout 30 10
+
+    dns_query_restriction deny sa-trusted.bondedsender.org
+    dns_query_restriction deny sa-accredit.habeas.com
+    dns_query_restriction deny bl.score.senderscore.com

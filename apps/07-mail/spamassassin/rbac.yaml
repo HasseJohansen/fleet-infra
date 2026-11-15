@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: spamd-sa-update
+  namespace: mail
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: spamd-pod-delete
+  namespace: mail
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["delete", "list"]

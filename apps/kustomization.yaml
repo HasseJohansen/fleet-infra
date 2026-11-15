@@ -8,3 +8,4 @@ resources:
   - 04-controllers
   - 05-policy
   - 06-share
+  - 07-mail

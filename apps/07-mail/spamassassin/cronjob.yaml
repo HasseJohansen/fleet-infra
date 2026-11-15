@@ -1,0 +1,63 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: spamd-bayes-backup
+  namespace: mail
+spec:
+  schedule: "30 4 * * *"
+  timeZone: Europe/Copenhagen
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          initContainers:
+            - name: fix-bayes-perms
+              image: busybox:1.36
+              command: ["sh", "-c", "chmod 777 /var/lib/spamassassin || true"]
+              volumeMounts:
+                - name: bayes
+                  mountPath: /var/lib/spamassassin
+          containers:
+            - name: backup
+              image: dinkel/spamassassin:latest
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  set -e
+                  sa-learn --sync
+                  sa-learn --backup > /tmp/root-bayes.txt
+                  scp -i /ssh/hetzner \
+                      -o UserKnownHostsFile=/ssh/known_hosts \
+                      -o StrictHostKeyChecking=yes \
+                      /tmp/root-bayes.txt hhj@mail2.musikcheck.dk:/tmp/root-bayes.txt
+                  echo "bayes dump pushed to mail2.musikcheck.dk:/tmp/root-bayes.txt"
+              volumeMounts:
+                - name: bayes
+                  mountPath: /var/lib/spamassassin
+                - name: config-mail
+                  mountPath: /etc/mail/spamassassin/local.cf
+                  subPath: local.cf
+                - name: config-etc
+                  mountPath: /etc/spamassassin/local.cf
+                  subPath: local.cf
+                - name: ssh
+                  mountPath: /ssh
+                  readOnly: true
+          volumes:
+            - name: bayes
+              persistentVolumeClaim:
+                claimName: spamd-bayes
+            - name: config-mail
+              configMap:
+                name: spamd-local-cf
+            - name: config-etc
+              configMap:
+                name: spamd-local-cf
+            - name: ssh
+              secret:
+                secretName: spamd-backup-ssh
+                defaultMode: 0400
