@@ -509,8 +509,8 @@ data:
     shortcircuit BAYES_00                ham
     endif
     
-    pyzor_options --homedir /etc/mail/spamassassin
-    razor_config /etc/mail/spamassassin/.razor/razor-agent.conf
+    pyzor_options --homedir /var/lib/spamassassin
+    razor_config /var/lib/spamassassin/.razor/razor-agent.conf
     clear_report_template
     report (_SCORE_ / _REQD_ requ) _TESTSSCORES(,)_ autolearn=_AUTOLEARN
     rbl_timeout 30 10

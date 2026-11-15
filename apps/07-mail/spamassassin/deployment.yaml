@@ -38,21 +38,28 @@ spec:
               mountPath: /var/lib/spamassassin
         - name: razor-init
           image: instantlinux/spamassassin:latest
-          command: ["sh", "-c", "timeout 30 razor-admin -home /etc/mail/spamassassin/.razor -create || true"]
+          command: ["sh", "-c", "mkdir -p /var/lib/spamassassin/.razor; if [ ! -e /var/lib/spamassassin/.razor/identity ]; then timeout 30 razor-admin -home /var/lib/spamassassin/.razor -create || true; fi"]
+          volumeMounts:
+            - name: bayes
+              mountPath: /var/lib/spamassassin
       containers:
         - name: spamd
           image: instantlinux/spamassassin:latest # {"$imagepolicy": "flux-system:spamassassin:tag"}
+          command: ["/usr/sbin/spamd"]
+          args:
+            - "--listen"
+            - "0.0.0.0:783"
+            - "--allow-tell"
+            - "--create-prefs"
+            - "--max-children"
+            - "5"
+            - "--timeout-child"
+            - "600"
           env:
             - name: TZ
               value: Europe/Copenhagen
             - name: USERNAME
               value: debian-spamd
-            - name: CRON_HOUR
-              value: "2"
-            - name: CRON_MINUTE
-              value: "45"
-            - name: EXTRA_OPTIONS
-              value: "--listen 0.0.0.0:783 --allow-tell --create-prefs --max-children 5 --timeout-child 600"
           ports:
             - name: spamd
               containerPort: 783
