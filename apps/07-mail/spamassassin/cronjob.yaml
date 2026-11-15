@@ -21,26 +21,36 @@ spec:
               volumeMounts:
                 - name: bayes
                   mountPath: /var/lib/spamassassin
-          containers:
-            - name: backup
+            - name: bayes-dump
               image: instantlinux/spamassassin:latest
               command: ["/bin/sh", "-c"]
               args:
-                - |
-                  set -e
-                  sa-learn --sync
-                  sa-learn --backup > /tmp/root-bayes.txt
-                  scp -i /ssh/hetzner \
-                      -o UserKnownHostsFile=/ssh/known_hosts \
-                      -o StrictHostKeyChecking=yes \
-                      /tmp/root-bayes.txt hhj@mail2.musikcheck.dk:/tmp/root-bayes.txt
-                  echo "bayes dump pushed to mail2.musikcheck.dk:/tmp/root-bayes.txt"
+                - "set -e; sa-learn --sync; sa-learn --backup > /shared/root-bayes.txt"
               volumeMounts:
                 - name: bayes
                   mountPath: /var/lib/spamassassin
                 - name: config
                   mountPath: /etc/spamassassin/local.cf
                   subPath: local.cf
+                - name: shared
+                  mountPath: /shared
+          containers:
+            - name: scp
+              image: alpine:3.20
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  set -e
+                  apk add --no-cache openssh-client >/dev/null
+                  scp -i /ssh/hetzner \
+                      -o UserKnownHostsFile=/ssh/known_hosts \
+                      -o StrictHostKeyChecking=yes \
+                      /shared/root-bayes.txt hhj@mail2.musikcheck.dk:/tmp/root-bayes.txt
+                  echo "bayes dump pushed to mail2.musikcheck.dk:/tmp/root-bayes.txt"
+              volumeMounts:
+                - name: shared
+                  mountPath: /shared
+                  readOnly: true
                 - name: ssh
                   mountPath: /ssh
                   readOnly: true
@@ -51,6 +61,8 @@ spec:
             - name: config
               configMap:
                 name: spamd-config
+            - name: shared
+              emptyDir: {}
             - name: ssh
               secret:
                 secretName: spamd-backup-ssh
