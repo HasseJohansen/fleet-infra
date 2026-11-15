@@ -480,13 +480,13 @@ data:
   local.cf: |
     # Adapted from the primary MX host /etc/spamassassin/local.cf:
     # - dns_server 127.0.0.1 dropped: pod resolv.conf already points at cluster DNS (10.43.0.10)
-    # - lock_method flock -> fcntl: bayes DB lives on an RWX (NFS) Longhorn volume, flock is unsafe over NFS
+    # - lock_method flock -> nflock: bayes DB lives on an RWX (NFS) Longhorn volume, flock is unsafe over NFS
     # - trusted_networks extended with cluster CIDRs and the tailscale range (exim on the Hetzner host)
     # - bayes_path pinned to the shared PVC; pyzor/razor paths adjusted to the Debian config dir
     trusted_networks 192.168.0. 10.42.0.0/16 10.43.0.0/16 100.64.0.0/10
     
     bayes_path /var/lib/spamassassin/bayes
-    lock_method fcntl
+    lock_method nflock
     
     bayes_ignore_header X-Bogosity
     bayes_ignore_header X-Spam-Flag
