@@ -48,8 +48,6 @@ spec:
             - "--create-prefs"
             - "--max-children"
             - "5"
-            - "--min-spamd-children"
-            - "1"
             - "--timeout-child"
             - "600"
           ports:
