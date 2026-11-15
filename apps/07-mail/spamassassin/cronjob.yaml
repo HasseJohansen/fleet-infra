@@ -23,7 +23,7 @@ spec:
                   mountPath: /var/lib/spamassassin
           containers:
             - name: backup
-              image: instantlinux/spamassassin:4.0.2
+              image: instantlinux/spamassassin:4.0.1
               command: ["/bin/sh", "-c"]
               args:
                 - |
