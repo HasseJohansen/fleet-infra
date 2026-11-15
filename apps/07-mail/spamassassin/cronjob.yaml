@@ -23,7 +23,7 @@ spec:
                   mountPath: /var/lib/spamassassin
           containers:
             - name: backup
-              image: dinkel/spamassassin:latest
+              image: instantlinux/spamassassin:4.0.2
               command: ["/bin/sh", "-c"]
               args:
                 - |
@@ -38,11 +38,8 @@ spec:
               volumeMounts:
                 - name: bayes
                   mountPath: /var/lib/spamassassin
-                - name: config-mail
+                - name: config
                   mountPath: /etc/mail/spamassassin/local.cf
-                  subPath: local.cf
-                - name: config-etc
-                  mountPath: /etc/spamassassin/local.cf
                   subPath: local.cf
                 - name: ssh
                   mountPath: /ssh
@@ -51,12 +48,9 @@ spec:
             - name: bayes
               persistentVolumeClaim:
                 claimName: spamd-bayes
-            - name: config-mail
+            - name: config
               configMap:
-                name: spamd-local-cf
-            - name: config-etc
-              configMap:
-                name: spamd-local-cf
+                name: spamd-config
             - name: ssh
               secret:
                 secretName: spamd-backup-ssh

@@ -1,0 +1,21 @@
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: spamassassin
+  namespace: flux-system
+spec:
+  image: instantlinux/spamassassin
+  interval: 30m0s
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: spamassassin
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: spamassassin
+  policy:
+    semver:
+      range: 4.0.x

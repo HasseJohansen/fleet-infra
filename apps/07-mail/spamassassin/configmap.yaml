@@ -1,21 +1,493 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: spamd-local-cf
+  name: spamd-config
   namespace: mail
 data:
-  # Adapted from the primary MX host /etc/spamassassin/local.cf:
-  # - dns_server 127.0.0.1 dropped: pod resolv.conf already points at cluster DNS (10.43.0.10)
-  # - lock_method flock -> fcntl: bayes DB lives on an RWX (NFS) Longhorn volume, flock is unsafe over NFS
-  # - trusted_networks extended with cluster CIDRs and the tailscale range (exim on the Hetzner host)
-  # - bayes_path pinned to the shared PVC
+  init.pre: |
+    # This is the right place to customize your installation of SpamAssassin.
+    #
+    # See 'perldoc Mail::SpamAssassin::Conf' for details of what can be
+    # tweaked.
+    #
+    # This file contains plugin activation commands for plugins included
+    # in SpamAssassin 3.0.x releases.  It will not be installed if you
+    # already have a file in place called "init.pre".
+    #
+    # There are now multiple files read to enable plugins in the 
+    # /etc/mail/spamassassin directory; previously only one, "init.pre" was 
+    # read.  Now both "init.pre", "v310.pre", and any other files ending in
+    # ".pre" will be read.  As future releases are made, new plugins will be
+    # added to new files, named according to the release they're added in.
+    ###########################################################################
+    
+    # RelayCountry - add metadata for Bayes learning, marking the countries
+    # a message was relayed through
+    #
+    # Note: This requires the Geo::IP Perl module
+    #
+    loadplugin Mail::SpamAssassin::Plugin::RelayCountry
+    
+    # URIDNSBL - look up URLs found in the message against several DNS
+    # blocklists.
+    #
+    loadplugin Mail::SpamAssassin::Plugin::URIDNSBL
+    
+    # SPF - perform SPF verification.
+    #
+    loadplugin Mail::SpamAssassin::Plugin::SPF
+    
+  sa-compile.pre: |
+    # Rule2XSBody - speedup by compilation of ruleset to native code
+    #
+    loadplugin Mail::SpamAssassin::Plugin::Rule2XSBody
+  v310.pre: |
+    # This is the right place to customize your installation of SpamAssassin.
+    #
+    # See 'perldoc Mail::SpamAssassin::Conf' for details of what can be
+    # tweaked.
+    #
+    # This file was installed during the installation of SpamAssassin 3.1.0,
+    # and contains plugin loading commands for the new plugins added in that
+    # release.  It will not be overwritten during future SpamAssassin installs,
+    # so you can modify it to enable some disabled-by-default plugins below,
+    # if you so wish.
+    #
+    # There are now multiple files read to enable plugins in the
+    # /etc/mail/spamassassin directory; previously only one, "init.pre" was
+    # read.  Now both "init.pre", "v310.pre", and any other files ending in
+    # ".pre" will be read.  As future releases are made, new plugins will be
+    # added to new files, named according to the release they're added in.
+    ###########################################################################
+    
+    # DCC - perform DCC message checks.
+    #
+    # DCC is disabled here because it is not open source.  See the DCC
+    # license for more details.
+    #
+    #loadplugin Mail::SpamAssassin::Plugin::DCC
+    
+    # Pyzor - perform Pyzor message checks.
+    #
+    loadplugin Mail::SpamAssassin::Plugin::Pyzor
+    
+    # Razor2 - perform Razor2 message checks.
+    #
+    loadplugin Mail::SpamAssassin::Plugin::Razor2
+    
+    # SpamCop - perform SpamCop message reporting
+    #
+    loadplugin Mail::SpamAssassin::Plugin::SpamCop
+    
+    # AntiVirus - some simple anti-virus checks, this is not a replacement
+    # for an anti-virus filter like Clam AntiVirus
+    #
+    loadplugin Mail::SpamAssassin::Plugin::AntiVirus
+    
+    # AWL - do auto-whitelist checks
+    #
+    loadplugin Mail::SpamAssassin::Plugin::AWL
+    
+    # AutoLearnThreshold - threshold-based discriminator for Bayes auto-learning
+    #
+    loadplugin Mail::SpamAssassin::Plugin::AutoLearnThreshold
+    
+    # TextCat - language guesser
+    #
+    loadplugin Mail::SpamAssassin::Plugin::TextCat
+    
+    # AccessDB - lookup from-addresses in access database
+    #
+    #loadplugin Mail::SpamAssassin::Plugin::AccessDB
+    
+    # WhitelistSubject - Whitelist/Blacklist certain subject regular expressions
+    #
+    loadplugin Mail::SpamAssassin::Plugin::WhiteListSubject
+    
+    ###########################################################################
+    # experimental plugins
+    
+    # DomainKeys - perform DomainKeys verification
+    #
+    # This plugin has been removed as of v3.3.0.  Use the DKIM plugin instead,
+    # which supports both Domain Keys and DKIM.
+    
+    # MIMEHeader - apply regexp rules against MIME headers in the message
+    #
+    loadplugin Mail::SpamAssassin::Plugin::MIMEHeader
+    
+    # ReplaceTags
+    #
+    loadplugin Mail::SpamAssassin::Plugin::ReplaceTags
+    
+  v312.pre: |
+    # This is the right place to customize your installation of SpamAssassin.
+    #
+    # See 'perldoc Mail::SpamAssassin::Conf' for details of what can be
+    # tweaked.
+    #
+    # This file was installed during the installation of SpamAssassin 3.1.2,
+    # and contains plugin loading commands for the new plugins added in that
+    # release.  It will not be overwritten during future SpamAssassin installs,
+    # so you can modify it to enable some disabled-by-default plugins below,
+    # if you so wish.
+    #
+    # There are now multiple files read to enable plugins in the
+    # /etc/mail/spamassassin directory; previously only one, "init.pre" was
+    # read.  Now both "init.pre", "v310.pre", and any other files ending in
+    # ".pre" will be read.  As future releases are made, new plugins will be
+    # added to new files, named according to the release they're added in.
+    
+    ###########################################################################
+    
+    # DKIM - perform DKIM verification
+    #
+    # Mail::DKIM module required for use, see INSTALL for more information.
+    # 
+    # Note that if Mail::DKIM version 0.20 or later is installed, this
+    # renders the DomainKeys plugin redundant.
+    #
+    loadplugin Mail::SpamAssassin::Plugin::DKIM
+    
+  v320.pre: |
+    # This is the right place to customize your installation of SpamAssassin.
+    #
+    # See 'perldoc Mail::SpamAssassin::Conf' for details of what can be
+    # tweaked.
+    #
+    # This file was installed during the installation of SpamAssassin 3.2.0,
+    # and contains plugin loading commands for the new plugins added in that
+    # release.  It will not be overwritten during future SpamAssassin installs,
+    # so you can modify it to enable some disabled-by-default plugins below,
+    # if you so wish.
+    #
+    # There are now multiple files read to enable plugins in the
+    # /etc/mail/spamassassin directory; previously only one, "init.pre" was
+    # read.  Now both "init.pre", "v310.pre", and any other files ending in
+    # ".pre" will be read.  As future releases are made, new plugins will be
+    # added to new files, named according to the release they're added in.
+    ###########################################################################
+    
+    # Check - Provides main check functionality
+    #
+    loadplugin Mail::SpamAssassin::Plugin::Check
+    
+    # HTTPSMismatch - find URI mismatches between href and anchor text
+    #
+    loadplugin Mail::SpamAssassin::Plugin::HTTPSMismatch
+    
+    # URIDetail - test URIs using detailed URI information
+    #
+    loadplugin Mail::SpamAssassin::Plugin::URIDetail
+    
+    # Shortcircuit - stop evaluation early if high-accuracy rules fire
+    # 
+    loadplugin Mail::SpamAssassin::Plugin::Shortcircuit
+    
+    # Plugins which used to be EvalTests.pm
+    # broken out into separate plugins
+    loadplugin Mail::SpamAssassin::Plugin::Bayes
+    loadplugin Mail::SpamAssassin::Plugin::BodyEval
+    loadplugin Mail::SpamAssassin::Plugin::DNSEval
+    loadplugin Mail::SpamAssassin::Plugin::HTMLEval
+    loadplugin Mail::SpamAssassin::Plugin::HeaderEval
+    loadplugin Mail::SpamAssassin::Plugin::MIMEEval
+    loadplugin Mail::SpamAssassin::Plugin::RelayEval
+    loadplugin Mail::SpamAssassin::Plugin::URIEval
+    loadplugin Mail::SpamAssassin::Plugin::WLBLEval
+    
+    # VBounce - anti-bounce-message rules, see rules/20_vbounce.cf
+    #
+    loadplugin Mail::SpamAssassin::Plugin::VBounce
+    
+    # Rule2XSBody - speedup by compilation of ruleset to native code
+    #
+    loadplugin Mail::SpamAssassin::Plugin::Rule2XSBody
+    
+    # ASN - Look up the Autonomous System Number of the connecting IP
+    # and create a header containing ASN data for bayes tokenization.
+    # See plugin's POD docs for usage info.
+    #
+    loadplugin Mail::SpamAssassin::Plugin::ASN
+    
+    # ImageInfo - rules to match metadata of image attachments
+    #
+    loadplugin Mail::SpamAssassin::Plugin::ImageInfo
+    
+  v330.pre: |
+    # This is the right place to customize your installation of SpamAssassin.
+    #
+    # See 'perldoc Mail::SpamAssassin::Conf' for details of what can be
+    # tweaked.
+    #
+    # This file was installed during the installation of SpamAssassin 3.3.0,
+    # and contains plugin loading commands for the new plugins added in that
+    # release.  It will not be overwritten during future SpamAssassin installs,
+    # so you can modify it to enable some disabled-by-default plugins below,
+    # if you so wish.
+    #
+    # There are now multiple files read to enable plugins in the
+    # /etc/mail/spamassassin directory; previously only one, "init.pre" was
+    # read.  Now both "init.pre", "v310.pre", and any other files ending in
+    # ".pre" will be read.  As future releases are made, new plugins will be
+    # added to new files, named according to the release they're added in.
+    ###########################################################################
+    
+    # PhishTag - allows sites to rewrite suspect phish-mail URLs
+    # (Note: this requires configuration, see http://umut.topkara.org/PhishTag)
+    #
+    #loadplugin Mail::SpamAssassin::Plugin::PhishTag
+    
+    # FreeMail - detect email addresses using free webmail services,
+    # usable as input for other rules
+    #
+    loadplugin Mail::SpamAssassin::Plugin::FreeMail
+    
+  v340.pre: |
+    # This is the right place to customize your installation of SpamAssassin.
+    #
+    # See 'perldoc Mail::SpamAssassin::Conf' for details of what can be
+    # tweaked.
+    #
+    # This file was installed during the installation of SpamAssassin 3.4.0,
+    # and contains plugin loading commands for the new plugins added in that
+    # release.  It will not be overwritten during future SpamAssassin installs,
+    # so you can modify it to enable some disabled-by-default plugins below,
+    # if you so wish.
+    #
+    # There are now multiple files read to enable plugins in the
+    # /etc/mail/spamassassin directory; previously only one, "init.pre" was
+    # read.  Now both "init.pre", "v310.pre", and any other files ending in
+    # ".pre" will be read.  As future releases are made, new plugins will be
+    # added to new files, named according to the release they're added in.
+    ###########################################################################
+    
+    # AskDNS - forms a DNS query based on 'tags' as supplied by other plugins
+    #
+    loadplugin Mail::SpamAssassin::Plugin::AskDNS
+  v341.pre: |
+    # This is the right place to customize your installation of SpamAssassin.
+    #
+    # See 'perldoc Mail::SpamAssassin::Conf' for details of what can be
+    # tweaked.
+    #
+    # This file was installed during the installation of SpamAssassin 3.4.1,
+    # and contains plugin loading commands for the new plugins added in that
+    # release.  It will not be overwritten during future SpamAssassin installs,
+    # so you can modify it to enable some disabled-by-default plugins below,
+    # if you so wish.
+    #
+    # There are now multiple files read to enable plugins in the
+    # /etc/mail/spamassassin directory; previously only one, "init.pre" was
+    # read.  Now both "init.pre", "v310.pre", and any other files ending in
+    # ".pre" will be read.  As future releases are made, new plugins will be
+    # added to new files, named according to the release they're added in.
+    ###########################################################################
+    
+    # TxRep - Reputation database that replaces AWL
+    loadplugin Mail::SpamAssassin::Plugin::TxRep
+    
+    # URILocalBL - Provides ISP and Country code based filtering as well as
+    # quick IP based blocks without a full RBL implementation - Bug 7060
+    
+    #loadplugin Mail::SpamAssassin::Plugin::URILocalBL
+    
+    # PDFInfo - Use several methods to detect a PDF file's ham/spam traits
+    loadplugin Mail::SpamAssassin::Plugin::PDFInfo
+  v342.pre: |
+    # This is the right place to customize your installation of SpamAssassin.
+    #
+    # See 'perldoc Mail::SpamAssassin::Conf' for details of what can be
+    # tweaked.
+    #
+    # This file was installed during the installation of SpamAssassin 3.4.2,
+    # and contains plugin loading commands for the new plugins added in that
+    # release.  It will not be overwritten during future SpamAssassin installs,
+    # so you can modify it to enable some disabled-by-default plugins below,
+    # if you so wish.
+    #
+    # There are now multiple files read to enable plugins in the
+    # /etc/mail/spamassassin directory; previously only one, "init.pre" was
+    # read.  Now both "init.pre", "v310.pre", and any other files ending in
+    # ".pre" will be read.  As future releases are made, new plugins will be
+    # added to new files, named according to the release they're added in.
+    ###########################################################################
+    
+    # HashBL - Query hashed/unhashed strings, emails, uris etc from DNS lists
+    loadplugin Mail::SpamAssassin::Plugin::HashBL
+    
+    # ResourceLimits - assure your spamd child processes
+    # do not exceed specified CPU or memory limit
+    loadplugin Mail::SpamAssassin::Plugin::ResourceLimits
+    
+    # FromNameSpoof - help stop spam that tries to spoof other domains using 
+    # the from name
+    loadplugin Mail::SpamAssassin::Plugin::FromNameSpoof
+    
+    # Phishing - finds uris used in phishing campaigns detected by
+    # OpenPhish or PhishTank feeds.
+    loadplugin Mail::SpamAssassin::Plugin::Phishing
+    
+  v343.pre: |
+    # This is the right place to customize your installation of SpamAssassin.
+    #
+    # See 'perldoc Mail::SpamAssassin::Conf' for details of what can be
+    # tweaked.
+    #
+    # This file was installed during the installation of SpamAssassin 4.0.0,
+    # and contains plugin loading commands for the new plugins added in that
+    # release.  It will not be overwritten during future SpamAssassin installs,
+    # so you can modify it to enable some disabled-by-default plugins below,
+    # if you so wish.
+    #
+    # There are now multiple files read to enable plugins in the
+    # /etc/mail/spamassassin directory; previously only one, "init.pre" was
+    # read.  Now both "init.pre", "v310.pre", and any other files ending in
+    # ".pre" will be read.  As future releases are made, new plugins will be
+    # added to new files, named according to the release they're added in.
+    ###########################################################################
+    
+    # OLEVBMacro - Detects both OLE macros and VB code inside Office documents
+    #
+    # It tries to discern between safe and malicious code but due to the threat
+    # macros present to security, many places block these type of documents outright.
+    #
+    # For this plugin to work, Archive::Zip and IO::String modules are required.
+    loadplugin Mail::SpamAssassin::Plugin::OLEVBMacro
+  v400.pre: |
+    # This is the right place to customize your installation of SpamAssassin.
+    #
+    # See 'perldoc Mail::SpamAssassin::Conf' for details of what can be
+    # tweaked.
+    #
+    # This file was installed during the installation of SpamAssassin 4.0.0,
+    # and contains plugin loading commands for the new plugins added in that
+    # release.  It will not be overwritten during future SpamAssassin installs,
+    # so you can modify it to enable some disabled-by-default plugins below,
+    # if you so wish.
+    #
+    # There are now multiple files read to enable plugins in the
+    # /etc/mail/spamassassin directory; previously only one, "init.pre" was
+    # read.  Now both "init.pre", "v310.pre", and any other files ending in
+    # ".pre" will be read.  As future releases are made, new plugins will be
+    # added to new files, named according to the release they're added in.
+    ###########################################################################
+    
+    # ExtractText - Extract text from documents or images for matching
+    #
+    # Requires manual configuration, see plugin documentation.
+    #
+    # loadplugin Mail::SpamAssassin::Plugin::ExtractText
+    
+    # DecodeShortUrl - Check for shortened URLs
+    #
+    # Note that this plugin will send HTTP requests to different URL shortener
+    # services.  Enabling caching is recommended, see plugin documentation.
+    #
+    # loadplugin Mail::SpamAssassin::Plugin::DecodeShortURLs
+    
+    # DMARC - Check DMARC compliance
+    #
+    # Requires Mail::DMARC module and working SPF and DKIM Plugins.
+    #
+    loadplugin Mail::SpamAssassin::Plugin::DMARC
+    
+  v401.pre: |
+    # This is the right place to customize your installation of SpamAssassin.
+    #
+    # See 'perldoc Mail::SpamAssassin::Conf' for details of what can be
+    # tweaked.
+    #
+    # This file was installed during the installation of SpamAssassin 4.0.0,
+    # and contains plugin loading commands for the new plugins added in that
+    # release.  It will not be overwritten during future SpamAssassin installs,
+    # so you can modify it to enable some disabled-by-default plugins below,
+    # if you so wish.
+    #
+    # There are now multiple files read to enable plugins in the
+    # /etc/mail/spamassassin directory; previously only one, "init.pre" was
+    # read.  Now both "init.pre", "v310.pre", and any other files ending in
+    # ".pre" will be read.  As future releases are made, new plugins will be
+    # added to new files, named according to the release they're added in.
+    ###########################################################################
+    
+    # AuthRes - use Authentication-Results header fields
+    #
+    # This plugin parses Authentication-Results header fields and can supply
+    # the results obtained to other plugins.
+    #
+    loadplugin Mail::SpamAssassin::Plugin::AuthRes
+  v402.pre: |
+    # This is the right place to customize your installation of SpamAssassin.
+    #
+    # See 'perldoc Mail::SpamAssassin::Conf' for details of what can be
+    # tweaked.
+    #
+    # This file was installed during the installation of SpamAssassin 4.0.0,
+    # and contains plugin loading commands for the new plugins added in that
+    # release.  It will not be overwritten during future SpamAssassin installs,
+    # so you can modify it to enable some disabled-by-default plugins below,
+    # if you so wish.
+    #
+    # There are now multiple files read to enable plugins in the
+    # /etc/mail/spamassassin directory; previously only one, "init.pre" was
+    # read.  Now both "init.pre", "v310.pre", and any other files ending in
+    # ".pre" will be read.  As future releases are made, new plugins will be
+    # added to new files, named according to the release they're added in.
+    ###########################################################################
+    
+    # Redirectors - Check for redirector URLs
+    #
+    # Note that this plugin will send HTTP requests to different URL redirector
+    # services.  Enabling caching is recommended, see plugin documentation.
+    #
+    loadplugin Mail::SpamAssassin::Plugin::Redirectors
+  65_debian.cf: |
+    # Special SpamAssassin rules for Debian
+    # Duncan Findlay
+    
+    header	 D_SENT_BY_DEBCONF	Subject =~ /^Debconf:/
+    score	 D_SENT_BY_DEBCONF	-5.0
+    describe D_SENT_BY_DEBCONF	Sent by Debconf
+    
+    body	 D_SENT_BY_AFBACKUP	/^\[Afbackup\]: Overall exit status:/
+    score	 D_SENT_BY_AFBACKUP	-5.0
+    describe D_SENT_BY_AFBACKUP	Sent by Afbackup
+    
+    header	 D_SENT_BY_APTLC	Subject =~ /^apt-listchanges: (changelogs|news) for/
+    score	 D_SENT_BY_APTLC	-5.0
+    describe D_SENT_BY_APTLC	Sent by apt-listchanges
+    
+    header	 __ANACRON_SUBJ		Subject =~ /^Anacron job '[a-z0-9_.-]+' on/i
+    header   __ANACRON_FROM		From =~ /^Anacron/
+    meta	 D_SENT_BY_ANACRON	__ANACRON_SUBJ && __ANACRON_FROM
+    score	 D_SENT_BY_ANACRON	-5.0
+    describe D_SENT_BY_ANACRON	Sent by Anacron Daemon
+    
+    
+    header	 __CRON_FROM		From =~ /^Cron Daemon/
+    header 	 __CRON_HEADER		X-Cron-Env =~ /./
+    meta	 D_SENT_BY_CRON		__CRON_FROM && __CRON_HEADER
+    score 	 D_SENT_BY_CRON		-5.0
+    describe D_SENT_BY_CRON		Sent by Cron Daemon
+    
+    # As documented in https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=861671,
+    # the bb.barracudacentral.org blacklist requires users to register, making it
+    # unsuitable for use in the default configuration. If you've registered your
+    # use of this blacklist, remove the following line in order to re-activate
+    # this service:
+    score RCVD_IN_BRBL_LASTEXT 0
   local.cf: |
+    # Adapted from the primary MX host /etc/spamassassin/local.cf:
+    # - dns_server 127.0.0.1 dropped: pod resolv.conf already points at cluster DNS (10.43.0.10)
+    # - lock_method flock -> fcntl: bayes DB lives on an RWX (NFS) Longhorn volume, flock is unsafe over NFS
+    # - trusted_networks extended with cluster CIDRs and the tailscale range (exim on the Hetzner host)
+    # - bayes_path pinned to the shared PVC; pyzor/razor paths adjusted to the Debian config dir
     trusted_networks 192.168.0. 10.42.0.0/16 10.43.0.0/16 100.64.0.0/10
-
-    # bayes DB on the shared RWX volume
+    
     bayes_path /var/lib/spamassassin/bayes
     lock_method fcntl
-
+    
     bayes_ignore_header X-Bogosity
     bayes_ignore_header X-Spam-Flag
     bayes_ignore_header X-Spam-Status
@@ -23,7 +495,7 @@ data:
     bayes_ignore_header X-Spam_score
     bayes_ignore_header X-Spam_bar
     bayes_ignore_header X-Spam_report
-
+    
     ifplugin Mail::SpamAssassin::Plugin::Shortcircuit
     shortcircuit USER_IN_WHITELIST       on
     shortcircuit USER_IN_DEF_WHITELIST   on
@@ -36,13 +508,13 @@ data:
     shortcircuit BAYES_99                spam
     shortcircuit BAYES_00                ham
     endif
-
-    pyzor_options --homedir /etc/spamassassin
-    razor_config /etc/spamassassin/.razor/razor-agent.conf
+    
+    pyzor_options --homedir /etc/mail/spamassassin
+    razor_config /etc/mail/spamassassin/.razor/razor-agent.conf
     clear_report_template
     report (_SCORE_ / _REQD_ requ) _TESTSSCORES(,)_ autolearn=_AUTOLEARN
     rbl_timeout 30 10
-
+    
     dns_query_restriction deny sa-trusted.bondedsender.org
     dns_query_restriction deny sa-accredit.habeas.com
     dns_query_restriction deny bl.score.senderscore.com

@@ -36,20 +36,23 @@ spec:
           volumeMounts:
             - name: bayes
               mountPath: /var/lib/spamassassin
+        - name: razor-init
+          image: instantlinux/spamassassin:4.0.2
+          command: ["sh", "-c", "timeout 30 razor-admin -home /etc/mail/spamassassin/.razor -create || true"]
       containers:
         - name: spamd
-          image: dinkel/spamassassin:latest
-          command: ["/usr/sbin/spamd"]
-          args:
-            - "-d"
-            - "-i"
-            - "0.0.0.0:783"
-            - "--allow-tell"
-            - "--create-prefs"
-            - "--max-children"
-            - "5"
-            - "--timeout-child"
-            - "600"
+          image: instantlinux/spamassassin:4.0.2 # {"$imagepolicy": "flux-system:spamassassin:tag"}
+          env:
+            - name: TZ
+              value: Europe/Copenhagen
+            - name: USERNAME
+              value: debian-spamd
+            - name: CRON_HOUR
+              value: "2"
+            - name: CRON_MINUTE
+              value: "45"
+            - name: EXTRA_OPTIONS
+              value: "--listen 0.0.0.0:783 --allow-tell --create-prefs --max-children 5 --timeout-child 600"
           ports:
             - name: spamd
               containerPort: 783
@@ -71,19 +74,55 @@ spec:
           volumeMounts:
             - name: bayes
               mountPath: /var/lib/spamassassin
-            - name: config-mail
+            - name: config
               mountPath: /etc/mail/spamassassin/local.cf
               subPath: local.cf
-            - name: config-etc
-              mountPath: /etc/spamassassin/local.cf
-              subPath: local.cf
+            - name: config
+              mountPath: /etc/mail/spamassassin/init.pre
+              subPath: init.pre
+            - name: config
+              mountPath: /etc/mail/spamassassin/sa-compile.pre
+              subPath: sa-compile.pre
+            - name: config
+              mountPath: /etc/mail/spamassassin/v310.pre
+              subPath: v310.pre
+            - name: config
+              mountPath: /etc/mail/spamassassin/v312.pre
+              subPath: v312.pre
+            - name: config
+              mountPath: /etc/mail/spamassassin/v320.pre
+              subPath: v320.pre
+            - name: config
+              mountPath: /etc/mail/spamassassin/v330.pre
+              subPath: v330.pre
+            - name: config
+              mountPath: /etc/mail/spamassassin/v340.pre
+              subPath: v340.pre
+            - name: config
+              mountPath: /etc/mail/spamassassin/v341.pre
+              subPath: v341.pre
+            - name: config
+              mountPath: /etc/mail/spamassassin/v342.pre
+              subPath: v342.pre
+            - name: config
+              mountPath: /etc/mail/spamassassin/v343.pre
+              subPath: v343.pre
+            - name: config
+              mountPath: /etc/mail/spamassassin/v400.pre
+              subPath: v400.pre
+            - name: config
+              mountPath: /etc/mail/spamassassin/v401.pre
+              subPath: v401.pre
+            - name: config
+              mountPath: /etc/mail/spamassassin/v402.pre
+              subPath: v402.pre
+            - name: config
+              mountPath: /etc/mail/spamassassin/65_debian.cf
+              subPath: 65_debian.cf
       volumes:
         - name: bayes
           persistentVolumeClaim:
             claimName: spamd-bayes
-        - name: config-mail
+        - name: config
           configMap:
-            name: spamd-local-cf
-        - name: config-etc
-          configMap:
-            name: spamd-local-cf
+            name: spamd-config
