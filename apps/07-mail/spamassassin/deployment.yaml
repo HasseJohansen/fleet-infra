@@ -82,49 +82,49 @@ spec:
             - name: bayes
               mountPath: /var/lib/spamassassin
             - name: config
-              mountPath: /etc/mail/spamassassin/local.cf
+              mountPath: /etc/spamassassin/local.cf
               subPath: local.cf
             - name: config
-              mountPath: /etc/mail/spamassassin/init.pre
+              mountPath: /etc/spamassassin/init.pre
               subPath: init.pre
             - name: config
-              mountPath: /etc/mail/spamassassin/sa-compile.pre
+              mountPath: /etc/spamassassin/sa-compile.pre
               subPath: sa-compile.pre
             - name: config
-              mountPath: /etc/mail/spamassassin/v310.pre
+              mountPath: /etc/spamassassin/v310.pre
               subPath: v310.pre
             - name: config
-              mountPath: /etc/mail/spamassassin/v312.pre
+              mountPath: /etc/spamassassin/v312.pre
               subPath: v312.pre
             - name: config
-              mountPath: /etc/mail/spamassassin/v320.pre
+              mountPath: /etc/spamassassin/v320.pre
               subPath: v320.pre
             - name: config
-              mountPath: /etc/mail/spamassassin/v330.pre
+              mountPath: /etc/spamassassin/v330.pre
               subPath: v330.pre
             - name: config
-              mountPath: /etc/mail/spamassassin/v340.pre
+              mountPath: /etc/spamassassin/v340.pre
               subPath: v340.pre
             - name: config
-              mountPath: /etc/mail/spamassassin/v341.pre
+              mountPath: /etc/spamassassin/v341.pre
               subPath: v341.pre
             - name: config
-              mountPath: /etc/mail/spamassassin/v342.pre
+              mountPath: /etc/spamassassin/v342.pre
               subPath: v342.pre
             - name: config
-              mountPath: /etc/mail/spamassassin/v343.pre
+              mountPath: /etc/spamassassin/v343.pre
               subPath: v343.pre
             - name: config
-              mountPath: /etc/mail/spamassassin/v400.pre
+              mountPath: /etc/spamassassin/v400.pre
               subPath: v400.pre
             - name: config
-              mountPath: /etc/mail/spamassassin/v401.pre
+              mountPath: /etc/spamassassin/v401.pre
               subPath: v401.pre
             - name: config
-              mountPath: /etc/mail/spamassassin/v402.pre
+              mountPath: /etc/spamassassin/v402.pre
               subPath: v402.pre
             - name: config
-              mountPath: /etc/mail/spamassassin/65_debian.cf
+              mountPath: /etc/spamassassin/65_debian.cf
               subPath: 65_debian.cf
       volumes:
         - name: bayes

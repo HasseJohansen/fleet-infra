@@ -39,7 +39,7 @@ spec:
                 - name: bayes
                   mountPath: /var/lib/spamassassin
                 - name: config
-                  mountPath: /etc/mail/spamassassin/local.cf
+                  mountPath: /etc/spamassassin/local.cf
                   subPath: local.cf
                 - name: ssh
                   mountPath: /ssh
