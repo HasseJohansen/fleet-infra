@@ -37,11 +37,11 @@ spec:
             - name: bayes
               mountPath: /var/lib/spamassassin
         - name: razor-init
-          image: instantlinux/spamassassin:4.0.1
+          image: instantlinux/spamassassin:latest
           command: ["sh", "-c", "timeout 30 razor-admin -home /etc/mail/spamassassin/.razor -create || true"]
       containers:
         - name: spamd
-          image: instantlinux/spamassassin:4.0.1 # {"$imagepolicy": "flux-system:spamassassin:tag"}
+          image: instantlinux/spamassassin:latest # {"$imagepolicy": "flux-system:spamassassin:tag"}
           env:
             - name: TZ
               value: Europe/Copenhagen

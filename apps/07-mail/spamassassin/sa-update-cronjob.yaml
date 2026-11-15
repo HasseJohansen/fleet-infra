@@ -23,7 +23,7 @@ spec:
                 - name: bayes
                   mountPath: /var/lib/spamassassin
             - name: sa-update
-              image: instantlinux/spamassassin:4.0.1
+              image: instantlinux/spamassassin:latest
               command: ["/bin/sh", "-c"]
               args:
                 - "sa-update || true; sa-compile || true"
