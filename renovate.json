@@ -10,6 +10,13 @@
       "matchStrings": ["kairosRelease: (?<currentValue>\\S+)"],
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "kairos-io/kairos"
+    },
+    {
+      "description": "Watch instantlinux/spamassassin Docker Hub tags and bump BASE_TAG in the spamd image Dockerfile (the build itself is driven by Flux via --build-arg)",
+      "fileMatch": ["^images/spamd/Dockerfile$"],
+      "matchStrings": ["ARG BASE_TAG=(?<currentValue>\\S+)"],
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "instantlinux/spamassassin"
     }
   ],
   "packageRules": [

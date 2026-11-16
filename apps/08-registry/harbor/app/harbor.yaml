@@ -1,0 +1,57 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: harbor
+  namespace: flux-system
+spec:
+  interval: 15m
+  url: https://helm.goharbor.io
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: harbor--harbor
+  namespace: flux-system
+spec:
+  interval: 15m
+  path: ./apps/08-registry/harbor/app
+  prune: true
+  timeout: 10m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: harbor-core
+      namespace: harbor
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: harbor-registry
+      namespace: harbor
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: harbor-nginx
+      namespace: harbor
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: config--harbor
+  namespace: flux-system
+spec:
+  interval: 15m
+  dependsOn:
+    - name: harbor--harbor
+  path: ./apps/08-registry/harbor/config
+  prune: true
+  timeout: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  healthChecks:
+    - apiVersion: batch/v1
+      kind: CronJob
+      name: spamd-image-build
+      namespace: harbor

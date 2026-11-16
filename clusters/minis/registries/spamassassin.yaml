@@ -1,11 +1,17 @@
 ---
+# Watches our own Harbor image (harbor.k8s.musikcheck.dk/mail/spamd), which the
+# spamd-image-build CronJob produces from upstream releases. Range includes
+# prerelease-style tags (4.0.2-4) copied from the upstream tag.
 apiVersion: image.toolkit.fluxcd.io/v1
 kind: ImageRepository
 metadata:
   name: spamassassin
   namespace: flux-system
 spec:
-  image: instantlinux/spamassassin
+  image: harbor.k8s.musikcheck.dk/mail/spamd
+  insecure: true
+  secretRef:
+    name: harbor-pull
   interval: 30m0s
 ---
 apiVersion: image.toolkit.fluxcd.io/v1
@@ -18,4 +24,4 @@ spec:
     name: spamassassin
   policy:
     semver:
-      range: 4.0.x
+      range: ">=4.0.0-0 <4.1.0-0"

@@ -1,0 +1,25 @@
+---
+# Watches the upstream instantlinux/spamassassin releases on Docker Hub.
+# The resolved tag is written into the spamd-image-build CronJob (via the
+# flux-system:spamassassin-upstream:tag setter), which builds+pushes our custom
+# image only when this tag is new. Range includes prerelease-style tags (4.0.2-4).
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: spamassassin-upstream
+  namespace: flux-system
+spec:
+  image: instantlinux/spamassassin
+  interval: 30m0s
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: spamassassin-upstream
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: spamassassin-upstream
+  policy:
+    semver:
+      range: ">=4.0.0-0 <4.1.0-0"

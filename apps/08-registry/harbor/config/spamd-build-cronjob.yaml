@@ -1,0 +1,85 @@
+# Builds and pushes harbor.k8s.musikcheck.dk/mail/spamd:<tag>, but only when the
+# desired tag is not present in Harbor yet. The desired tag (SPAMD_TAG) is kept up
+# to date by Flux ImageUpdateAutomation from the upstream instantlinux/spamassassin
+# release (see clusters/minis/registries/spamassassin-upstream.yaml), so a build is
+# only ever started for a genuinely new upstream release.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: spamd-image-build
+  namespace: harbor
+spec:
+  schedule: "17 * * * *"
+  timeZone: Europe/Copenhagen
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          initContainers:
+            - name: clone
+              image: alpine/git:2.49.1
+              env:
+                - name: GIT_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: harbor-build-git
+                      key: token
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  set -e
+                  git clone --depth 1 --branch main \
+                    "https://x-access-token:${GIT_TOKEN}@github.com/HasseJohansen/fleet-infra.git" /src
+              volumeMounts:
+                - name: src
+                  mountPath: /src
+          containers:
+            - name: kaniko
+              image: gcr.io/kaniko-project/executor:v1.23.2
+              env:
+                - name: SPAMD_TAG
+                  value: "4.0.2-4" # {"$imagepolicy": "flux-system:spamassassin-upstream:tag"}
+                - name: HARBOR_ROBOT
+                  valueFrom:
+                    secretKeyRef:
+                      name: harbor-robot-push
+                      key: username
+                - name: HARBOR_ROBOT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: harbor-robot-push
+                      key: password
+              command: ["/busybox/sh", "-c"]
+              args:
+                - |
+                  set -e
+                  echo "desired spamd image tag: ${SPAMD_TAG}"
+                  AUTH="Authorization: Basic $(printf '%s:%s' "${HARBOR_ROBOT}" "${HARBOR_ROBOT_SECRET}" | base64)"
+                  # Skip the build when Harbor already has this tag (no new upstream release)
+                  if wget -q --header="${AUTH}" -O /dev/null \
+                      "http://harbor.harbor.svc.cluster.local/api/v2.0/projects/mail/repositories/mail%2Fspamd/artifacts/${SPAMD_TAG}"; then
+                    echo "mail/spamd:${SPAMD_TAG} already in Harbor, nothing to do"
+                    exit 0
+                  fi
+                  mkdir -p /kaniko/.docker
+                  printf '{"auths":{"harbor.k8s.musikcheck.dk":{"auth":"%s"}}}' \
+                    "$(printf '%s:%s' "${HARBOR_ROBOT}" "${HARBOR_ROBOT_SECRET}" | base64)" \
+                    > /kaniko/.docker/config.json
+                  /kaniko/executor \
+                    --context=dir:///src/images/spamd \
+                    --dockerfile=Dockerfile \
+                    --build-arg BASE_TAG="${SPAMD_TAG}" \
+                    --destination="harbor.k8s.musikcheck.dk/mail/spamd:${SPAMD_TAG}" \
+                    --insecure-push --skip-tls-verify-push \
+                    --cache=false
+              volumeMounts:
+                - name: src
+                  mountPath: /src
+                  readOnly: true
+          volumes:
+            - name: src
+              emptyDir: {}

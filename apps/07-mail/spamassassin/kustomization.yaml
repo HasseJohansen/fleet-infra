@@ -8,6 +8,8 @@ resources:
   - hpa.yaml
   - pdb.yaml
   - secret.yaml
+  - secret-harbor-pull.yaml
   - cronjob.yaml
   - sa-update-cronjob.yaml
   - rbac.yaml
+  - sa.yaml

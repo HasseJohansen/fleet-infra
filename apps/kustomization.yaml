@@ -9,3 +9,4 @@ resources:
   - 05-policy
   - 06-share
   - 07-mail
+  - 08-registry

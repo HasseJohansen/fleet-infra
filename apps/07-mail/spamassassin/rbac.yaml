@@ -3,6 +3,8 @@ kind: ServiceAccount
 metadata:
   name: spamd-sa-update
   namespace: mail
+imagePullSecrets:
+  - name: harbor-pull
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role

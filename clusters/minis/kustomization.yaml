@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - apps.yaml
+  - flux-system
+  - registries/apps-image-update.yaml
+  - registries/harbor-pull-secret.yaml
+  - registries/roon.yaml
+  - registries/roon-policy.yaml
+  - registries/spamassassin.yaml
+  - registries/spamassassin-upstream.yaml
