@@ -37,14 +37,14 @@ spec:
             - name: bayes
               mountPath: /var/lib/spamassassin
         - name: razor-init
-          image: harbor.k8s.musikcheck.dk/mail/spamd:4.0.2-3.1
+          image: harbor.k8s.musikcheck.dk/mail/spamd:4.0.2-3.2
           command: ["sh", "-c", "mkdir -p /var/lib/spamassassin/.razor; if [ ! -e /var/lib/spamassassin/.razor/identity ]; then timeout 30 razor-admin -home /var/lib/spamassassin/.razor -create || true; fi"]
           volumeMounts:
             - name: bayes
               mountPath: /var/lib/spamassassin
       containers:
         - name: spamd
-          image: harbor.k8s.musikcheck.dk/mail/spamd:4.0.2-3.1 # {"$imagepolicy": "flux-system:spamassassin"}
+          image: harbor.k8s.musikcheck.dk/mail/spamd:4.0.2-3.2 # {"$imagepolicy": "flux-system:spamassassin"}
           command: ["/usr/sbin/spamd"]
           args:
             - "--listen"

@@ -15,9 +15,12 @@ RUN /usr/bin/apt-get update \
     && rm -rf /var/lib/apt/lists/*
 # exim/dovecot on the mail host pass the mail user (hhj, uid 1000 there) to spamc;
 # spamd resolves it via getpwnam, so the user must exist in the image or every scan
-# logs "handle_user (getpwnam) unable to find user". Keep uid 1000 to match the host
-# so files on the NFS bayes volume keep a consistent owner.
+# logs "handle_user (getpwnam) unable to find user". Keep uid 1000 to match the host.
+# Home is /var/lib/spamassassin (the shared bayes PVC, chmod 777 by the init container):
+# spamd runs as uid 2022 and cannot setuid, so a home owned by uid 1000 made every
+# scan log "failed to create readable default_prefs"; on the PVC the user_prefs are
+# writable and shared across replicas.
 RUN userdel ubuntu 2>/dev/null || true \
     && groupadd -g 1000 hhj 2>/dev/null || true \
-    && useradd -u 1000 -g 1000 -m -d /home/hhj -s /usr/sbin/nologin hhj
+    && useradd -u 1000 -g 1000 -d /var/lib/spamassassin -s /usr/sbin/nologin hhj
 USER 2022
