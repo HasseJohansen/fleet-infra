@@ -30,7 +30,7 @@ spec:
                   cp /git-secret/identity /ssh/identity
                   cp /git-secret/known_hosts /ssh/known_hosts
                   chmod 600 /ssh/identity /ssh/known_hosts
-                  export GIT_SSH_COMMAND="ssh -i /ssh/identity -o UserKnownHostsFile=/ssh/known_hosts -o StrictHostKeyChecking=yes"
+                  export GIT_SSH_COMMAND="ssh -i /ssh/identity -o UserKnownHostsFile=/ssh/known_hosts -o StrictHostKeyChecking=accept-new"
                   git clone --depth 1 --branch main git@github.com:HasseJohansen/fleet-infra.git /src
               volumeMounts:
                 - name: src
