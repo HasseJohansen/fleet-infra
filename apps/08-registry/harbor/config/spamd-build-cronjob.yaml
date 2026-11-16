@@ -22,21 +22,22 @@ spec:
           initContainers:
             - name: clone
               image: alpine/git:2.49.1
-              env:
-                - name: GIT_TOKEN
-                  valueFrom:
-                    secretKeyRef:
-                      name: harbor-build-git
-                      key: token
               command: ["/bin/sh", "-c"]
               args:
                 - |
                   set -e
-                  git clone --depth 1 --branch main \
-                    "https://x-access-token:${GIT_TOKEN}@github.com/HasseJohansen/fleet-infra.git" /src
+                  mkdir -p /ssh && chmod 700 /ssh
+                  cp /git-secret/identity /ssh/identity
+                  cp /git-secret/known_hosts /ssh/known_hosts
+                  chmod 600 /ssh/identity /ssh/known_hosts
+                  export GIT_SSH_COMMAND="ssh -i /ssh/identity -o UserKnownHostsFile=/ssh/known_hosts -o StrictHostKeyChecking=yes"
+                  git clone --depth 1 --branch main git@github.com:HasseJohansen/fleet-infra.git /src
               volumeMounts:
                 - name: src
                   mountPath: /src
+                - name: git-secret
+                  mountPath: /git-secret
+                  readOnly: true
           containers:
             - name: kaniko
               image: gcr.io/kaniko-project/executor:v1.23.2
@@ -83,3 +84,7 @@ spec:
           volumes:
             - name: src
               emptyDir: {}
+            - name: git-secret
+              secret:
+                secretName: harbor-build-git
+                defaultMode: 0400

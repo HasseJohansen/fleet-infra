@@ -61,8 +61,11 @@ Layout:
    - robot account `mail-pull` with pull-only on `mail` → fill the
      `.dockerconfigjson` in `clusters/minis/registries/harbor-pull-secret.yaml` and
      `apps/07-mail/spamassassin/secret-harbor-pull.yaml` (base64 of `user:pass`);
-   - create a read-only GitHub token (repo scope) → `harbor-build-git` secret.
-   Commit + push; Flux re-encrypts nothing, just applies.
+     both are pre-filled in git already;
+   - the build clone uses the same read-only SSH deploy key as Flux
+     (`harbor-build-git` secret, keys `identity` + `known_hosts`) — no extra
+     GitHub token needed.
+   Commit + push.
 
 5. Trigger the first build: `kubectl -n harbor create job --from=cronjob/spamd-image-build spamd-build-$(date +%s)`.
    The image `mail/spamd:4.0.2-4` appears in Harbor; Flux then updates the spamd
