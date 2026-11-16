@@ -29,7 +29,7 @@ spec:
             # Single container: the custom Harbor image includes openssh-client,
             # so the sa-learn dump and the scp run in the same container.
             - name: bayes-backup
-              image: 4.0.2-3 # {"$imagepolicy": "flux-system:spamassassin:tag"}
+              image: harbor.k8s.musikcheck.dk/mail/spamd:4.0.2-3 # {"$imagepolicy": "flux-system:spamassassin"}
               command: ["/bin/sh", "-c"]
               args:
                 - |
