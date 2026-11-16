@@ -15,11 +15,6 @@ spec:
         namespace: flux-system
   interval: 15m
   timeout: 10m
-  # database.internal.password comes from the harbor-admin secret (SOPS-encrypted)
-  valuesFrom:
-    - kind: Secret
-      name: harbor-admin
-      valuesKey: extra-values.yaml
   values:
     externalURL: http://harbor.k8s.musikcheck.dk
     expose:
