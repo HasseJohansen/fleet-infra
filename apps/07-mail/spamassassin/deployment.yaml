@@ -162,6 +162,9 @@ spec:
             - name: config
               mountPath: /etc/unbound/unbound.conf
               subPath: unbound.conf
+            - name: config
+              mountPath: /etc/unbound/root.hints
+              subPath: root.hints
       volumes:
         - name: bayes
           persistentVolumeClaim:
