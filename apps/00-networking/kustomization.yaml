@@ -6,3 +6,4 @@ resources:
   - external-dns-unifi
   - samba-operator
   - istio
+  - coredns-custom

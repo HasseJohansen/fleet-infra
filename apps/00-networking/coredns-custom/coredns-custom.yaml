@@ -1,0 +1,33 @@
+---
+# k3s imports /etc/coredns/custom/*.server into CoreDNS (see the Corefile's
+# "import /etc/coredns/custom/*.server" line). The k8s.musikcheck.dk zone is
+# private (managed by the UniFi controller at 192.168.0.1 via external-dns-unifi),
+# so pods must forward that zone there explicitly.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns-custom
+  namespace: kube-system
+data:
+  k8s.musikcheck.dk.server: |
+    k8s.musikcheck.dk:53 {
+      errors
+      forward . 192.168.0.1
+      cache 30
+      loop
+      reload
+    }
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: coredns-custom--kube-system
+  namespace: flux-system
+spec:
+  interval: 15m
+  path: ./apps/00-networking/coredns-custom
+  prune: true
+  timeout: 2m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
