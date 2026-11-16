@@ -14,6 +14,10 @@ spec:
       template:
         spec:
           restartPolicy: OnFailure
+          securityContext:
+            # image runs as uid 2022 (debian-spamd); fsGroup lets it read the
+            # 0400 ssh secret (group-readable via fsGroup)
+            fsGroup: 2022
           initContainers:
             - name: fix-bayes-perms
               image: busybox:1.36
