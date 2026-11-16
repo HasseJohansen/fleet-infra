@@ -6,9 +6,8 @@
 ARG BASE_TAG=4.0.2-4
 FROM instantlinux/spamassassin:${BASE_TAG}
 
-# PATH is set explicitly: the base image config carries no PATH env, so a bare
-# "apt-get" is not found by kaniko's /bin/sh -c.
-RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
-    apt-get update \
-    && apt-get install -y --no-install-recommends openssh-client \
+# Absolute paths: kaniko's /bin/sh -c does not have /usr/bin in PATH for this
+# base image, so a bare "apt-get" is not found.
+RUN /usr/bin/apt-get update \
+    && /usr/bin/apt-get install -y --no-install-recommends openssh-client \
     && rm -rf /var/lib/apt/lists/*
