@@ -78,6 +78,25 @@ Layout:
    and check `/tmp/root-bayes.txt` on mail2.musikcheck.dk — one container now does
    both the `sa-learn --backup` and the `scp`.
 
+## Known follow-ups
+
+- **ImageUpdateAutomation cannot push**: the `flux-system` GitRepository uses an
+  SSH deploy key, which GitHub treats as read-only ("The key you are
+  authenticating with has been marked as read only"). To let Flux commit image
+  tag bumps to `./apps` automatically, create a classic PAT with `repo` scope and
+  switch the GitRepository to HTTPS basic auth (secret keys `username`/`password`,
+  url `https://github.com/HasseJohansen/fleet-infra`). Until then, update the
+  image tags in `apps/07-mail/spamassassin/` manually when a new build lands in
+  Harbor (the ImagePolicy `spamassassin` already tracks
+  `harbor.k8s.musikcheck.dk/mail/spamd`).
+- The `registries.yaml` mirror on the nodes was applied at runtime; `/etc` is a
+  tmpfs overlay on Kairos, so add it to the Kairos machine config (`write_files`)
+  to survive reboots.
+- Upstream tag `4.0.2-4` on Docker Hub is a Helm chart manifest, not an image;
+  the upstream ImagePolicy range excludes it via an OR clause
+  (`>=4.0.0-0 <4.0.2-4 || >=4.0.3-0 <4.1.0-0`) so any newer real image tag is
+  picked up automatically.
+
 ## Notes
 
 - Upstream tags are prerelease-style (`4.0.2-4`), hence the ImagePolicy ranges use
