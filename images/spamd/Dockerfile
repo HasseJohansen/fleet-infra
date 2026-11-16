@@ -6,8 +6,11 @@
 ARG BASE_TAG=4.0.2-3
 FROM instantlinux/spamassassin:${BASE_TAG}
 
-# Absolute paths: kaniko's /bin/sh -c does not have /usr/bin in PATH for this
-# base image, so a bare "apt-get" is not found.
+# The base image sets USER 2022 (debian-spamd); kaniko runs RUN as that user, so
+# switch to root for the package install and restore the original user afterwards.
+# Absolute paths: kaniko's /bin/sh -c does not have /usr/bin in PATH for this base.
+USER root
 RUN /usr/bin/apt-get update \
     && /usr/bin/apt-get install -y --no-install-recommends openssh-client \
     && rm -rf /var/lib/apt/lists/*
+USER 2022
