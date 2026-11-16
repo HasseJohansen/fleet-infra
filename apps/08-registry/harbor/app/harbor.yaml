@@ -21,19 +21,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  healthChecks:
-    - apiVersion: apps/v1
-      kind: Deployment
-      name: harbor-core
-      namespace: harbor
-    - apiVersion: apps/v1
-      kind: Deployment
-      name: harbor-registry
-      namespace: harbor
-    - apiVersion: apps/v1
-      kind: Deployment
-      name: harbor-nginx
-      namespace: harbor
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
