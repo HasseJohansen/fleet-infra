@@ -93,6 +93,11 @@ Layout:
   the upstream ImagePolicy range excludes it via an OR clause
   (`>=4.0.0-0 <4.0.2-4 || >=4.0.3-0 <4.1.0-0`) so any newer real image tag is
   picked up automatically.
+- The container `image:` fields in `apps/07-mail/spamassassin/` use the whole-image
+  marker `# {"$imagepolicy": "flux-system:spamassassin"}` (no `:tag` suffix): with
+  this Flux version the `:tag` marker on a plain image string wrote a bare tag and
+  broke pulls. The `:tag` suffix is only used on the plain `SPAMD_TAG` value in the
+  build CronJob, where a bare tag is correct.
 
 ## Notes
 
