@@ -479,10 +479,14 @@ data:
     score RCVD_IN_BRBL_LASTEXT 0
   local.cf: |
     # Adapted from the primary MX host /etc/spamassassin/local.cf:
-    # - dns_server 127.0.0.1 dropped: pod resolv.conf already points at cluster DNS (10.43.0.10)
+    # - dns_server 127.0.0.1: unbound sidecar in this pod recurses from the root servers, so
+    #   DNSBL queries go out from our own egress IP. Via cluster DNS (10.43.0.10) they would be
+    #   forwarded to the ISP resolver and get rate-limited/blocked (RCVD_IN_ZEN_BLOCKED_OPENDNS,
+    #   URIBL_BLOCKED) because that resolver is shared with many other users.
     # - lock_method flock -> nflock: bayes DB lives on an RWX (NFS) Longhorn volume, flock is unsafe over NFS
     # - trusted_networks extended with cluster CIDRs and the tailscale range (exim on the Hetzner host)
     # - bayes_path pinned to the shared PVC; pyzor/razor paths adjusted to the Debian config dir
+    dns_server 127.0.0.1
     trusted_networks 192.168.0. 10.42.0.0/16 10.43.0.0/16 100.64.0.0/10
     
     bayes_path /var/lib/spamassassin/bayes
@@ -518,3 +522,33 @@ data:
     dns_query_restriction deny sa-trusted.bondedsender.org
     dns_query_restriction deny sa-accredit.habeas.com
     dns_query_restriction deny bl.score.senderscore.com
+  # Unbound sidecar config: full recursion from the root servers (no forwarding to the
+  # cluster/ISP resolver), so DNSBL lookups originate from our own egress IP and are not
+  # rate-limited like queries from a shared resolver. spamd reaches it via dns_server 127.0.0.1.
+  unbound.conf: |
+    server:
+      interface: 0.0.0.0
+      port: 53
+      do-ip4: yes
+      do-ip6: no
+      do-udp: yes
+      do-tcp: yes
+      access-control: 127.0.0.0/8 allow
+      access-control: 10.42.0.0/16 allow
+      access-control: 10.43.0.0/16 allow
+      access-control: 192.168.0.0/16 allow
+      access-control: 100.64.0.0/10 allow
+      access-control: 0.0.0.0/0 refuse
+      root-hints: /etc/unbound/root.hints
+      module-config: "iterator"
+      chroot: ""
+      username: ""
+      directory: /etc/unbound
+      pidfile: /tmp/unbound.pid
+      logfile: ""
+      use-syslog: no
+      verbosity: 1
+      hide-identity: yes
+      hide-version: yes
+      qname-minimisation: yes
+      serve-expired: yes

@@ -37,14 +37,14 @@ spec:
             - name: bayes
               mountPath: /var/lib/spamassassin
         - name: razor-init
-          image: harbor.k8s.musikcheck.dk/mail/spamd:4.0.2-3
+          image: harbor.k8s.musikcheck.dk/mail/spamd:4.0.2-3.1
           command: ["sh", "-c", "mkdir -p /var/lib/spamassassin/.razor; if [ ! -e /var/lib/spamassassin/.razor/identity ]; then timeout 30 razor-admin -home /var/lib/spamassassin/.razor -create || true; fi"]
           volumeMounts:
             - name: bayes
               mountPath: /var/lib/spamassassin
       containers:
         - name: spamd
-          image: harbor.k8s.musikcheck.dk/mail/spamd:4.0.2-3 # {"$imagepolicy": "flux-system:spamassassin"}
+          image: harbor.k8s.musikcheck.dk/mail/spamd:4.0.2-3.1 # {"$imagepolicy": "flux-system:spamassassin"}
           command: ["/usr/sbin/spamd"]
           args:
             - "--listen"
@@ -136,6 +136,32 @@ spec:
             - name: config
               mountPath: /etc/spamassassin/65_debian.cf
               subPath: 65_debian.cf
+        - name: unbound
+          # Recursive resolver sidecar: spamd's dns_server 127.0.0.1 (see local.cf) points here,
+          # so DNSBL queries recurse from the root servers via our own egress IP instead of going
+          # through cluster DNS -> ISP resolver (shared, gets rate-limited/blocked by the DNSBLs).
+          image: alpinelinux/unbound@sha256:3d1a2772cd413554fec9b8cd399c6878d80fc7789330c7b69ae1b2c09db70030
+          command: ["unbound", "-d", "-c", "/etc/unbound/unbound.conf"]
+          ports:
+            - name: dns
+              containerPort: 53
+              protocol: UDP
+            - name: dns-tcp
+              containerPort: 53
+              protocol: TCP
+          readinessProbe:
+            exec:
+              command: ["nslookup", "example.com", "127.0.0.1"]
+            initialDelaySeconds: 2
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+          volumeMounts:
+            - name: config
+              mountPath: /etc/unbound/unbound.conf
+              subPath: unbound.conf
       volumes:
         - name: bayes
           persistentVolumeClaim:
