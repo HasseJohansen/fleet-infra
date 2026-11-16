@@ -23,7 +23,7 @@ spec:
                 - name: bayes
                   mountPath: /var/lib/spamassassin
             - name: sa-update
-              image: instantlinux/spamassassin:latest # {"$imagepolicy": "flux-system:spamassassin:tag"}
+              image: harbor.k8s.musikcheck.dk/mail/spamd:4.0.2-3 # {"$imagepolicy": "flux-system:spamassassin:tag"}
               command: ["/bin/sh", "-c"]
               args:
                 - "sa-update || true; sa-compile || true"
