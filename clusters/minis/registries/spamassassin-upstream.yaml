@@ -2,7 +2,10 @@
 # Watches the upstream instantlinux/spamassassin releases on Docker Hub.
 # The resolved tag is written into the spamd-image-build CronJob (via the
 # flux-system:spamassassin-upstream:tag setter), which builds+pushes our custom
-# image only when this tag is new. Range includes prerelease-style tags (4.0.2-4).
+# image only when this tag is new.
+# NOTE: tag 4.0.2-4 on Docker Hub is a Helm chart manifest, not an image; the
+# range is therefore capped below it (latest real image is 4.0.2-3). Widen the
+# upper bound (e.g. to <4.1.0-0) once upstream publishes a newer image tag.
 apiVersion: image.toolkit.fluxcd.io/v1
 kind: ImageRepository
 metadata:
@@ -22,4 +25,4 @@ spec:
     name: spamassassin-upstream
   policy:
     semver:
-      range: ">=4.0.0-0 <4.1.0-0"
+      range: ">=4.0.0-0 <4.0.2-4"

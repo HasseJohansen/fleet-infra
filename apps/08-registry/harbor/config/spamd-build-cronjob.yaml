@@ -43,7 +43,7 @@ spec:
               image: gcr.io/kaniko-project/executor:v1.23.2-debug # debug variant ships /busybox/sh for the wrapper script
               env:
                 - name: SPAMD_TAG
-                  value: "4.0.2-4" # {"$imagepolicy": "flux-system:spamassassin-upstream:tag"}
+                  value: "4.0.2-3" # {"$imagepolicy": "flux-system:spamassassin-upstream:tag"}
                 - name: HARBOR_ROBOT
                   valueFrom:
                     secretKeyRef:
