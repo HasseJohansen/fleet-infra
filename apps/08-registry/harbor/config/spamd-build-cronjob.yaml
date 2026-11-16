@@ -75,7 +75,7 @@ spec:
                     --dockerfile=Dockerfile \
                     --build-arg BASE_TAG="${SPAMD_TAG}" \
                     --destination="harbor.k8s.musikcheck.dk/mail/spamd:${SPAMD_TAG}" \
-                    --skip-tls-verify-registry=harbor.k8s.musikcheck.dk \
+                    --insecure-registry=harbor.k8s.musikcheck.dk \
                     --cache=false
               volumeMounts:
                 - name: src
