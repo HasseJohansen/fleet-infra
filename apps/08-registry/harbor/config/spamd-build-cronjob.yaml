@@ -54,15 +54,27 @@ spec:
                     secretKeyRef:
                       name: harbor-robot-push
                       key: password
+                # Read-only check below: the push robot has no read scope, so it
+                # cannot be used to test whether the tag already exists in Harbor.
+                - name: HARBOR_ADMIN_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: harbor-admin
+                      key: HARBOR_ADMIN_PASSWORD
               command: ["/busybox/sh", "-c"]
               args:
                 - |
                   set -e
                   echo "desired spamd image tag: ${SPAMD_TAG}"
-                  AUTH="Authorization: Basic $(printf '%s:%s' "${HARBOR_ROBOT}" "${HARBOR_ROBOT_SECRET}" | base64)"
-                  # Skip the build when Harbor already has this tag (no new upstream release)
-                  if wget -q --header="${AUTH}" -O /dev/null \
-                      "http://harbor.harbor.svc.cluster.local/api/v2.0/projects/mail/repositories/mail%2Fspamd/artifacts/${SPAMD_TAG}"; then
+                  # Skip the build when Harbor already has this tag (no new upstream release).
+                  # Check the registry v2 API as the Harbor admin: the /api/v2.0 artifact
+                  # path 404s through the front proxy (%2F is decoded before routing),
+                  # and the push robot gets 404 on all read endpoints (no pull scope).
+                  AUTH="Authorization: Basic $(printf '%s:%s' "admin" "${HARBOR_ADMIN_PASSWORD}" | base64)"
+                  if wget -q -O /dev/null \
+                      --header="${AUTH}" \
+                      --header="Accept: application/vnd.docker.distribution.manifest.v2+json, application/vnd.docker.distribution.manifest.list.v2+json, application/vnd.oci.image.manifest.v1+json, application/vnd.oci.image.index.v1+json" \
+                      "http://harbor.harbor.svc.cluster.local/v2/mail/spamd/manifests/${SPAMD_TAG}"; then
                     echo "mail/spamd:${SPAMD_TAG} already in Harbor, nothing to do"
                     exit 0
                   fi
