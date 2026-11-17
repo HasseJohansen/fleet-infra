@@ -483,14 +483,16 @@ data:
     #   DNSBL queries go out from our own egress IP. Via cluster DNS (10.43.0.10) they would be
     #   forwarded to the ISP resolver and get rate-limited/blocked (RCVD_IN_ZEN_BLOCKED_OPENDNS,
     #   URIBL_BLOCKED) because that resolver is shared with many other users.
-    # - lock_method flock -> nflock: bayes DB lives on an RWX (NFS) Longhorn volume, flock is unsafe over NFS
+    # - lock_method nfssafe: bayes DB lives on an RWX (NFS) Longhorn volume, flock is unsafe over
+    #   NFS. SA 4.0 renamed the NFS-safe method from nflock (3.4.x) to nfssafe; nflock is rejected
+    #   as invalid and only logs a warning, and nfssafe is the UNIX default anyway.
     # - trusted_networks extended with cluster CIDRs and the tailscale range (exim on the Hetzner host)
     # - bayes_path pinned to the shared PVC; pyzor/razor paths adjusted to the Debian config dir
     dns_server 127.0.0.1
     trusted_networks 192.168.0. 10.42.0.0/16 10.43.0.0/16 100.64.0.0/10
     
     bayes_path /var/lib/spamassassin/bayes
-    lock_method nflock
+    lock_method nfssafe
     
     bayes_ignore_header X-Bogosity
     bayes_ignore_header X-Spam-Flag

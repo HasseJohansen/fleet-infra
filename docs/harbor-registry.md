@@ -103,8 +103,11 @@ Layout:
 
 - Upstream tags are prerelease-style (`4.0.2-4`), hence the ImagePolicy ranges use
   `>=4.0.0-0 <4.1.0-0` so they actually match.
-- The build CronJob runs hourly but is a no-op unless `SPAMD_TAG` is missing in
-  Harbor. Worst-case latency upstream-release → new spamd running: ~30m (upstream
+- The build CronJob runs hourly but is a no-op unless the desired tag is missing in
+  Harbor. The desired tag is `${SPAMD_TAG}.${LOCAL_REV}`: `SPAMD_TAG` tracks upstream
+  releases, and you bump `LOCAL_REV` in `spamd-build-cronjob.yaml` whenever
+  `images/spamd/Dockerfile` changes (e.g. `4.0.2-3` + `LOCAL_REV=3` → `4.0.2-3.3`).
+  Worst-case latency upstream-release → new spamd running: ~30m (upstream
   scan) + ≤1h (cron tick) + build + ~30m (Harbor scan).
 - Harbor PVCs are on Longhorn, so the existing Wasabi backup target covers them.
 - Set a retention rule in the Harbor UI (e.g. keep the last 10 tags of `mail/spamd`)

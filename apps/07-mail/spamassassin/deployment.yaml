@@ -57,6 +57,10 @@ spec:
             - "5"
             - "--timeout-child"
             - "600"
+            # spamd logs via syslog (/dev/log) by default, which does not exist in the
+            # container ("logger: syslog initialization failed"); --syslog=stderr logs
+            # to stderr, which kubectl logs captures.
+            - "--syslog=stderr"
           env:
             - name: TZ
               value: Europe/Copenhagen

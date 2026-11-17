@@ -1,6 +1,11 @@
 # syntax=docker/dockerfile:1
-# instantlinux/spamassassin + openssh-client, so the spamd bayes backup CronJob can
-# do both the sa-learn dump and the scp in a single container.
+# instantlinux/spamassassin + openssh-client + two Perl modules, so that:
+# - the spamd bayes backup CronJob can do both the sa-learn dump and the scp in a
+#   single container (openssh-client);
+# - the ResourceLimits plugin works instead of logging "BSD::Resource missing"
+#   (libbsd-resource-perl);
+# - the OLEVBMacro plugin can inspect zip attachments instead of logging
+#   "Archive::Zip missing" (libarchive-zip-perl).
 # BASE_TAG is passed by the spamd-image-build CronJob as --build-arg, resolved by
 # Flux from the latest upstream 4.0.x release; the default is bumped by Renovate.
 ARG BASE_TAG=4.0.2-3
@@ -11,7 +16,10 @@ FROM instantlinux/spamassassin:${BASE_TAG}
 # Absolute paths: kaniko's /bin/sh -c does not have /usr/bin in PATH for this base.
 USER root
 RUN /usr/bin/apt-get update \
-    && /usr/bin/apt-get install -y --no-install-recommends openssh-client \
+    && /usr/bin/apt-get install -y --no-install-recommends \
+        openssh-client \
+        libarchive-zip-perl \
+        libbsd-resource-perl \
     && rm -rf /var/lib/apt/lists/*
 # exim/dovecot on the mail host pass the mail user (hhj, uid 1000 there) to spamc;
 # spamd resolves it via getpwnam, so the user must exist in the image or every scan

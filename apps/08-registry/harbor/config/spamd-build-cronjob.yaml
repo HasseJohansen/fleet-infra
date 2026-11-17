@@ -1,8 +1,9 @@
 # Builds and pushes harbor.k8s.musikcheck.dk/mail/spamd:<tag>, but only when the
-# desired tag is not present in Harbor yet. The desired tag (SPAMD_TAG) is kept up
-# to date by Flux ImageUpdateAutomation from the upstream instantlinux/spamassassin
-# release (see clusters/minis/registries/spamassassin-upstream.yaml), so a build is
-# only ever started for a genuinely new upstream release.
+# desired tag is not present in Harbor yet. The desired tag is "${SPAMD_TAG}.${LOCAL_REV}",
+# where SPAMD_TAG is kept up to date by Flux ImageUpdateAutomation from the upstream
+# instantlinux/spamassassin release (see clusters/minis/registries/spamassassin-upstream.yaml)
+# and LOCAL_REV is a manual counter: bump it whenever images/spamd/Dockerfile changes,
+# so the custom image is rebuilt even though the upstream tag is unchanged.
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -44,6 +45,9 @@ spec:
               env:
                 - name: SPAMD_TAG
                   value: "4.0.2-3" # {"$imagepolicy": "flux-system:spamassassin-upstream:tag"}
+                # Bump when images/spamd/Dockerfile changes; the built tag is ${SPAMD_TAG}.${LOCAL_REV}.
+                - name: LOCAL_REV
+                  value: "3"
                 - name: HARBOR_ROBOT
                   valueFrom:
                     secretKeyRef:
@@ -65,7 +69,8 @@ spec:
               args:
                 - |
                   set -e
-                  echo "desired spamd image tag: ${SPAMD_TAG}"
+                  TAG="${SPAMD_TAG}.${LOCAL_REV}"
+                  echo "desired spamd image tag: ${TAG}"
                   # Skip the build when Harbor already has this tag (no new upstream release).
                   # Check the registry v2 API as the Harbor admin: the /api/v2.0 artifact
                   # path 404s through the front proxy (%2F is decoded before routing),
@@ -74,8 +79,8 @@ spec:
                   if wget -q -O /dev/null \
                       --header="${AUTH}" \
                       --header="Accept: application/vnd.docker.distribution.manifest.v2+json, application/vnd.docker.distribution.manifest.list.v2+json, application/vnd.oci.image.manifest.v1+json, application/vnd.oci.image.index.v1+json" \
-                      "http://harbor.harbor.svc.cluster.local/v2/mail/spamd/manifests/${SPAMD_TAG}"; then
-                    echo "mail/spamd:${SPAMD_TAG} already in Harbor, nothing to do"
+                      "http://harbor.harbor.svc.cluster.local/v2/mail/spamd/manifests/${TAG}"; then
+                    echo "mail/spamd:${TAG} already in Harbor, nothing to do"
                     exit 0
                   fi
                   mkdir -p /kaniko/.docker
@@ -86,7 +91,7 @@ spec:
                     --context=dir:///src/images/spamd \
                     --dockerfile=Dockerfile \
                     --build-arg BASE_TAG="${SPAMD_TAG}" \
-                    --destination="harbor.k8s.musikcheck.dk/mail/spamd:${SPAMD_TAG}" \
+                    --destination="harbor.k8s.musikcheck.dk/mail/spamd:${TAG}" \
                     --insecure-registry=harbor.k8s.musikcheck.dk \
                     --cache=false
               volumeMounts:
