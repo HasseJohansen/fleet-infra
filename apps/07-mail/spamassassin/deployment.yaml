@@ -66,22 +66,28 @@ spec:
             - name: spamd
               containerPort: 783
               protocol: TCP
+          # Probes check the LISTEN socket in /proc/net/tcp instead of connecting: spamd logs
+          # every accepted connection at info level and has no log-level switch, so a PING probe
+          # from 127.0.0.1 spammed the logs every 10s/20s. 783 = 0x030F, state 0A = LISTEN,
+          # rem_address :0000 distinguishes the listening socket from established connections.
           readinessProbe:
             exec:
               command:
-                - perl
-                - -MIO::Socket::IP
-                - -e
-                - '$s=IO::Socket::IP->new(PeerAddr=>"127.0.0.1",PeerPort=>783,Proto=>"tcp",Timeout=>5) or exit 1; print $s "PING SPAMC/1.0\r\n\r\n"; $r=<$s>; exit(($r=~/PONG/)?0:1)'
+                - grep
+                - -qE
+                - ':030F [0-9A-F]+:0000 0A '
+                - /proc/net/tcp
+                - /proc/net/tcp6
             initialDelaySeconds: 5
             periodSeconds: 10
           livenessProbe:
             exec:
               command:
-                - perl
-                - -MIO::Socket::IP
-                - -e
-                - '$s=IO::Socket::IP->new(PeerAddr=>"127.0.0.1",PeerPort=>783,Proto=>"tcp",Timeout=>5) or exit 1; print $s "PING SPAMC/1.0\r\n\r\n"; $r=<$s>; exit(($r=~/PONG/)?0:1)'
+                - grep
+                - -qE
+                - ':030F [0-9A-F]+:0000 0A '
+                - /proc/net/tcp
+                - /proc/net/tcp6
             initialDelaySeconds: 15
             periodSeconds: 20
           resources:
