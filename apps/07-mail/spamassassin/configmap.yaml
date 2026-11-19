@@ -488,6 +488,9 @@ data:
     #   as invalid and only logs a warning, and nfssafe is the UNIX default anyway.
     # - trusted_networks extended with cluster CIDRs and the tailscale range (exim on the Hetzner host)
     # - bayes_path pinned to the shared PVC; pyzor/razor paths adjusted to the Debian config dir
+    # Classify as spam from score 3.0 (2026-11-19): exim sets X-Spam_flag: True when
+    # SA reports spam, and the sieve files those into SPAMTRAP. Exim still hard-rejects > 15.0.
+    required_score 3.0
     dns_server 127.0.0.1
     trusted_networks 192.168.0. 10.42.0.0/16 10.43.0.0/16 100.64.0.0/10
     
@@ -512,7 +515,9 @@ data:
     shortcircuit SUBJECT_IN_BLACKLIST    on
     shortcircuit ALL_TRUSTED             on
     shortcircuit BAYES_99                spam
-    shortcircuit BAYES_00                ham
+    # shortcircuit BAYES_00 ham disabled 2026-11-19: the -100 ham shortcircuit
+    # masked DNSBL hits (listed sender IPs passed at score < 0)
+    #shortcircuit BAYES_00                ham
     endif
     
     pyzor_options --homedir /var/lib/spamassassin
