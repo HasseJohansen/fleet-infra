@@ -4,4 +4,4 @@
 #   sudo kairos-agent upgrade list-releases
 # Currently running image (update manually when upgrading):
 #   quay.io/kairos/hadron:v0.6.3-standard-amd64-generic-v4.5.0-k3s-v1.37.2-k3s1
-kairosRelease: v4.5.0
+kairosRelease: v4.5.2
