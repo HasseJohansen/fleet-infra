@@ -89,6 +89,26 @@ Layout:
   `/etc/rancher/k3s/registries.yaml` on redeploy and every boot, so the
   `harbor.k8s.musikcheck.dk` HTTP mirror survives reboots (applied at runtime on
   all 3 nodes already).
+- **docker.io/quay.io pull-through proxy cache (done 2026-11-21)**: Harbor projects
+  `dockerhub` (upstream `https://registry-1.docker.io`) and `quay` (upstream
+  `https://quay.io`) are proxy-cache projects, both **public** (anonymous pulls by
+  kubelet must work). Node `registries.yaml` mirrors them with the `/v2/<project>`
+  path included — containerd appends the repo path after the endpoint path, so the
+  endpoint must be `http://harbor.k8s.musikcheck.dk/v2/dockerhub` (k3s sets
+  `override_path=true` for path endpoints). After a k3s restart on each node,
+  `crictl pull docker.io/library/hello-world` is served from Harbor (verify via
+  `GET /v2/dockerhub/library/hello-world/tags/list`). This keeps image pulls —
+  including the quay.io Kairos OS images used by kairos-operator NodeOps — on the
+  LAN and working even when external DNS is down. Caveat: Docker Hub anonymous
+  rate limit (100/6h) applies to Harbor's egress IP; add Hub robot creds to the
+  `docker-hub` registry entry in Harbor if hit.
+- **resolv.conf is pinned on every boot** (same kairos-config `write_files`):
+  the Kairos image ships `/etc/resolv.conf` with `nameserver 10.43.0.10` (cluster
+  DNS), which makes CoreDNS's `forward . /etc/resolv.conf` loop and crashloop,
+  taking down cluster AND node DNS (image pulls fail with
+  `lookup registry-1.docker.io: i/o timeout`). cloud-config now writes
+  `nameserver 192.168.0.1` + `1.1.1.1`. k3s regenerates the CoreDNS ConfigMap on
+  server restart, so do NOT rely on patching the Corefile.
 - Upstream tag `4.0.2-4` on Docker Hub is a Helm chart manifest, not an image;
   the upstream ImagePolicy range excludes it via an OR clause
   (`>=4.0.0-0 <4.0.2-4 || >=4.0.3-0 <4.1.0-0`) so any newer real image tag is
