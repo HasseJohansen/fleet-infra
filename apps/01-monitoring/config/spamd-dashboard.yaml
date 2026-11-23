@@ -1,0 +1,646 @@
+# Provisioned into Grafana by the grafana-sc-dashboard sidecar (label grafana_dashboard="1",
+# RESOURCE=both, NAMESPACE=ALL -> /tmp/dashboards, file provider sidecarProvider).
+# Datasource uid "prometheus" is the kube-prometheus-stack Prometheus.
+# Source of truth for the JSON: regenerate this file from the dashboard JSON.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-spamd
+  namespace: monitoring
+  labels:
+    grafana_dashboard: "1"
+data:
+  spamd.json: |
+    {
+      "uid": "spamd-overview",
+      "title": "spamd — Spam vs Ham",
+      "description": "spamd (SpamAssassin) scan results, parsed from spamd pod logs by spamd-exporter (mail namespace). spamd logs only the Message-ID, not the envelope sender: 'sender' = full Message-ID, 'domain' = its domain part.",
+      "tags": [
+        "mail",
+        "spam",
+        "spamd"
+      ],
+      "timezone": "browser",
+      "editable": true,
+      "graphTooltip": 1,
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "version": 1,
+      "time": {
+        "from": "now-24h",
+        "to": "now"
+      },
+      "templating": {
+        "list": [
+          {
+            "name": "window",
+            "type": "custom",
+            "label": "Window",
+            "hide": 0,
+            "refresh": 1,
+            "query": "1h,6h,24h,7d,30d",
+            "current": {
+              "selected": true,
+              "text": "24h",
+              "value": "24h"
+            },
+            "options": [
+              {
+                "text": "1h",
+                "value": "1h",
+                "selected": false
+              },
+              {
+                "text": "6h",
+                "value": "6h",
+                "selected": false
+              },
+              {
+                "text": "24h",
+                "value": "24h",
+                "selected": true
+              },
+              {
+                "text": "7d",
+                "value": "7d",
+                "selected": false
+              },
+              {
+                "text": "30d",
+                "value": "30d",
+                "selected": false
+              }
+            ]
+          }
+        ]
+      },
+      "panels": [
+        {
+          "id": 1,
+          "type": "piechart",
+          "title": "Spam vs ham share (last $window)",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 8,
+            "x": 0,
+            "y": 0
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "sum by (verdict) (increase(spamd_messages_total[$window]))",
+              "legendFormat": "{{verdict}}",
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "values": false,
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": ""
+            },
+            "pieType": "pie",
+            "displayLabels": [
+              "name",
+              "percent"
+            ],
+            "tooltip": {
+              "mode": "single",
+              "sort": "desc"
+            }
+          }
+        },
+        {
+          "id": 2,
+          "type": "stat",
+          "title": "Spam % (last $window)",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 4,
+            "x": 8,
+            "y": 0
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "100 * sum(increase(spamd_messages_total{verdict=\"spam\"}[$window])) / clamp_min(sum(increase(spamd_messages_total[$window])), 1)",
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "decimals": 1,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 15
+                  },
+                  {
+                    "color": "red",
+                    "value": 40
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "values": false,
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": ""
+            },
+            "orientation": "auto",
+            "textMode": "auto",
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto"
+          }
+        },
+        {
+          "id": 3,
+          "type": "stat",
+          "title": "Messages (last $window)",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 4,
+            "x": 12,
+            "y": 0
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "sum(increase(spamd_messages_total{verdict=\"spam\"}[$window]))",
+              "legendFormat": "spam",
+              "instant": true
+            },
+            {
+              "refId": "B",
+              "expr": "sum(increase(spamd_messages_total{verdict=\"ham\"}[$window]))",
+              "legendFormat": "ham",
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "values": false,
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": ""
+            },
+            "orientation": "auto",
+            "textMode": "value_and_name",
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto"
+          }
+        },
+        {
+          "id": 4,
+          "type": "stat",
+          "title": "Avg spam score (last $window)",
+          "description": "SpamAssassin score of identified spam; required_score is 3.0 (see spamd local.cf).",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 4,
+            "x": 16,
+            "y": 0
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "sum(increase(spamd_score_sum{verdict=\"spam\"}[$window])) / clamp_min(sum(increase(spamd_messages_total{verdict=\"spam\"}[$window])), 1)",
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "decimals": 2
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "values": false,
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": ""
+            },
+            "orientation": "auto",
+            "textMode": "auto",
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto"
+          }
+        },
+        {
+          "id": 5,
+          "type": "stat",
+          "title": "Avg scan time (last $window)",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 4,
+            "x": 20,
+            "y": 0
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "sum(increase(spamd_scantime_seconds_total[$window])) / clamp_min(sum(increase(spamd_messages_total[$window])), 1)",
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "decimals": 2
+            },
+            "overrides": []
+          },
+          "options": {
+            "reduceOptions": {
+              "values": false,
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": ""
+            },
+            "orientation": "auto",
+            "textMode": "auto",
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto"
+          }
+        },
+        {
+          "id": 6,
+          "type": "timeseries",
+          "title": "Spam vs ham % over time",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 8
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "100 * sum(rate(spamd_messages_total{verdict=\"spam\"}[$__rate_interval])) / clamp_min(sum(rate(spamd_messages_total[$__rate_interval])), 0.0001)",
+              "legendFormat": "spam %"
+            },
+            {
+              "refId": "B",
+              "expr": "100 * sum(rate(spamd_messages_total{verdict=\"ham\"}[$__rate_interval])) / clamp_min(sum(rate(spamd_messages_total[$__rate_interval])), 0.0001)",
+              "legendFormat": "ham %"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "min": 0,
+              "max": 100
+            },
+            "overrides": []
+          },
+          "options": {
+            "showPoints": "never",
+            "spanNulls": false,
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 15,
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          }
+        },
+        {
+          "id": 7,
+          "type": "timeseries",
+          "title": "Messages per minute by verdict",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 8
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "sum by (verdict) (rate(spamd_messages_total[$__rate_interval])) * 60",
+              "legendFormat": "{{verdict}}"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "min": 0
+            },
+            "overrides": []
+          },
+          "options": {
+            "showPoints": "never",
+            "spanNulls": false,
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 15,
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          }
+        },
+        {
+          "id": 8,
+          "type": "bargauge",
+          "title": "Top 10 spamming domains (last $window)",
+          "description": "Domain part of the spam Message-ID (spamd does not log envelope sender or From header).",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 16
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "topk(10, sum by (domain) (increase(spamd_messages_by_domain_total{verdict=\"spam\"}[$window])))",
+              "legendFormat": "{{domain}}",
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 3
+                  },
+                  {
+                    "color": "red",
+                    "value": 10
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "orientation": "horizontal",
+            "showValue": "always",
+            "displayMode": "gradient",
+            "reduceOptions": {
+              "values": false,
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": ""
+            }
+          }
+        },
+        {
+          "id": 9,
+          "type": "bargauge",
+          "title": "Top 10 spamming senders — Message-ID (last $window)",
+          "description": "Full Message-ID of spam. Spammers usually rotate the local part, so the domain panel above is usually the more useful view.",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 16
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "topk(10, sum by (sender) (increase(spamd_messages_by_sender_total{verdict=\"spam\"}[$window])))",
+              "legendFormat": "{{sender}}",
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 3
+                  },
+                  {
+                    "color": "red",
+                    "value": 10
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "orientation": "horizontal",
+            "showValue": "always",
+            "displayMode": "gradient",
+            "reduceOptions": {
+              "values": false,
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": ""
+            }
+          }
+        },
+        {
+          "id": 10,
+          "type": "timeseries",
+          "title": "Bytes scanned per second by verdict",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 24
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "sum by (verdict) (rate(spamd_message_size_bytes_total[$__rate_interval]))",
+              "legendFormat": "{{verdict}}"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "Bps",
+              "min": 0
+            },
+            "overrides": []
+          },
+          "options": {
+            "showPoints": "never",
+            "spanNulls": false,
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 15,
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          }
+        },
+        {
+          "id": 11,
+          "type": "stat",
+          "title": "spamd-exporter health (last $window)",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 24
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "sum(increase(spamd_result_lines_total[$window]))",
+              "legendFormat": "result lines parsed",
+              "instant": true
+            },
+            {
+              "refId": "B",
+              "expr": "time() - spamd_exporter_last_run_timestamp_seconds",
+              "legendFormat": "poll age",
+              "instant": true
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "decimals": 0
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "poll age"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "s"
+                  }
+                ]
+              }
+            ]
+          },
+          "options": {
+            "reduceOptions": {
+              "values": false,
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": ""
+            },
+            "orientation": "auto",
+            "textMode": "value_and_name",
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto"
+          }
+        }
+      ]
+    }

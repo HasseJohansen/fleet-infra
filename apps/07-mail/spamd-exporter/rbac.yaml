@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: spamd-exporter
+  namespace: mail
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: spamd-exporter
+  namespace: mail
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["list", "get", "watch"]
+  - apiGroups: [""]
+    resources: ["pods/log"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: spamd-exporter
+  namespace: mail
+subjects:
+  - kind: ServiceAccount
+    name: spamd-exporter
+    namespace: mail
+roleRef:
+  kind: Role
+  name: spamd-exporter
+  apiGroup: rbac.authorization.k8s.io

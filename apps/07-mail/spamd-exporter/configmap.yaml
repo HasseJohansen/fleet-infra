@@ -1,0 +1,212 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spamd-exporter-script
+  namespace: mail
+  labels:
+    app: spamd-exporter
+data:
+  exporter.py: |
+    #!/usr/bin/env python3
+    """Prometheus exporter for spamd (SpamAssassin) pod logs.
+
+    spamd runs with --syslog=stderr, so its log lines are stored by the
+    container runtime and readable through the Kubernetes pod log API.
+    This exporter pulls the logs of all spamd pods in $NAMESPACE, parses
+    the per-message `result:` lines and exposes counters on /metrics.
+
+    spamd logs do not contain the envelope sender, only the Message-ID,
+    so "sender" = full Message-ID and "domain" = its domain part.
+    """
+    import hashlib
+    import json
+    import os
+    import re
+    import ssl
+    import threading
+    import time
+    from collections import deque
+    from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+    from urllib.request import Request, urlopen
+
+    NAMESPACE = os.environ.get("NAMESPACE", "mail")
+    LABEL_SELECTOR = os.environ.get("LABEL_SELECTOR", "app=spamd")
+    CONTAINER = os.environ.get("CONTAINER", "spamd")
+    PORT = int(os.environ.get("PORT", "8080"))
+    SINCE_SECONDS = int(os.environ.get("SINCE_SECONDS", "90"))
+    # First pass after (re)start reads this far back; counters are in-memory
+    # and reset on restart, so re-reading the full window keeps them consistent.
+    BACKFILL_SECONDS = int(os.environ.get("BACKFILL_SECONDS", "86400"))
+    POLL_SECONDS = int(os.environ.get("POLL_SECONDS", "15"))
+    HOST = os.environ.get("KUBERNETES_SERVICE_HOST", "kubernetes.default.svc")
+    SVC_PORT = os.environ.get("KUBERNETES_SERVICE_PORT_HTTPS", "443")
+    SA_DIR = "/var/run/secrets/kubernetes.io/serviceaccount"
+
+    RESULT_RE = re.compile(
+        r"spamd: result: (?P<verdict>[YN.]) +(?P<score>-?\d+) - "
+        r".*?scantime=(?P<scantime>[0-9.]+),size=(?P<size>\d+),"
+        r"user=(?P<user>[^,]+),uid=(?P<uid>\d+),required_score=(?P<req>[0-9.]+),"
+        r".*?mid=<(?P<mid>[^>]*)>(?:,bayes=(?P<bayes>[0-9.]+))?"
+    )
+
+    HELP = {
+        "spamd_messages_total": "Messages scanned by spamd, by verdict (spam/ham) and local user.",
+        "spamd_messages_by_domain_total": "Messages scanned by spamd, by verdict and Message-ID domain.",
+        "spamd_messages_by_sender_total": "Messages scanned by spamd, by verdict and sender (full Message-ID).",
+        "spamd_message_size_bytes_total": "Total message size in bytes scanned by spamd, by verdict.",
+        "spamd_scantime_seconds_total": "Total time spent scanning messages, by verdict.",
+        "spamd_score_sum": "Sum of SpamAssassin scores of messages identified as spam.",
+        "spamd_bayes_sum": "Sum of bayes probabilities, by verdict.",
+        "spamd_result_lines_total": "spamd `result:` log lines parsed by the exporter.",
+        "spamd_exporter_errors_total": "Errors while reading the Kubernetes API.",
+        "spamd_exporter_last_run_timestamp_seconds": "Unix timestamp of the last successful log poll.",
+    }
+
+    lock = threading.Lock()
+    counters = {}  # (metric, labels_key) -> [labels dict, value]
+    gauges = {}
+    seen = {}      # pod -> (set of line hashes, deque for eviction)
+
+    with open(os.path.join(SA_DIR, "token")) as fh:
+        TOKEN = fh.read().strip()
+    SSL_CTX = ssl.create_default_context(cafile=os.path.join(SA_DIR, "ca.crt"))
+
+
+    def esc(value):
+        return value.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n")
+
+
+    def inc(metric, labels, value=1.0):
+        key = (metric, tuple(sorted(labels.items())))
+        with lock:
+            entry = counters.setdefault(key, [dict(labels), 0.0])
+            entry[1] += value
+
+
+    def set_gauge(metric, value):
+        key = (metric, ())
+        with lock:
+            gauges[key] = [{}, value]
+
+
+    def api_get(path):
+        req = Request(
+            "https://%s:%s%s" % (HOST, SVC_PORT, path),
+            headers={"Authorization": "Bearer " + TOKEN},
+        )
+        with urlopen(req, context=SSL_CTX, timeout=30) as resp:
+            return resp.read().decode("utf-8", "replace")
+
+
+    def parse_line(line):
+        m = RESULT_RE.search(line)
+        if not m:
+            return
+        verdict = "spam" if m.group("verdict") == "Y" else "ham"
+        mid = m.group("mid") or "-"
+        if "@" in mid:
+            sender, domain = mid, mid.rsplit("@", 1)[1]
+        else:
+            sender, domain = mid, "-"
+        inc("spamd_messages_total", {"verdict": verdict, "user": m.group("user")})
+        inc("spamd_messages_by_domain_total", {"verdict": verdict, "domain": domain})
+        inc("spamd_messages_by_sender_total",
+            {"verdict": verdict, "sender": sender, "domain": domain})
+        inc("spamd_message_size_bytes_total", {"verdict": verdict}, float(m.group("size")))
+        inc("spamd_scantime_seconds_total", {"verdict": verdict}, float(m.group("scantime")))
+        if verdict == "spam":
+            # only spam scores are guaranteed >= required_score, so only they
+            # make a monotonic counter
+            inc("spamd_score_sum", {"verdict": verdict}, float(m.group("score")))
+        if m.group("bayes") is not None:
+            inc("spamd_bayes_sum", {"verdict": verdict}, float(m.group("bayes")))
+        inc("spamd_result_lines_total", {})
+
+
+    def fetch(first):
+        since = BACKFILL_SECONDS if first else SINCE_SECONDS
+        pods = json.loads(api_get(
+            "/api/v1/namespaces/%s/pods?labelSelector=%s" % (NAMESPACE, LABEL_SELECTOR)))
+        for pod in pods.get("items", []):
+            name = pod["metadata"]["name"]
+            if pod.get("status", {}).get("phase") != "Running":
+                continue
+            try:
+                log = api_get(
+                    "/api/v1/namespaces/%s/pods/%s/log?container=%s&sinceSeconds=%d"
+                    % (NAMESPACE, name, CONTAINER, since))
+            except Exception:
+                inc("spamd_exporter_errors_total", {"op": "log", "pod": name})
+                continue
+            hashes, dq = seen.setdefault(name, (set(), deque(maxlen=50000)))
+            for line in log.splitlines():
+                h = hashlib.sha1(line.encode()).hexdigest()
+                if h in hashes:
+                    continue
+                if len(dq) == dq.maxlen:
+                    hashes.discard(dq[0])
+                dq.append(h)
+                hashes.add(h)
+                parse_line(line)
+        set_gauge("spamd_exporter_last_run_timestamp_seconds", time.time())
+
+
+    def run():
+        first = True
+        while True:
+            try:
+                fetch(first)
+            except Exception:
+                inc("spamd_exporter_errors_total", {"op": "pods", "pod": ""})
+            first = False
+            time.sleep(POLL_SECONDS)
+
+
+    def fmt(value):
+        # full precision: %g would truncate large counters/timestamps to 6 digits
+        if value == int(value) and abs(value) < 1e15:
+            return str(int(value))
+        return repr(value)
+
+
+    def render():
+        with lock:
+            metrics = {}
+            for (metric, _), (labels, value) in counters.items():
+                metrics.setdefault(metric, {"type": "counter", "samples": []})
+                metrics[metric]["samples"].append((labels, value))
+            for (metric, _), (labels, value) in gauges.items():
+                metrics.setdefault(metric, {"type": "gauge", "samples": []})
+                metrics[metric]["samples"].append((labels, value))
+        out = []
+        for metric in sorted(metrics):
+            info = metrics[metric]
+            out.append("# HELP %s %s" % (metric, HELP.get(metric, metric)))
+            out.append("# TYPE %s %s" % (metric, info["type"]))
+            for labels, value in sorted(info["samples"], key=lambda s: sorted(s[0].items())):
+                ls = ",".join('%s="%s"' % (k, esc(v)) for k, v in sorted(labels.items()))
+                suffix = "{%s}" % ls if ls else ""
+                out.append("%s%s %s" % (metric, suffix, fmt(value)))
+        return "\n".join(out) + "\n"
+
+
+    class Handler(BaseHTTPRequestHandler):
+        def do_GET(self):
+            if self.path.startswith("/metrics"):
+                body = render().encode()
+                self.send_response(200)
+                self.send_header("Content-Type", "text/plain; version=0.0.4; charset=utf-8")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+            else:
+                self.send_response(404)
+                self.end_headers()
+
+        def log_message(self, *args):
+            pass
+
+
+    if __name__ == "__main__":
+        threading.Thread(target=run, daemon=True).start()
+        ThreadingHTTPServer(("0.0.0.0", PORT), Handler).serve_forever()

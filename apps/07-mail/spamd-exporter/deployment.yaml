@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spamd-exporter
+  namespace: mail
+  labels:
+    app: spamd-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spamd-exporter
+  template:
+    metadata:
+      labels:
+        app: spamd-exporter
+    spec:
+      serviceAccountName: spamd-exporter
+      containers:
+        - name: exporter
+          # stock image from docker.io, served via the Harbor dockerhub proxy cache
+          image: python:3.13-alpine
+          command: ["python", "/app/exporter.py"]
+          env:
+            - name: NAMESPACE
+              value: mail
+            - name: LABEL_SELECTOR
+              value: app=spamd
+            - name: CONTAINER
+              value: spamd
+            - name: SINCE_SECONDS
+              value: "90"
+            - name: BACKFILL_SECONDS
+              value: "86400"
+            - name: POLL_SECONDS
+              value: "15"
+            - name: PORT
+              value: "8080"
+          ports:
+            - name: http-metrics
+              containerPort: 8080
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: http-metrics
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 20m
+              memory: 64Mi
+          volumeMounts:
+            - name: script
+              mountPath: /app/exporter.py
+              subPath: exporter.py
+              readOnly: true
+      volumes:
+        - name: script
+          configMap:
+            name: spamd-exporter-script
