@@ -35,7 +35,10 @@ spec:
                   subPath: local.cf
           containers:
             - name: restart-spamd
-              image: bitnami/kubectl:1.37
+              # bitnami/kubectl publishes no 1.x version tags anymore (only "latest" + digests),
+              # so bitnami/kubectl:1.37 was ImagePullBackOff forever and sa-update never ran.
+              # Pull goes through the Harbor dockerhub proxy cache (node registries.yaml mirror).
+              image: bitnami/kubectl:latest
               command: ["kubectl"]
               args:
                 - delete
