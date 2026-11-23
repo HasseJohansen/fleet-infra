@@ -47,7 +47,7 @@ spec:
                   value: "4.0.2-3" # {"$imagepolicy": "flux-system:spamassassin-upstream:tag"}
                 # Bump when images/spamd/Dockerfile changes; the built tag is ${SPAMD_TAG}.${LOCAL_REV}.
                 - name: LOCAL_REV
-                  value: "3"
+                  value: "4"
                 - name: HARBOR_ROBOT
                   valueFrom:
                     secretKeyRef:

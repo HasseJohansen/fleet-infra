@@ -20,6 +20,7 @@ RUN /usr/bin/apt-get update \
         openssh-client \
         libarchive-zip-perl \
         libbsd-resource-perl \
+        sa-compile \
     && rm -rf /var/lib/apt/lists/*
 # exim/dovecot on the mail host pass the mail user (hhj, uid 1000 there) to spamc;
 # spamd resolves it via getpwnam, so the user must exist in the image or every scan
