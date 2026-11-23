@@ -15,3 +15,19 @@ rules:
   - apiGroups: [""]
     resources: ["pods"]
     verbs: ["delete", "list"]
+---
+# Without this binding the spamd-sa-update CronJob's restart-spamd container fails with
+# "pods is forbidden" when it does `kubectl delete pods -l app=spamd` after sa-update.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: spamd-pod-delete
+  namespace: mail
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: spamd-pod-delete
+subjects:
+  - kind: ServiceAccount
+    name: spamd-sa-update
+    namespace: mail
