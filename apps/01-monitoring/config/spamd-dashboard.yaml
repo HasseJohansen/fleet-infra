@@ -1,7 +1,6 @@
 # Provisioned into Grafana by the grafana-sc-dashboard sidecar (label grafana_dashboard="1",
 # RESOURCE=both, NAMESPACE=ALL -> /tmp/dashboards, file provider sidecarProvider).
 # Datasource uid "prometheus" is the kube-prometheus-stack Prometheus.
-# Source of truth for the JSON: regenerate this file from the dashboard JSON.
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -14,7 +13,7 @@ data:
     {
       "uid": "spamd-overview",
       "title": "spamd — Spam vs Ham",
-      "description": "spamd (SpamAssassin) scan results, parsed from spamd pod logs by spamd-exporter (mail namespace). spamd logs only the Message-ID, not the envelope sender: 'sender' = full Message-ID, 'domain' = its domain part.",
+      "description": "spamd (SpamAssassin) scan results, parsed from spamd pod logs by spamd-exporter (mail namespace). spamd logs only the Message-ID, not the envelope sender: 'sender' = full Message-ID, 'domain' = its domain part. Share/top-N panels use windowed gauges (spamd_window_*) recomputed from the logs, so one-off spammers show up immediately; trend panels use rate() on the cumulative counters.",
       "tags": [
         "mail",
         "spam",
@@ -25,7 +24,7 @@ data:
       "graphTooltip": 1,
       "refresh": "1m",
       "schemaVersion": 39,
-      "version": 1,
+      "version": 2,
       "time": {
         "from": "now-24h",
         "to": "now"
@@ -92,7 +91,7 @@ data:
           "targets": [
             {
               "refId": "A",
-              "expr": "sum by (verdict) (increase(spamd_messages_total[$window]))",
+              "expr": "sum by (verdict) (spamd_window_messages{window=\"$window\"})",
               "legendFormat": "{{verdict}}",
               "instant": true
             }
@@ -139,7 +138,7 @@ data:
           "targets": [
             {
               "refId": "A",
-              "expr": "100 * sum(increase(spamd_messages_total{verdict=\"spam\"}[$window])) / clamp_min(sum(increase(spamd_messages_total[$window])), 1)",
+              "expr": "100 * sum(spamd_window_messages{window=\"$window\",verdict=\"spam\"}) / clamp_min(sum(spamd_window_messages{window=\"$window\"}), 1)",
               "instant": true
             }
           ],
@@ -199,13 +198,13 @@ data:
           "targets": [
             {
               "refId": "A",
-              "expr": "sum(increase(spamd_messages_total{verdict=\"spam\"}[$window]))",
+              "expr": "sum(spamd_window_messages{window=\"$window\",verdict=\"spam\"})",
               "legendFormat": "spam",
               "instant": true
             },
             {
               "refId": "B",
-              "expr": "sum(increase(spamd_messages_total{verdict=\"ham\"}[$window]))",
+              "expr": "sum(spamd_window_messages{window=\"$window\",verdict=\"ham\"})",
               "legendFormat": "ham",
               "instant": true
             }
@@ -249,7 +248,7 @@ data:
           "targets": [
             {
               "refId": "A",
-              "expr": "sum(increase(spamd_score_sum{verdict=\"spam\"}[$window])) / clamp_min(sum(increase(spamd_messages_total{verdict=\"spam\"}[$window])), 1)",
+              "expr": "sum(spamd_window_score_sum{window=\"$window\",verdict=\"spam\"}) / clamp_min(sum(spamd_window_messages{window=\"$window\",verdict=\"spam\"}), 1)",
               "instant": true
             }
           ],
@@ -292,7 +291,7 @@ data:
           "targets": [
             {
               "refId": "A",
-              "expr": "sum(increase(spamd_scantime_seconds_total[$window])) / clamp_min(sum(increase(spamd_messages_total[$window])), 1)",
+              "expr": "sum(spamd_window_scantime_seconds{window=\"$window\"}) / clamp_min(sum(spamd_window_messages{window=\"$window\"}), 1)",
               "instant": true
             }
           ],
@@ -432,7 +431,7 @@ data:
           "targets": [
             {
               "refId": "A",
-              "expr": "topk(10, sum by (domain) (increase(spamd_messages_by_domain_total{verdict=\"spam\"}[$window])))",
+              "expr": "topk(10, sum by (domain) (spamd_window_messages_by_domain{window=\"$window\",verdict=\"spam\"}))",
               "legendFormat": "{{domain}}",
               "instant": true
             }
@@ -492,7 +491,7 @@ data:
           "targets": [
             {
               "refId": "A",
-              "expr": "topk(10, sum by (sender) (increase(spamd_messages_by_sender_total{verdict=\"spam\"}[$window])))",
+              "expr": "topk(10, sum by (sender) (spamd_window_messages_by_sender{window=\"$window\",verdict=\"spam\"}))",
               "legendFormat": "{{sender}}",
               "instant": true
             }

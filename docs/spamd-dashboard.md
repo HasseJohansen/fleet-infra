@@ -27,27 +27,37 @@ The verdict char after `result:` is `Y` = spam, `.`/`N` = ham. Note that spamd d
 dashboard "sender" = full Message-ID and "domain" = its domain part. Spammers rotate
 the Message-ID local part, so the *domain* panels are usually the useful ones.
 
-Metrics exposed (all counters except the gauge):
+Metrics exposed:
 
-- `spamd_messages_total{verdict,user}`
-- `spamd_messages_by_domain_total{verdict,domain}`
-- `spamd_messages_by_sender_total{verdict,sender,domain}`
-- `spamd_message_size_bytes_total{verdict}`
-- `spamd_scantime_seconds_total{verdict}`
-- `spamd_score_sum{verdict="spam"}` (spam scores are always >= required_score, so this stays monotonic)
-- `spamd_bayes_sum{verdict}`
-- `spamd_result_lines_total`, `spamd_exporter_errors_total{op,pod}`, `spamd_exporter_last_run_timestamp_seconds`
+- cumulative counters (hash-deduped over a 31d log fetch), for rate()/trend panels:
+  `spamd_messages_total{verdict,user}`, `spamd_messages_by_domain_total{verdict,domain}`,
+  `spamd_messages_by_sender_total{verdict,sender,domain}`,
+  `spamd_message_size_bytes_total{verdict}`, `spamd_scantime_seconds_total{verdict}`,
+  `spamd_score_sum{verdict="spam"}` (spam scores are always >= required_score, so this
+  stays monotonic), `spamd_bayes_sum{verdict}`, `spamd_result_lines_total`
+- windowed gauges `spamd_window_messages{window,verdict,user}`,
+  `spamd_window_messages_by_domain{window,verdict,domain}`,
+  `spamd_window_messages_by_sender{window,verdict,sender,domain}`,
+  `spamd_window_size_bytes{window,verdict}`, `spamd_window_scantime_seconds{window,verdict}`,
+  `spamd_window_score_sum{window,verdict}` — recomputed from the raw logs on every poll
+  (windows: 1h, 6h, 24h, 7d, 30d; limited by container log rotation)
+- health: `spamd_exporter_errors_total{op,pod}`, `spamd_exporter_last_run_timestamp_seconds`
 
-The exporter polls the log API every 15s (`SINCE_SECONDS=90`, dedup by line hash), and
-on (re)start backfills `BACKFILL_SECONDS=86400` once so the counters reflect the last 24h.
-Because the counters are in-memory, `increase()` over windows larger than the exporter's
-uptime undercounts the backfilled part — after 24h of uptime all `$window` panels are exact.
+The share/top-N dashboard panels query the **windowed gauges**, not `increase()` on the
+counters: a first-time spammer only ever appears as a flat series at value 1, and
+`increase()` over a window that starts before the series exists returns 0 for such
+series — so increase()-based top-N panels silently hide one-off spammers. The gauges
+are also immune to exporter restarts (no state is kept; everything is recomputed from
+the logs). The trend panels (% over time, msg/min, bytes/s) use `rate()` on the counters,
+which handles counter resets correctly.
+
+The exporter polls the log API every 30s (`POLL_SECONDS`), once per window per spamd pod.
 
 ## Dashboard panels
 
-- Pie chart: spam vs ham share over `$window` (1h/6h/24h/7d/30d variable)
+- Pie chart: spam vs ham share over `$window` (1h/6h/24h/7d/30d variable, windowed gauges)
 - Stats: spam %, message counts, avg spam score (required_score is 3.0), avg scan time
-- Time series: spam/ham % over time, messages/min by verdict, bytes/s scanned
+- Time series: spam/ham % over time, messages/min by verdict, bytes/s scanned (rate on counters)
 - Bar gauges: top 10 spamming domains and top 10 spamming senders (Message-ID) over `$window`
 - Stat: exporter health (result lines parsed, poll age)
 

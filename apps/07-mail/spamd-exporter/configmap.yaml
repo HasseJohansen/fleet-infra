@@ -12,8 +12,17 @@ data:
 
     spamd runs with --syslog=stderr, so its log lines are stored by the
     container runtime and readable through the Kubernetes pod log API.
-    This exporter pulls the logs of all spamd pods in $NAMESPACE, parses
-    the per-message `result:` lines and exposes counters on /metrics.
+    This exporter pulls the logs of all spamd pods in $NAMESPACE and exposes:
+
+    - cumulative counters (spamd_messages_total, ..._by_domain_total, ...)
+      deduplicated by line hash, for rate()/trend panels;
+    - windowed gauges (spamd_window_messages{window=...}, ...) recomputed
+      from the raw logs on every poll, for "top N / share over last $window"
+      panels. Windowed gauges are used instead of increase() because a
+      first-time spammer only ever appears as a flat series at value 1,
+      for which increase() over a window that starts before the series
+      returns 0 -- i.e. increase()-based top-N panels silently hide
+      one-off spammers. The gauges are also immune to exporter restarts.
 
     spamd logs do not contain the envelope sender, only the Message-ID,
     so "sender" = full Message-ID and "domain" = its domain part.
@@ -33,11 +42,11 @@ data:
     LABEL_SELECTOR = os.environ.get("LABEL_SELECTOR", "app=spamd")
     CONTAINER = os.environ.get("CONTAINER", "spamd")
     PORT = int(os.environ.get("PORT", "8080"))
-    SINCE_SECONDS = int(os.environ.get("SINCE_SECONDS", "90"))
-    # First pass after (re)start reads this far back; counters are in-memory
-    # and reset on restart, so re-reading the full window keeps them consistent.
-    BACKFILL_SECONDS = int(os.environ.get("BACKFILL_SECONDS", "86400"))
-    POLL_SECONDS = int(os.environ.get("POLL_SECONDS", "15"))
+    POLL_SECONDS = int(os.environ.get("POLL_SECONDS", "30"))
+    # how far back the cumulative counters read (deduped by line hash)
+    FETCH_SECONDS = int(os.environ.get("FETCH_SECONDS", "2678400"))  # 31d
+    # windows exposed as spamd_window_* gauges; must match the dashboard's $window
+    WINDOWS = [("1h", 3600), ("6h", 21600), ("24h", 86400), ("7d", 604800), ("30d", 2592000)]
     HOST = os.environ.get("KUBERNETES_SERVICE_HOST", "kubernetes.default.svc")
     SVC_PORT = os.environ.get("KUBERNETES_SERVICE_PORT_HTTPS", "443")
     SA_DIR = "/var/run/secrets/kubernetes.io/serviceaccount"
@@ -50,21 +59,27 @@ data:
     )
 
     HELP = {
-        "spamd_messages_total": "Messages scanned by spamd, by verdict (spam/ham) and local user.",
-        "spamd_messages_by_domain_total": "Messages scanned by spamd, by verdict and Message-ID domain.",
-        "spamd_messages_by_sender_total": "Messages scanned by spamd, by verdict and sender (full Message-ID).",
-        "spamd_message_size_bytes_total": "Total message size in bytes scanned by spamd, by verdict.",
-        "spamd_scantime_seconds_total": "Total time spent scanning messages, by verdict.",
-        "spamd_score_sum": "Sum of SpamAssassin scores of messages identified as spam.",
-        "spamd_bayes_sum": "Sum of bayes probabilities, by verdict.",
-        "spamd_result_lines_total": "spamd `result:` log lines parsed by the exporter.",
+        "spamd_messages_total": "Messages scanned by spamd, by verdict (spam/ham) and local user. Cumulative since exporter start (31d backfill, hash-deduped).",
+        "spamd_messages_by_domain_total": "Messages scanned by spamd, by verdict and Message-ID domain. Cumulative.",
+        "spamd_messages_by_sender_total": "Messages scanned by spamd, by verdict and sender (full Message-ID). Cumulative.",
+        "spamd_message_size_bytes_total": "Total message size in bytes scanned by spamd, by verdict. Cumulative.",
+        "spamd_scantime_seconds_total": "Total time spent scanning messages, by verdict. Cumulative.",
+        "spamd_score_sum": "Sum of SpamAssassin scores of messages identified as spam. Cumulative (spam scores are always >= required_score, so monotonic).",
+        "spamd_bayes_sum": "Sum of bayes probabilities, by verdict. Cumulative.",
+        "spamd_window_messages": "Messages in the last {window}, by verdict and user. Recomputed from logs each poll.",
+        "spamd_window_messages_by_domain": "Messages in the last {window}, by verdict and Message-ID domain. Recomputed from logs each poll.",
+        "spamd_window_messages_by_sender": "Messages in the last {window}, by verdict and sender (full Message-ID). Recomputed from logs each poll.",
+        "spamd_window_size_bytes": "Message bytes in the last {window}, by verdict.",
+        "spamd_window_scantime_seconds": "Scan time in the last {window}, by verdict.",
+        "spamd_window_score_sum": "Sum of spam scores in the last {window}.",
+        "spamd_result_lines_total": "spamd `result:` log lines parsed by the exporter (cumulative, hash-deduped).",
         "spamd_exporter_errors_total": "Errors while reading the Kubernetes API.",
         "spamd_exporter_last_run_timestamp_seconds": "Unix timestamp of the last successful log poll.",
     }
 
     lock = threading.Lock()
     counters = {}  # (metric, labels_key) -> [labels dict, value]
-    gauges = {}
+    gauges = {}    # (metric, labels_key) -> [labels dict, value]; rebuilt every poll
     seen = {}      # pod -> (set of line hashes, deque for eviction)
 
     with open(os.path.join(SA_DIR, "token")) as fh:
@@ -76,17 +91,23 @@ data:
         return value.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n")
 
 
-    def inc(metric, labels, value=1.0):
+    def fmt(value):
+        # full precision: %g would truncate large counters/timestamps to 6 digits
+        if value == int(value) and abs(value) < 1e15:
+            return str(int(value))
+        return repr(value)
+
+
+    def add(store, metric, labels, value):
         key = (metric, tuple(sorted(labels.items())))
-        with lock:
-            entry = counters.setdefault(key, [dict(labels), 0.0])
-            entry[1] += value
+        entry = store.setdefault(key, [dict(labels), 0.0])
+        entry[1] += value
 
 
-    def set_gauge(metric, value):
-        key = (metric, ())
+    def set_gauges(new_gauges):
         with lock:
-            gauges[key] = [{}, value]
+            gauges.clear()
+            gauges.update(new_gauges)
 
 
     def api_get(path):
@@ -94,79 +115,123 @@ data:
             "https://%s:%s%s" % (HOST, SVC_PORT, path),
             headers={"Authorization": "Bearer " + TOKEN},
         )
-        with urlopen(req, context=SSL_CTX, timeout=30) as resp:
+        with urlopen(req, context=SSL_CTX, timeout=60) as resp:
             return resp.read().decode("utf-8", "replace")
 
 
     def parse_line(line):
         m = RESULT_RE.search(line)
         if not m:
-            return
+            return None
         verdict = "spam" if m.group("verdict") == "Y" else "ham"
         mid = m.group("mid") or "-"
         if "@" in mid:
             sender, domain = mid, mid.rsplit("@", 1)[1]
         else:
             sender, domain = mid, "-"
-        inc("spamd_messages_total", {"verdict": verdict, "user": m.group("user")})
-        inc("spamd_messages_by_domain_total", {"verdict": verdict, "domain": domain})
-        inc("spamd_messages_by_sender_total",
-            {"verdict": verdict, "sender": sender, "domain": domain})
-        inc("spamd_message_size_bytes_total", {"verdict": verdict}, float(m.group("size")))
-        inc("spamd_scantime_seconds_total", {"verdict": verdict}, float(m.group("scantime")))
-        if verdict == "spam":
-            # only spam scores are guaranteed >= required_score, so only they
-            # make a monotonic counter
-            inc("spamd_score_sum", {"verdict": verdict}, float(m.group("score")))
-        if m.group("bayes") is not None:
-            inc("spamd_bayes_sum", {"verdict": verdict}, float(m.group("bayes")))
-        inc("spamd_result_lines_total", {})
+        return {
+            "verdict": verdict,
+            "user": m.group("user"),
+            "sender": sender,
+            "domain": domain,
+            "size": float(m.group("size")),
+            "scantime": float(m.group("scantime")),
+            "score": float(m.group("score")) if verdict == "spam" else None,
+            "bayes": float(m.group("bayes")) if m.group("bayes") is not None else None,
+        }
 
 
-    def fetch(first):
-        since = BACKFILL_SECONDS if first else SINCE_SECONDS
+    def count_cumulative(fields):
+        inc = counters  # alias; mutated under lock in fetch
+        add(inc, "spamd_messages_total", {"verdict": fields["verdict"], "user": fields["user"]}, 1)
+        add(inc, "spamd_messages_by_domain_total", {"verdict": fields["verdict"], "domain": fields["domain"]}, 1)
+        add(inc, "spamd_messages_by_sender_total",
+            {"verdict": fields["verdict"], "sender": fields["sender"], "domain": fields["domain"]}, 1)
+        add(inc, "spamd_message_size_bytes_total", {"verdict": fields["verdict"]}, fields["size"])
+        add(inc, "spamd_scantime_seconds_total", {"verdict": fields["verdict"]}, fields["scantime"])
+        if fields["score"] is not None:
+            add(inc, "spamd_score_sum", {"verdict": fields["verdict"]}, fields["score"])
+        if fields["bayes"] is not None:
+            add(inc, "spamd_bayes_sum", {"verdict": fields["verdict"]}, fields["bayes"])
+        add(inc, "spamd_result_lines_total", {}, 1)
+
+
+    def count_window(win, fields):
+        add(win, "spamd_window_messages", {"verdict": fields["verdict"], "user": fields["user"]}, 1)
+        add(win, "spamd_window_messages_by_domain", {"verdict": fields["verdict"], "domain": fields["domain"]}, 1)
+        add(win, "spamd_window_messages_by_sender",
+            {"verdict": fields["verdict"], "sender": fields["sender"], "domain": fields["domain"]}, 1)
+        add(win, "spamd_window_size_bytes", {"verdict": fields["verdict"]}, fields["size"])
+        add(win, "spamd_window_scantime_seconds", {"verdict": fields["verdict"]}, fields["scantime"])
+        if fields["score"] is not None:
+            add(win, "spamd_window_score_sum", {"verdict": fields["verdict"]}, fields["score"])
+
+
+    def fetch_pod_log(name, since_seconds):
+        return api_get(
+            "/api/v1/namespaces/%s/pods/%s/log?container=%s&sinceSeconds=%d"
+            % (NAMESPACE, name, CONTAINER, since_seconds))
+
+
+    def fetch():
         pods = json.loads(api_get(
             "/api/v1/namespaces/%s/pods?labelSelector=%s" % (NAMESPACE, LABEL_SELECTOR)))
-        for pod in pods.get("items", []):
-            name = pod["metadata"]["name"]
-            if pod.get("status", {}).get("phase") != "Running":
-                continue
-            try:
-                log = api_get(
-                    "/api/v1/namespaces/%s/pods/%s/log?container=%s&sinceSeconds=%d"
-                    % (NAMESPACE, name, CONTAINER, since))
-            except Exception:
-                inc("spamd_exporter_errors_total", {"op": "log", "pod": name})
-                continue
-            hashes, dq = seen.setdefault(name, (set(), deque(maxlen=50000)))
-            for line in log.splitlines():
-                h = hashlib.sha1(line.encode()).hexdigest()
-                if h in hashes:
+        running = [p["metadata"]["name"] for p in pods.get("items", [])
+                   if p.get("status", {}).get("phase") == "Running"]
+
+        # windowed aggregates: rebuild from scratch from per-window log fetches
+        win_gauges = {}
+        for wname, wsecs in WINDOWS:
+            win = {}
+            for name in running:
+                try:
+                    log = fetch_pod_log(name, wsecs)
+                except Exception:
+                    add(counters, "spamd_exporter_errors_total", {"op": "log", "pod": name}, 1)
                     continue
-                if len(dq) == dq.maxlen:
-                    hashes.discard(dq[0])
-                dq.append(h)
-                hashes.add(h)
-                parse_line(line)
-        set_gauge("spamd_exporter_last_run_timestamp_seconds", time.time())
+                for line in log.splitlines():
+                    fields = parse_line(line)
+                    if fields:
+                        count_window(win, fields)
+            for (metric, labels_key), (labels, value) in win.items():
+                labels = dict(labels)
+                labels["window"] = wname
+                key = (metric, tuple(sorted(labels.items())))
+                win_gauges[key] = [labels, value]
+
+        # cumulative counters: hash-deduped over the longest fetch
+        with lock:
+            for name in running:
+                try:
+                    log = fetch_pod_log(name, FETCH_SECONDS)
+                except Exception:
+                    add(counters, "spamd_exporter_errors_total", {"op": "log", "pod": name}, 1)
+                    continue
+                hashes, dq = seen.setdefault(name, (set(), deque(maxlen=100000)))
+                for line in log.splitlines():
+                    h = hashlib.sha1(line.encode()).hexdigest()
+                    if h in hashes:
+                        continue
+                    if len(dq) == dq.maxlen:
+                        hashes.discard(dq[0])
+                    dq.append(h)
+                    hashes.add(h)
+                    fields = parse_line(line)
+                    if fields:
+                        count_cumulative(fields)
+            gauges.clear()
+            gauges.update(win_gauges)
+            gauges[("spamd_exporter_last_run_timestamp_seconds", ())] = [{}, time.time()]
 
 
     def run():
-        first = True
         while True:
             try:
-                fetch(first)
+                fetch()
             except Exception:
-                inc("spamd_exporter_errors_total", {"op": "pods", "pod": ""})
-            first = False
+                with lock:
+                    add(counters, "spamd_exporter_errors_total", {"op": "pods", "pod": ""}, 1)
             time.sleep(POLL_SECONDS)
-
-
-    def fmt(value):
-        # full precision: %g would truncate large counters/timestamps to 6 digits
-        if value == int(value) and abs(value) < 1e15:
-            return str(int(value))
-        return repr(value)
 
 
     def render():
@@ -181,7 +246,8 @@ data:
         out = []
         for metric in sorted(metrics):
             info = metrics[metric]
-            out.append("# HELP %s %s" % (metric, HELP.get(metric, metric)))
+            help_text = HELP.get(metric, metric).replace("{window}", "window label")
+            out.append("# HELP %s %s" % (metric, help_text))
             out.append("# TYPE %s %s" % (metric, info["type"]))
             for labels, value in sorted(info["samples"], key=lambda s: sorted(s[0].items())):
                 ls = ",".join('%s="%s"' % (k, esc(v)) for k, v in sorted(labels.items()))

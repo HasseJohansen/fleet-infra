@@ -28,12 +28,12 @@ spec:
               value: app=spamd
             - name: CONTAINER
               value: spamd
-            - name: SINCE_SECONDS
-              value: "90"
-            - name: BACKFILL_SECONDS
-              value: "86400"
+            # how far back the cumulative counters read (hash-deduped); the
+            # windowed gauges fetch per-window (see WINDOWS in the script)
+            - name: FETCH_SECONDS
+              value: "2678400"
             - name: POLL_SECONDS
-              value: "15"
+              value: "30"
             - name: PORT
               value: "8080"
           ports:
