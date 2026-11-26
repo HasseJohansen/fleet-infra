@@ -4,4 +4,10 @@
 #   sudo kairos-agent upgrade list-releases
 # Currently running image (update manually when upgrading):
 #   quay.io/kairos/hadron:v0.6.3-standard-amd64-generic-v4.7.0-k3s-v1.37.2-k3s1
+# NOTE for upgrade NodeOps (kairos-agent upgrade --source dir:/ ...): always add
+#   --exclude-path /etc/resolv.conf
+# alongside /etc/hostname and /etc/hosts — the image ships a resolv.conf pointing at
+# 10.43.0.10 (cluster DNS), which loops CoreDNS and breaks all node/cluster DNS.
+# The pin lives in kairos-config clusters/minis/cloud-config.yaml (write_files +
+# stages.boot + after-upgrade-chroot).
 kairosRelease: v4.7.0
